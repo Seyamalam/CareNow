@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { View, Linking } from "react-native";
 import { Input, Dialog } from "panelui-native";
 import { Button } from "../components/button";
 import { router } from "expo-router";
@@ -174,6 +174,40 @@ export default function Motherhood() {
           <Button fullWidth variant="outline" onPress={() => setTab("Journal")}>
             Add a journal entry
           </Button>
+          <Section title="Nutrition & learning" />
+          <Box>
+            {[
+              [
+                "Pregnancy nutrition",
+                "https://www.nhs.uk/pregnancy/keeping-well/have-a-healthy-diet/",
+              ],
+              [
+                "Appointments & screening",
+                "https://www.nhs.uk/pregnancy/your-pregnancy-care/your-antenatal-care-and-appointments/",
+              ],
+              [
+                "Postpartum recovery",
+                "https://www.nhs.uk/baby/support-and-services/your-post-pregnancy-body/",
+              ],
+            ].map(([label, url]) => (
+              <Button
+                key={url}
+                variant="ghost"
+                fullWidth
+                endContent={<ArrowUpRight size={17} />}
+                onPress={() =>
+                  void Linking.openURL(url).catch(() =>
+                    notify("Unable to open guide"),
+                  )
+                }
+              >
+                {label}
+              </Button>
+            ))}
+            <Type size={10} muted>
+              NHS · External guides in English
+            </Type>
+          </Box>
           <Section title="Prenatal support" />
           <Box>
             <Type weight="bold">Nursing & daily care</Type>

@@ -78,6 +78,11 @@ const app = base
   })
   .get("/catalog", (c) => c.json({ doctors, services }))
   .post("/session", async (c) => {
+    await c.env.DB.prepare(
+      "DELETE FROM sessions WHERE id IN (SELECT id FROM sessions WHERE expires_at <= ? LIMIT 100)",
+    )
+      .bind(new Date().toISOString())
+      .run();
     const id = crypto.randomUUID();
     const token = crypto.randomUUID() + crypto.randomUUID();
     const state = initialState();

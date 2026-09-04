@@ -104,10 +104,62 @@ try {
     ).body.records[0].type,
     "Consultation",
   );
+  const fileBody = {
+    name: "demo-report.pdf",
+    mime: "application/pdf",
+    data: Buffer.from("%PDF-1.4\nFictional demo attachment\n%%EOF").toString(
+      "base64",
+    ),
+  };
+  const upload = await req("/attachments", ta, fileBody);
+  assert.equal(upload.status, 201);
+  const fileId = upload.body.id;
+  assert.equal(
+    (await req("/attachments/" + fileId, ta)).body.data,
+    fileBody.data,
+  );
+  assert.equal((await req("/attachments/" + fileId, tb)).status, 404);
+  assert.equal(
+    (
+      await req("/actions", tb, {
+        type: "message.send",
+        appointmentId: "welcome-appointment",
+        text: "Foreign attachment",
+        attachmentId: fileId,
+      })
+    ).status,
+    400,
+  );
+  assert.equal(
+    (
+      await req("/attachments", ta, {
+        ...fileBody,
+        data: Buffer.from("invalid file contents").toString("base64"),
+      })
+    ).status,
+    400,
+  );
+  const simultaneous = await Promise.all(
+    ["First parallel entry", "Second parallel entry"].map((value) =>
+      req("/actions", ta, {
+        type: "log.add",
+        memberId: "self",
+        kind: "symptom",
+        value,
+      }),
+    ),
+  );
+  assert(simultaneous.every((r) => r.status === 200));
+  const after = (await req("/state", ta)).body;
+  assert(after.logs.some((l) => l.value === "First parallel entry"));
+  assert(after.logs.some((l) => l.value === "Second parallel entry"));
   console.log(
-    "PASS: remote D1 health, sessions, auth, bookings, duplicate slots, ownership, messages, input validation, care pricing, transitions and persistence",
+    "PASS: remote D1 health, sessions, auth, bookings, duplicate slots, ownership, messages, input validation, care pricing, transitions, attachment isolation, concurrent writes and persistence",
   );
 } finally {
   await req("/session/current", ta, null, "DELETE");
   await req("/session/current", tb, null, "DELETE");
 }
+
+assert.equal((await req("/state", ta)).status, 401);
+console.log("PASS: deleted session cannot be reused");

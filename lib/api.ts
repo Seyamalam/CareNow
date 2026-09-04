@@ -12,6 +12,22 @@ export const API_URL =
   "https://carenow-api.seyamalam41.workers.dev";
 let token: string | null = null;
 const client = hc<AppType>(API_URL, {
+  fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    try {
+      return await fetch(input instanceof URL ? input.toString() : input, {
+        ...init,
+        signal: controller.signal,
+      });
+    } catch {
+      throw new ApiError(
+        "Connection unavailable. Check your internet and try again.",
+      );
+    } finally {
+      clearTimeout(timer);
+    }
+  },
   headers: async (): Promise<Record<string, string>> => {
     token ??= await AsyncStorage.getItem("carenow.session");
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -57,9 +73,9 @@ export async function connect() {
   return data.state;
 }
 export async function getState() {
-  return stateSchema.parse(
-    await (await check(await client.api.state.$get())).json(),
-  );
+  const response = await client.api.state.$get();
+  if (response.status === 401) return connect();
+  return stateSchema.parse(await (await check(response)).json());
 }
 export async function sendAction(action: Action) {
   return stateSchema.parse(

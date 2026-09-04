@@ -1,0 +1,6 @@
+/doctor/* /doctor/[id].html 200
+/service/* /service/[id].html 200
+/appointment/* /appointment/[id].html 200
+/consult/* /consult/[id].html 200
+/record/* /record/[id].html 200
+/request/* /request/[id].html 200

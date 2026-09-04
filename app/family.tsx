@@ -19,7 +19,7 @@ export default function Family() {
           accessibilityLabel="Add family member"
           onPress={() => router.push("/member")}
         >
-          <Plus size={20} />
+          <Plus size={20} color={p.onPrimary} />
         </Button>
       }
     >

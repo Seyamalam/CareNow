@@ -211,6 +211,17 @@ export function Screen({
         )}
         {children}
       </ScrollView>
+      <View
+        pointerEvents="none"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: insets.top,
+          backgroundColor: p.background,
+        }}
+      />
     </KeyboardAvoidingView>
   );
 }

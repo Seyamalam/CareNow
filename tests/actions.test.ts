@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { initialState } from "../shared/seed";
 import { applyAction } from "../shared/actions";
-import { actionSchema, today } from "../shared/contracts";
+import { actionSchema, today, bangladeshDay } from "../shared/contracts";
 const booking = {
   type: "appointment.book",
   memberId: "self",
@@ -95,4 +95,38 @@ test("invalid phone and arbitrary shift rejected by shared schema", () => {
       .success,
     false,
   );
+});
+
+test("dates reject impossible calendar days and use Bangladesh midnight", () => {
+  assert.equal(
+    actionSchema.safeParse({ ...booking, date: "2026-02-30" }).success,
+    false,
+  );
+  assert.equal(bangladeshDay("2026-09-04T20:00:00Z"), "2026-09-05");
+});
+test("family deletion protects active care and removes unused profiles", () => {
+  assert.throws(
+    () => applyAction(initialState(), { type: "member.delete", id: "self" }),
+    /active care/,
+  );
+  let s = applyAction(initialState(), {
+    type: "member.save",
+    member: { ...initialState().members[0], id: "new", name: "Demo Patient" },
+  });
+  const id = s.members.at(-1)!.id;
+  s = applyAction(s, { type: "member.delete", id });
+  assert.equal(s.members.length, 3);
+});
+test("due date survives member edits and preferences persist", () => {
+  let s = applyAction(initialState(), {
+    type: "member.save",
+    member: { ...initialState().members[0], dueDate: today(100) },
+  });
+  assert.equal(s.members[0].dueDate, today(100));
+  s = applyAction(s, {
+    type: "preferences.save",
+    language: "bn",
+    reminders: false,
+  });
+  assert.deepEqual(s.preferences, { language: "bn", reminders: false });
 });
