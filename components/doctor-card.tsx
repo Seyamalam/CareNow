@@ -51,8 +51,8 @@ export function DoctorAvatar({
       <View
         style={{
           position: "absolute",
-          right: 4,
-          bottom: 4,
+          right: size * 0.1,
+          bottom: size * 0.1,
           width: 11,
           height: 11,
           borderRadius: 6,

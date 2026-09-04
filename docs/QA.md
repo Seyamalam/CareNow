@@ -1,0 +1,43 @@
+# Verification record
+
+Verified 2026-09-05 on macOS, a dedicated Android 15 ARM64 emulator (Pixel 7 profile), Expo Go SDK 57, the standalone release APK, local Wrangler/D1 and deployed Cloudflare services.
+
+## Automated results
+
+| Check | Result |
+|---|---|
+| App + server strict TypeScript | Pass |
+| Domain tests | 9 passed |
+| Local Hono/D1 integration | Pass |
+| Deployed Hono/D1 integration | Pass |
+| Expo Doctor | 21/21 passed |
+| Expo web static export | Pass |
+| Android ARM64 release build | Pass |
+| GitHub Actions | Workflow committed; GitHub account billing lock prevented job startup |
+
+Integration tests create isolated sessions and verify authentication, duplicate bookings, foreign-member/appointment rejection, care pricing, status transitions, consultation completion, attachment upload/read/ownership/type checks, simultaneous writes without lost updates, persistence and token invalidation after session deletion. Test sessions are deleted during cleanup.
+
+## Native interaction and visual review
+
+- Doctor discovery, doctor profile, appointment booking, success and details.
+- Saved chat note, simulated call start/end, consultation record creation and record detail.
+- Service discovery, shift/duration price changes, complete care request and confirmation.
+- Care progress advanced from Assigned to On the way and reflected in Activity.
+- Demo session reset restores fixtures; existing unrelated sessions remain separate.
+- Bangla navigation switch and switch back to English.
+- Motherhood journal saved a new 63.1 kg entry; seeded historical entries remain visible.
+- Child routine completed for Arham, preserving other family members' state.
+- Family profile edited and saved.
+- PDF selected from Android Downloads, uploaded to D1 and attached to the consultation; reopening returned the saved file to the Android share sheet.
+- Cold launch through the animated splash succeeds; selected family member and saved D1 data survive release APK reinstall and restart.
+- Family, profile, notification, record, emergency, postpartum and specialized care screens inspected.
+
+PNG evidence is in `docs/screenshots/` and embedded in README. All records and people shown are fictional. All key route captures are refreshed from the standalone build; early success-state captures remain from the verified initial build. A second dedicated emulator on port 5580 was used for final isolation after unrelated activity appeared on the original emulator.
+
+## Release limitations
+
+The app requires internet for the real D1 API. Calls, dispatch, clinicians, clinical documents and prices are clearly labeled demo experiences; there is no payment processing. Navigation and selected primary labels support Bangla; the catalog remains English. Native iOS builds are not claimed as tested. The APK uses the generated Expo development signing key and targets ARM64 devices.
+
+A safe `npm audit fix` removed all high-severity findings. npm still reports 15 moderate findings propagated from two upstream dependency families: `decode-uri-component` through Expo Router's CommonJS `query-string`, and `uuid` through the Xcode configuration tooling. npm's automatic force fix proposes incompatible Expo downgrades. These were not forced; re-evaluate after compatible upstream releases. The Worker stack has no audit findings. Do not treat this exhibition application as reviewed production health infrastructure.
+
+GitHub Actions run 33915928563 failed before executing any steps. The check annotation states: “The job was not started because your account is locked due to a billing issue.” The same verification commands completed locally. No billing/account settings were changed.
