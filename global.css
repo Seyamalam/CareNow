@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import 'uniwind';
+@import 'panelui-native/theme.css';
+
+/* Tailwind only generates the classes it can see, and the components live in
+   the package rather than in this project — without this line every one of
+   them renders unstyled, which reads like a broken install. */
+@source './node_modules/panelui-native/src';

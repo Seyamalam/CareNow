@@ -1,0 +1,18 @@
+node_modules/
+.expo/
+dist/
+web-build/
+*.log
+.DS_Store
+
+.env
+.env.*
+!.env.example
+.dev.vars
+.wrangler/
+android/
+ios/
+artifacts/
+*.apk
+# Original private planning document; product requirements are summarized in docs.
+Project DBA.docx
