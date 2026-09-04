@@ -1,8 +1,33 @@
-@import 'tailwindcss';
-@import 'uniwind';
-@import 'panelui-native/theme.css';
-
-/* Tailwind only generates the classes it can see, and the components live in
-   the package rather than in this project — without this line every one of
-   them renders unstyled, which reads like a broken install. */
+@import "tailwindcss";
+@import "uniwind";
+@import "panelui-native/theme.css";
 @source './node_modules/panelui-native/src';
+@theme {
+  --font-sans: "DMSans_400Regular";
+}
+@layer theme {
+  :root {
+    @variant light {
+      --color-background: #f7f8f3;
+      --color-foreground: #183d35;
+      --color-card: #ffffff;
+      --color-card-foreground: #183d35;
+      --color-primary: #194e3e;
+      --color-primary-foreground: #ffffff;
+      --color-secondary: #e8f0e8;
+      --color-secondary-foreground: #194e3e;
+      --color-muted: #f0f2ed;
+      --color-muted-foreground: #77877d;
+      --color-accent: #d7edc5;
+      --color-accent-foreground: #194e3e;
+      --color-border: #e5eae3;
+      --color-input: #e0e7df;
+      --color-ring: #588873;
+      --color-chart-1: #a2beac;
+      --color-chart-2: #f1e8d6;
+      --color-chart-3: #f7e6e1;
+      --color-chart-4: #ede9f6;
+      --color-chart-5: #dff0ea;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+import { useCSSVariable } from "uniwind";
+export function usePalette() {
+  const values = useCSSVariable([
+    "--color-background",
+    "--color-foreground",
+    "--color-card",
+    "--color-primary",
+    "--color-primary-foreground",
+    "--color-secondary",
+    "--color-muted",
+    "--color-muted-foreground",
+    "--color-accent",
+    "--color-border",
+    "--color-chart-1",
+    "--color-chart-2",
+    "--color-chart-3",
+    "--color-chart-4",
+    "--color-chart-5",
+    "--color-destructive",
+  ]);
+  const [
+    background,
+    ink,
+    card,
+    primary,
+    onPrimary,
+    secondary,
+    muted,
+    subtle,
+    accent,
+    border,
+    soft,
+    sand,
+    rose,
+    lavender,
+    mint,
+    danger,
+  ] = values.map(String);
+  return {
+    background,
+    ink,
+    card,
+    primary,
+    onPrimary,
+    secondary,
+    muted,
+    subtle,
+    accent,
+    border,
+    soft,
+    sand,
+    rose,
+    lavender,
+    mint,
+    danger,
+  };
+}
+export type Palette = ReturnType<typeof usePalette>;
