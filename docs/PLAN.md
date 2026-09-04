@@ -57,8 +57,8 @@
 - [x] Deploy Worker and D1 using available Cloudflare access; smoke-test remote API.
 - [x] Produce runnable native demo instructions and Expo web preview if supported.
 - [x] Add CI, setup/deployment guide, demo script, architecture notes, asset attribution and QA report.
-- [ ] Commit and push completed implementation and verification evidence.
-- [ ] Deliver public repository, preview/build access, screenshot highlights and honest integration limits.
+- [x] Commit and push completed implementation and verification evidence.
+- [x] Deliver public repository, preview/build access, screenshot highlights and honest integration limits.
 
 ## Definition of done
 
@@ -69,3 +69,5 @@ All planned demo journeys are implemented and validated. The demo uses Expo Reac
 - 2026-09-05: Requirements extracted; existing Expo/Panel UI starter found. Initialized project-local Git because the parent directory had an unrelated repository. CLI access to GitHub, Android ADB and Argent is available.
 
 - 2026-09-05: Public repository created and planning commit pushed before implementation. Hono/D1 deployed; typed Expo/Panel UI journeys implemented. Android release builds and Expo web export pass. Nine domain tests and local/remote D1 integration pass, including concurrency and attachment ownership. Native screenshot gallery now covers core routes, family care and specialized hubs. Final release packaging and handoff in progress.
+
+- 2026-09-05: Released v1.0.0 with a standalone 49 MB ARM64 APK, deployed Expo web preview and Hono/D1 API. 29 inspected native captures are in README. Cold launch, persistent session data, file upload/reopen and network-error recovery verified. Hosted CI could not start due to a GitHub account billing lock; equivalent checks passed locally. See QA.md for exact results and upstream dependency advisories.

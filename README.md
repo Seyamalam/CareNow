@@ -2,7 +2,7 @@
 
 A complete family-care exhibition demo for **Innovation Exhibitor · Bangladesh**. Expo React Native, Panel UI, Reanimated, and a typed Hono API backed by Cloudflare Workers and D1.
 
-[Open live demo](https://carenow-demo.pages.dev) · [Android APK](https://github.com/Seyamalam/CareNow/releases/latest) · [Exhibition walkthrough](docs/DEMO.md) · [Setup & deployment](docs/SETUP.md)
+[Open live demo](https://carenow-demo.pages.dev) · [Download Android APK](https://github.com/Seyamalam/CareNow/releases/download/v1.0.0/CareNow-1.0.0-arm64.apk) · [Exhibition walkthrough](docs/DEMO.md) · [Setup & deployment](docs/SETUP.md)
 
 ## What works
 
@@ -33,6 +33,8 @@ npx expo export --platform web
 ```
 
 [Product scope](docs/PRODUCT.md) · [Milestones](docs/PLAN.md) · [Architecture](docs/ARCHITECTURE.md) · [Verification](docs/QA.md) · [Assets & sources](docs/ASSETS.md) · [Visual brief review](docs/BRIEF-REVIEW.md)
+
+Verified: 9 domain tests, local/remote D1 integration, 21/21 Expo Doctor checks, Android release build and web export. GitHub-hosted CI is configured but could not start because of the account’s billing lock; details are in [QA](docs/QA.md).
 
 ## Screen gallery
 

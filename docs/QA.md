@@ -29,7 +29,7 @@ Integration tests create isolated sessions and verify authentication, duplicate 
 - Child routine completed for Arham, preserving other family members' state.
 - Family profile edited and saved.
 - PDF selected from Android Downloads, uploaded to D1 and attached to the consultation; reopening returned the saved file to the Android share sheet.
-- Network disabled on the final isolated emulator: a clear connection error and retry action appeared; connectivity restored before retrying.
+- Network disabled on the final isolated emulator: a clear connection error and retry action appeared; connectivity restored, then the retry action successfully returned to the requested doctor profile.
 - Cold launch through the animated splash succeeds; selected family member and saved D1 data survive release APK reinstall and restart.
 - Family, profile, notification, record, emergency, postpartum and specialized care screens inspected.
 
@@ -42,3 +42,11 @@ The app requires internet for the real D1 API. Calls, dispatch, clinicians, clin
 A safe `npm audit fix` removed all high-severity findings. npm still reports 15 moderate findings propagated from two upstream dependency families: `decode-uri-component` through Expo Router's CommonJS `query-string`, and `uuid` through the Xcode configuration tooling. npm's automatic force fix proposes incompatible Expo downgrades. These were not forced; re-evaluate after compatible upstream releases. The Worker stack has no audit findings. Do not treat this exhibition application as reviewed production health infrastructure.
 
 GitHub Actions run 33915928563 failed before executing any steps. The check annotation states: “The job was not started because your account is locked due to a billing issue.” The same verification commands completed locally. No billing/account settings were changed.
+
+## Published artifacts
+
+- Web: https://carenow-demo.pages.dev
+- API: https://carenow-api.seyamalam41.workers.dev/api/health
+- Android release: https://github.com/Seyamalam/CareNow/releases/tag/v1.0.0
+- APK SHA-256: `d56c239df95f3e1a953790ad7e9a3269dcf34420ca16e84be189bee785bb5452`
+- Gallery: 29 inspected PNGs, including the animated splash and network error state.
