@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Button } from "panelui-native";
+import { Button } from "../components/button";
 import { router } from "expo-router";
 import { Check, ArrowUpRight, Sparkles } from "lucide-react-native";
 import {
@@ -15,7 +15,7 @@ import {
 import { usePalette } from "../lib/theme";
 import { useCare } from "../lib/store";
 import { routines } from "../shared/catalog";
-import { today } from "../shared/contracts";
+import { today, bangladeshDay } from "../shared/contracts";
 export default function Child() {
   const { state, memberId, act } = useCare(),
     p = usePalette();
@@ -25,7 +25,7 @@ export default function Child() {
         l.memberId === memberId &&
         l.kind === "routine" &&
         l.value === r &&
-        l.date.startsWith(today()),
+        bangladeshDay(l.date) === today(),
     ),
   );
   return (

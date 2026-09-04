@@ -1,6 +1,6 @@
 import { View, ScrollView } from "react-native";
 import { router } from "expo-router";
-import { Button } from "panelui-native";
+import { Button } from "../../components/button";
 import {
   Bell,
   ChevronDown,
@@ -267,56 +267,65 @@ export default function Home() {
           </View>
         </View>
       </Enter>
-      <Enter delay={190}>
-        <View style={{ gap: 16 }}>
-          <Section
-            title={t("Today’s care", "আজকের যত্ন")}
-            action={t("Health hub", "স্বাস্থ্য")}
-            onPress={() =>
-              router.push(
-                member.relation === "Child" ? "/child" : "/motherhood",
-              )
-            }
-          />
-          <Box>
-            {medications
-              .slice(0, member.relation === "Mother" ? 2 : 1)
-              .map((med) => {
-                const key = `${today()}:${memberId}:${med.id}`,
-                  done = state!.medicationEvents.includes(key);
-                return (
-                  <Row key={med.id}>
-                    <IconTile name="heart" tone="sand" size={44} />
-                    <View style={{ flex: 1, gap: 3 }}>
-                      <Type size={14} weight="medium">
-                        {med.name}
-                      </Type>
-                      <Type size={11} muted>
-                        {med.time} · {done ? "Taken" : med.detail}
-                      </Type>
-                    </View>
-                    <Button
-                      size="icon"
-                      variant={done ? "primary" : "outline"}
-                      accessibilityLabel={
-                        done
-                          ? "Mark medication not taken"
-                          : "Mark medication taken"
-                      }
-                      onPress={() =>
-                        void act({ type: "medication.toggle", key }).catch(
-                          () => {},
-                        )
-                      }
-                    >
-                      <Check size={18} color={done ? p.onPrimary : p.subtle} />
-                    </Button>
-                  </Row>
-                );
-              })}
-          </Box>
-        </View>
-      </Enter>
+      {state!.preferences.reminders && (
+        <Enter delay={190}>
+          <View style={{ gap: 16 }}>
+            <Section
+              title={t("Today’s care", "আজকের যত্ন")}
+              action={t("Health hub", "স্বাস্থ্য")}
+              onPress={() =>
+                router.push(
+                  member.relation === "Child"
+                    ? "/child"
+                    : member.relation === "Self"
+                      ? "/motherhood"
+                      : "/records",
+                )
+              }
+            />
+            <Box>
+              {medications
+                .slice(0, member.relation === "Mother" ? 2 : 1)
+                .map((med) => {
+                  const key = `${today()}:${memberId}:${med.id}`,
+                    done = state!.medicationEvents.includes(key);
+                  return (
+                    <Row key={med.id}>
+                      <IconTile name="heart" tone="sand" size={44} />
+                      <View style={{ flex: 1, gap: 3 }}>
+                        <Type size={14} weight="medium">
+                          {med.name}
+                        </Type>
+                        <Type size={11} muted>
+                          {med.time} · {done ? "Taken" : med.detail}
+                        </Type>
+                      </View>
+                      <Button
+                        size="icon"
+                        variant={done ? "primary" : "outline"}
+                        accessibilityLabel={
+                          done
+                            ? "Mark medication not taken"
+                            : "Mark medication taken"
+                        }
+                        onPress={() =>
+                          void act({ type: "medication.toggle", key }).catch(
+                            () => {},
+                          )
+                        }
+                      >
+                        <Check
+                          size={18}
+                          color={done ? p.onPrimary : p.subtle}
+                        />
+                      </Button>
+                    </Row>
+                  );
+                })}
+            </Box>
+          </View>
+        </Enter>
+      )}
       <Enter delay={220}>
         <View style={{ gap: 16 }}>
           <Section

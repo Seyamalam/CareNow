@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { View, Platform, ScrollView } from "react-native";
-import { Button, Input } from "panelui-native";
+import { View, Platform, Keyboard } from "react-native";
+import { Input } from "panelui-native";
+import { Button } from "../../components/button";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Mic,
@@ -63,6 +64,7 @@ export default function Consult() {
     try {
       await act({ type: "message.send", appointmentId: id, text });
       setText("");
+      Keyboard.dismiss();
     } catch {}
   }
   async function attach() {
@@ -174,7 +176,13 @@ export default function Consult() {
               {String(seconds % 60).padStart(2, "0")}
             </Type>
             <Pill
-              text={camera ? "CAMERA PREVIEW · DEMO" : "CAMERA OFF"}
+              text={
+                a.mode === "Audio"
+                  ? "AUDIO CALL · DEMO"
+                  : camera
+                    ? "CAMERA PREVIEW · DEMO"
+                    : "CAMERA OFF"
+              }
               tone="mint"
             />
           </View>
@@ -234,7 +242,7 @@ export default function Consult() {
                       .catch(() => {})
                   }
                 >
-                  <PhoneOff size={21} />
+                  <PhoneOff size={21} color={p.onPrimary} />
                 </Button>
               </Row>
               {!running && (

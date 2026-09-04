@@ -4,6 +4,13 @@
   "main": "index.ts",
   "compatibility_date": "2026-09-04",
   "account_id": "ec7be8e0f814b43b1269fd93f671960b",
-  "d1_databases": [{"binding":"DB","database_name":"carenow-demo","database_id":"b4eacf2e-dab0-43e5-a30c-0160c8a0ea27","migrations_dir":"migrations"}],
-  "observability": {"enabled":true}
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "carenow-demo",
+      "database_id": "b4eacf2e-dab0-43e5-a30c-0160c8a0ea27",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "observability": { "enabled": true },
 }

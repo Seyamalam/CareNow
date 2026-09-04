@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Button } from "panelui-native";
+import { Button } from "../../components/button";
 import { router, useLocalSearchParams } from "expo-router";
 import { Check, ArrowRight } from "lucide-react-native";
 import {

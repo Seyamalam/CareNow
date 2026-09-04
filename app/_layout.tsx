@@ -20,7 +20,6 @@ import { Splash } from "../components/brand";
 import { FloatingToast } from "../components/ui";
 Uniwind.setTheme("light");
 void NativeSplash.preventAutoHideAsync();
-const queryClient = new QueryClient();
 function Navigation() {
   const p = usePalette();
   const care = useCare();
@@ -59,6 +58,7 @@ function Navigation() {
   );
 }
 export default function RootLayout() {
+  const [queryClient] = useState(() => new QueryClient());
   const [loaded, error] = useFonts({
     DMSans_400Regular,
     DMSans_600SemiBold,

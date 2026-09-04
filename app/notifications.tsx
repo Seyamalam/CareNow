@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Button } from "panelui-native";
+import { Button } from "../components/button";
 import { Screen, Type, Row, Box, IconTile, Empty } from "../components/ui";
 import { useCare } from "../lib/store";
 import { usePalette } from "../lib/theme";

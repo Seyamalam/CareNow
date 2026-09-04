@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
-import { Button, Switch } from "panelui-native";
+import { Switch } from "panelui-native";
+import { Button } from "../../components/button";
 import { router } from "expo-router";
 import {
   Screen,
@@ -38,7 +39,11 @@ export default function Profile() {
             }}
           >
             <Type size={25} weight="bold">
-              AR
+              {state!.members[0].name
+                .split(" ")
+                .map((n) => n[0])
+                .slice(0, 2)
+                .join("")}
             </Type>
           </View>
           <View style={{ flex: 1, gap: 5 }}>

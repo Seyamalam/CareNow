@@ -6,13 +6,11 @@
     "orientation": "portrait",
     "scheme": "carenow",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.carenow.demo"
     },
     "android": {
-      "edgeToEdgeEnabled": true,
       "package": "com.carenow.demo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/carenow-mark.png",

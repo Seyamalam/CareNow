@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
-import { Button, Input } from "panelui-native";
+import { Input } from "panelui-native";
+import { Button } from "../components/button";
 import { router, useLocalSearchParams } from "expo-router";
 import { Screen, Type, Choices } from "../components/ui";
 import { Confirm } from "../components/confirm";
@@ -24,6 +25,7 @@ export default function MemberForm() {
   const [remove, setRemove] = useState(false);
   async function save() {
     const r = memberSchema.safeParse({
+      ...old,
       id: old?.id ?? "new",
       name,
       age: age === "" ? NaN : Number(age),

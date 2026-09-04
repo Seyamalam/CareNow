@@ -1,5 +1,5 @@
 import { View, Share } from "react-native";
-import { Button } from "panelui-native";
+import { Button } from "../../components/button";
 import { useLocalSearchParams } from "expo-router";
 import { Share2 } from "lucide-react-native";
 import { Screen, Type, Row, Box, Pill, Empty } from "../../components/ui";

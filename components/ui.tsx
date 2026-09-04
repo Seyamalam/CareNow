@@ -9,7 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Text, Button, Card } from "panelui-native";
+import { Text, Card } from "panelui-native";
+import { Button } from "../components/button";
 import Animated, {
   FadeInDown,
   FadeIn,

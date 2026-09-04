@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, ScrollView } from "react-native";
-import { Button, Input } from "panelui-native";
+import { Input } from "panelui-native";
+import { Button } from "../components/button";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Screen,

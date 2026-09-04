@@ -1,4 +1,5 @@
-import { Dialog, Button } from "panelui-native";
+import { Dialog } from "panelui-native";
+import { Button } from "../components/button";
 export function Confirm({
   open,
   setOpen,

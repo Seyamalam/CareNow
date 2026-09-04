@@ -1,6 +1,154 @@
-import { type State,today } from './contracts';
-export function initialState():State { return {
- members:[{id:'self',name:'Ayesha Rahman',age:29,gender:'Female',relation:'Self',blood:'B+',allergies:'None recorded'},{id:'mother',name:'Nasima Rahman',age:62,gender:'Female',relation:'Mother',blood:'O+',allergies:'None recorded'},{id:'child',name:'Arham Rahman',age:5,gender:'Male',relation:'Child',blood:'B+',allergies:'None recorded'}],
- appointments:[{id:'welcome-appointment',memberId:'self',doctorId:'dr-samira',date:today(1),time:'10:30 AM',mode:'Video',status:'Confirmed',fee:800,note:'Prenatal follow-up',createdAt:new Date().toISOString()}],requests:[],messages:[],
- records:[{id:'record-1',memberId:'self',title:'Prenatal check-up',type:'Report',date:today(-4),provider:'CareNow Demo Clinic',lines:['Fictional demonstration record','Visit: routine prenatal follow-up','Care plan: review with your clinician','Next appointment: scheduled in CareNow']},{id:'record-2',memberId:'mother',title:'General health review',type:'Report',date:today(-7),provider:'CareNow Demo Clinic',lines:['Fictional demonstration record','Visit: routine health review','Follow-up: family physician consultation']},{id:'record-3',memberId:'self',title:'Supplement schedule',type:'Prescription',date:today(-4),provider:'Dr. Samira Islam · Demo',lines:['Demonstration only — not a medical prescription','Daily supplement: follow your clinician’s instructions','Use reminders to record your own prescribed schedule']}],
- logs:[],notifications:[{id:'welcome',title:'Your care space is ready',detail:'3 family profiles · Private demo session',read:false,date:new Date().toISOString()},{id:'appointment',title:'Upcoming consultation',detail:'Dr. Samira Islam · Tomorrow, 10:30 AM',read:false,date:new Date().toISOString()}],medicationEvents:[],preferences:{language:'en',reminders:true},version:0}; }
+import { type State, today } from "./contracts";
+export function initialState(): State {
+  return {
+    members: [
+      {
+        id: "self",
+        dueDate: today(112),
+        name: "Ayesha Rahman",
+        age: 29,
+        gender: "Female",
+        relation: "Self",
+        blood: "B+",
+        allergies: "None recorded",
+      },
+      {
+        id: "mother",
+        name: "Nasima Rahman",
+        age: 62,
+        gender: "Female",
+        relation: "Mother",
+        blood: "O+",
+        allergies: "None recorded",
+      },
+      {
+        id: "child",
+        name: "Arham Rahman",
+        age: 5,
+        gender: "Male",
+        relation: "Child",
+        blood: "B+",
+        allergies: "None recorded",
+      },
+    ],
+    appointments: [
+      {
+        id: "welcome-appointment",
+        memberId: "self",
+        doctorId: "dr-samira",
+        date: today(1),
+        time: "10:30 AM",
+        mode: "Video",
+        status: "Confirmed",
+        fee: 800,
+        note: "Prenatal follow-up",
+        createdAt: new Date().toISOString(),
+      },
+    ],
+    requests: [
+      {
+        id: "welcome-care",
+        memberId: "mother",
+        serviceId: "elderly-caregiver",
+        city: "Dhaka",
+        address: "House 12, Road 7, Dhanmondi",
+        contactName: "Ayesha Rahman",
+        phone: "01700000000",
+        email: "",
+        shift: 8,
+        days: 7,
+        startDate: today(1),
+        price: 8400,
+        status: "Assigned",
+        emergency: false,
+        createdAt: new Date().toISOString(),
+      },
+    ],
+    messages: [
+      {
+        id: "welcome-message",
+        appointmentId: "welcome-appointment",
+        sender: "Care team",
+        text: "Demo care team: your prenatal follow-up is scheduled. You can add visit notes and reports here.",
+        createdAt: new Date().toISOString(),
+      },
+    ],
+    records: [
+      {
+        id: "record-1",
+        memberId: "self",
+        title: "Prenatal check-up",
+        type: "Report",
+        date: today(-4),
+        provider: "CareNow Demo Clinic",
+        lines: [
+          "Fictional demonstration record",
+          "Visit: routine prenatal follow-up",
+          "Care plan: review with your clinician",
+          "Next appointment: scheduled in CareNow",
+        ],
+      },
+      {
+        id: "record-2",
+        memberId: "mother",
+        title: "General health review",
+        type: "Report",
+        date: today(-7),
+        provider: "CareNow Demo Clinic",
+        lines: [
+          "Fictional demonstration record",
+          "Visit: routine health review",
+          "Follow-up: family physician consultation",
+        ],
+      },
+      {
+        id: "record-3",
+        memberId: "self",
+        title: "Supplement schedule",
+        type: "Prescription",
+        date: today(-4),
+        provider: "Dr. Samira Islam · Demo",
+        lines: [
+          "Demonstration only — not a medical prescription",
+          "Daily supplement: follow your clinician’s instructions",
+          "Use reminders to record your own prescribed schedule",
+        ],
+      },
+    ],
+    logs: [
+      {
+        id: "seed-weight",
+        memberId: "self",
+        kind: "weight",
+        value: "62.5",
+        date: new Date().toISOString(),
+      },
+      {
+        id: "seed-symptom",
+        memberId: "self",
+        kind: "symptom",
+        value: "Feeling well. Added notes for the next visit.",
+        date: new Date(Date.now() - 86400000).toISOString(),
+      },
+    ],
+    notifications: [
+      {
+        id: "welcome",
+        title: "Your care space is ready",
+        detail: "3 family profiles · Private demo session",
+        read: false,
+        date: new Date().toISOString(),
+      },
+      {
+        id: "appointment",
+        title: "Upcoming consultation",
+        detail: "Dr. Samira Islam · Tomorrow, 10:30 AM",
+        read: false,
+        date: new Date().toISOString(),
+      },
+    ],
+    medicationEvents: [],
+    preferences: { language: "en", reminders: true },
+    version: 0,
+  };
+}

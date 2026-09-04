@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, ScrollView } from "react-native";
-import { Input, Button } from "panelui-native";
+import { Input } from "panelui-native";
+import { Button } from "../../components/button";
 import { Search, SlidersHorizontal } from "lucide-react-native";
 import { useLocalSearchParams } from "expo-router";
 import { Screen, Type, Row, Choice, Enter, Empty } from "../../components/ui";

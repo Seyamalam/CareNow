@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Button } from "panelui-native";
+import { Button } from "../components/button";
 import { router } from "expo-router";
 import { ArrowUpRight } from "lucide-react-native";
 import { Screen, Type, Row, Box, Pill, IconTile } from "../components/ui";

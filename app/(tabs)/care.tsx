@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
-import { Button } from "panelui-native";
+import { Button } from "../../components/button";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowUpRight, ChevronRight } from "lucide-react-native";
 import {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
-import { Button, Input } from "panelui-native";
+import { Input, Dialog } from "panelui-native";
+import { Button } from "../components/button";
 import { router } from "expo-router";
 import { Plus, Flower2, Check, ArrowUpRight } from "lucide-react-native";
 import {
@@ -17,7 +18,7 @@ import {
 } from "../components/ui";
 import { usePalette } from "../lib/theme";
 import { useCare } from "../lib/store";
-import { today } from "../shared/contracts";
+import { today, bangladeshDay } from "../shared/contracts";
 export default function Motherhood() {
   const p = usePalette(),
     { state, memberId, act, pending, notify } = useCare();
@@ -29,7 +30,23 @@ export default function Motherhood() {
   const logs = state!.logs.filter(
     (l) => l.memberId === memberId && l.kind !== "routine",
   );
-  const weeks = 24;
+  const member = state!.members.find((m) => m.id === memberId)!;
+  const [editing, setEditing] = useState(false);
+  const [dueDate, setDueDate] = useState(member.dueDate || today(112));
+  const daysRemaining = member.dueDate
+    ? Math.ceil((Date.parse(member.dueDate) - Date.parse(today())) / 86400000)
+    : null;
+  const weeks =
+    daysRemaining === null
+      ? 0
+      : Math.max(0, Math.min(42, Math.floor((280 - daysRemaining) / 7)));
+  async function saveTimeline() {
+    try {
+      await act({ type: "member.save", member: { ...member, dueDate } });
+      setEditing(false);
+      notify("Timeline updated");
+    } catch {}
+  }
   async function save() {
     try {
       await act({ type: "log.add", memberId, kind, value });
@@ -63,11 +80,18 @@ export default function Motherhood() {
             </Row>
             <Row style={{ alignItems: "baseline", gap: 8 }}>
               <Type size={58} weight="bold" style={{ letterSpacing: -2 }}>
-                24
+                {member.dueDate ? weeks : "—"}
               </Type>
               <Type size={22}>weeks</Type>
               <View style={{ flex: 1 }} />
-              <Pill text="TRIMESTER 2" tone="muted" />
+              <Pill
+                text={
+                  member.dueDate
+                    ? `TRIMESTER ${weeks < 14 ? 1 : weeks < 28 ? 2 : 3}`
+                    : "SET TIMELINE"
+                }
+                tone="muted"
+              />
             </Row>
             <View
               style={{
@@ -79,7 +103,7 @@ export default function Motherhood() {
             >
               <View
                 style={{
-                  width: `${(weeks / 40) * 100}%`,
+                  width: `${(Math.min(weeks, 40) / 40) * 100}%`,
                   height: "100%",
                   backgroundColor: p.primary,
                   borderRadius: 3,
@@ -90,9 +114,17 @@ export default function Motherhood() {
               <Type size={11}>Week 1</Type>
               <Type size={11}>Week 40</Type>
             </Row>
-            <Type size={10} muted>
-              Illustrative timeline · Set with a clinician for real care
-            </Type>
+            <Button
+              variant="ghost"
+              onPress={() => {
+                setDueDate(member.dueDate || today(112));
+                setEditing(true);
+              }}
+            >
+              {member.dueDate
+                ? `Due ${member.dueDate} · Edit`
+                : "Set expected due date"}
+            </Button>
           </View>
           <Section title="Today’s checklist" />
           <Box>
@@ -107,7 +139,7 @@ export default function Motherhood() {
                   l.memberId === memberId &&
                   l.kind === "symptom" &&
                   l.value === key &&
-                  l.date.startsWith(today()),
+                  bangladeshDay(l.date) === today(),
               );
               return (
                 <Row key={item}>
@@ -305,6 +337,27 @@ export default function Motherhood() {
           ))}
         </>
       )}
+      <Dialog open={editing} onOpenChange={setEditing}>
+        <Dialog.Content>
+          <Dialog.Title>Pregnancy timeline</Dialog.Title>
+          <Dialog.Description>{member.name}</Dialog.Description>
+          <Input
+            label="Expected due date"
+            value={dueDate}
+            onChangeText={setDueDate}
+            placeholder="YYYY-MM-DD"
+            keyboardType="numbers-and-punctuation"
+          />
+          <Dialog.Footer>
+            <Button variant="ghost" onPress={() => setEditing(false)}>
+              Cancel
+            </Button>
+            <Button loading={pending} onPress={saveTimeline}>
+              Save timeline
+            </Button>
+          </Dialog.Footer>
+        </Dialog.Content>
+      </Dialog>
     </Screen>
   );
 }

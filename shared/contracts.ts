@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+const validDate = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD")
+  .refine((v) => {
+    const n = new Date(v + "T12:00:00Z");
+    return Number.isFinite(n.getTime()) && n.toISOString().slice(0, 10) === v;
+  }, "Choose a valid calendar date");
 export const memberSchema = z.object({
   id: z.string(),
   name: z.string().trim().min(2).max(60),
@@ -7,6 +14,7 @@ export const memberSchema = z.object({
   gender: z.enum(["Female", "Male", "Other"]),
   relation: z.enum(["Self", "Mother", "Father", "Partner", "Child", "Other"]),
   blood: z.string().max(8),
+  dueDate: z.union([validDate, z.literal("")]).optional(),
   allergies: z.string().max(200),
 });
 export const appointmentSchema = z.object({
@@ -91,7 +99,7 @@ export const stateSchema = z.object({
   }),
   version: z.number(),
 });
-const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Choose a valid date");
+const date = validDate;
 export const actionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("member.save"), member: memberSchema }),
   z.object({ type: z.literal("member.delete"), id: z.string() }),
@@ -175,6 +183,11 @@ export const attachmentSchema = z.object({
     .max(700000)
     .regex(/^[A-Za-z0-9+/]+={0,2}$/),
 });
+export function bangladeshDay(value: string) {
+  return new Date(new Date(value).getTime() + 6 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+}
 export function today(offset = 0) {
   const d = new Date(Date.now() + 6 * 60 * 60 * 1000);
   d.setUTCDate(d.getUTCDate() + offset);
