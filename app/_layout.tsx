@@ -1,5 +1,6 @@
 import "../global.css";
 import React, { useEffect, useState } from "react";
+import { useReducedMotion } from "react-native-reanimated";
 import { Stack, DefaultTheme, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -21,6 +22,7 @@ import { FloatingToast } from "../components/ui";
 Uniwind.setTheme("light");
 void NativeSplash.preventAutoHideAsync();
 function Navigation() {
+  const reduced = useReducedMotion();
   const p = usePalette();
   const care = useCare();
   const [elapsed, setElapsed] = useState(false);
@@ -48,7 +50,7 @@ function Navigation() {
       <Stack
         screenOptions={{
           headerShown: false,
-          animation: "slide_from_right",
+          animation: reduced ? "none" : "slide_from_right",
           contentStyle: { backgroundColor: p.background },
         }}
       />

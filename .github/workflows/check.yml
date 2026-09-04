@@ -1,0 +1,28 @@
+name: Verify CareNow
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run db:migrate
+      - name: Hono and D1 integration
+        run: |
+          npm run api:dev > /tmp/carenow-api.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl --fail http://127.0.0.1:8787/api/health && break
+            sleep 1
+          done
+          API_URL=http://127.0.0.1:8787 node scripts/smoke-api.mjs
+      - run: npx expo export --platform web

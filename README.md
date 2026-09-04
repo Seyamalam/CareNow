@@ -1,24 +1,38 @@
 # CareNow
 
-A Bangladesh-focused family care demo for Innovation Fair BD, built with Expo React Native, Panel UI, Reanimated, and a typed Hono API on Cloudflare Workers with D1.
+A complete family-care exhibition demo for **Innovation Exhibitor · Bangladesh**. Expo React Native, Panel UI, Reanimated, and a typed Hono API backed by Cloudflare Workers and D1.
 
-## Build status
+[Open live demo](https://carenow-demo.pages.dev) · [Android APK](https://github.com/Seyamalam/CareNow/releases/latest) · [Exhibition walkthrough](docs/DEMO.md) · [Setup & deployment](docs/SETUP.md)
 
-Planning complete; implementation in progress. See [milestones and task checklist](docs/PLAN.md), [product scope](docs/PRODUCT.md), and [architecture](docs/ARCHITECTURE.md).
+## What works
 
-## Demo scope
+- Eleven doctor specialties, search/filtering, profiles, booking, cancellation and consultation records.
+- Private messages and PDF/photo uploads; simulated call controls and completion.
+- Elderly, prenatal/postpartum, child development and emergency services with BDT pricing, complete request forms and tracking.
+- Family profiles, pregnancy due date, journals, daily routines, medication check-offs, notifications and Bangla navigation.
+- Seven-day isolated demo sessions with real D1 persistence, reset, input validation and session ownership checks.
+- Original branding, animated splash, bundled fonts, tactile controls and reduced-motion support.
 
-Doctor discovery and consultation, elderly care, prenatal and postpartum care, neurodivergent children's support, emergency assistance, family profiles, appointments, medication tracking, secure session-scoped messages, and persistent care requests.
+All people, credentials, clinical records, prices and availability are fictional exhibition data. **Calls, dispatch and payments are simulated.** No real clinician, emergency service or payment processor is connected. Internet is required for data operations.
 
-All seeded people and clinical records are fictional. Consultation calls, dispatch, payments, and clinical documents are demonstration experiences unless an explicit live integration is configured. The app does not contact real emergency services or make medical decisions.
+## Run
 
-## Stack
+```sh
+npm ci
+npm start
+```
 
-- Expo SDK 57 / React Native 0.86 / Expo Router
-- Panel UI / Uniwind / Reanimated 4
-- Hono / Zod / TypeScript / Cloudflare Workers / D1
+The app connects to the deployed demo API by default. Use Expo Go for SDK 57 or install the standalone ARM64 Android APK. See [setup](docs/SETUP.md) for local Wrangler/D1, native builds and your own Cloudflare deployment.
 
-Setup, testing, deployment, and presentation instructions will be added as each milestone is verified.
+```sh
+npm run typecheck
+npm test
+node scripts/smoke-api.mjs
+npx expo-doctor
+npx expo export --platform web
+```
+
+[Product scope](docs/PRODUCT.md) · [Milestones](docs/PLAN.md) · [Architecture](docs/ARCHITECTURE.md) · [Verification](docs/QA.md) · [Assets & sources](docs/ASSETS.md) · [Visual brief review](docs/BRIEF-REVIEW.md)
 
 ## Screen gallery
 
@@ -33,6 +47,7 @@ Native Android captures are added here as each screen passes visual inspection. 
 <tr><td align="center"><img src="docs/screenshots/13-health-records.png" width="230" alt="13 health records" /><br/><sub>health records</sub></td><td align="center"><img src="docs/screenshots/14-consultation-summary.png" width="230" alt="14 consultation summary" /><br/><sub>consultation summary</sub></td><td align="center"><img src="docs/screenshots/15-profile.png" width="230" alt="15 profile" /><br/><sub>profile</sub></td></tr>
 <tr><td align="center"><img src="docs/screenshots/16-bangla-navigation.png" width="230" alt="16 bangla navigation" /><br/><sub>bangla navigation</sub></td><td align="center"><img src="docs/screenshots/17-family.png" width="230" alt="17 family" /><br/><sub>family</sub></td><td align="center"><img src="docs/screenshots/18-motherhood.png" width="230" alt="18 motherhood" /><br/><sub>motherhood</sub></td></tr>
 <tr><td align="center"><img src="docs/screenshots/19-care-tracking.png" width="230" alt="19 care tracking" /><br/><sub>care tracking</sub></td><td align="center"><img src="docs/screenshots/20-emergency-support.png" width="230" alt="20 emergency support" /><br/><sub>emergency support</sub></td><td align="center"><img src="docs/screenshots/21-activity.png" width="230" alt="21 activity" /><br/><sub>activity</sub></td></tr>
-<tr><td align="center"><img src="docs/screenshots/22-notifications.png" width="230" alt="22 notifications" /><br/><sub>notifications</sub></td></tr>
+<tr><td align="center"><img src="docs/screenshots/22-notifications.png" width="230" alt="22 notifications" /><br/><sub>notifications</sub></td><td align="center"><img src="docs/screenshots/23-journal.png" width="230" alt="23 journal" /><br/><sub>journal</sub></td><td align="center"><img src="docs/screenshots/24-postpartum.png" width="230" alt="24 postpartum" /><br/><sub>postpartum</sub></td></tr>
+<tr><td align="center"><img src="docs/screenshots/25-child-development.png" width="230" alt="25 child development" /><br/><sub>child development</sub></td><td align="center"><img src="docs/screenshots/26-family-profile-form.png" width="230" alt="26 family profile form" /><br/><sub>family profile form</sub></td></tr>
 </table>
 <!-- SCREENSHOTS:END -->

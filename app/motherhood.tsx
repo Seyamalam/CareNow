@@ -18,7 +18,7 @@ import {
 } from "../components/ui";
 import { usePalette } from "../lib/theme";
 import { useCare } from "../lib/store";
-import { today, bangladeshDay } from "../shared/contracts";
+import { today, bangladeshDay, memberSchema } from "../shared/contracts";
 export default function Motherhood() {
   const p = usePalette(),
     { state, memberId, act, pending, notify } = useCare();
@@ -32,6 +32,7 @@ export default function Motherhood() {
   );
   const member = state!.members.find((m) => m.id === memberId)!;
   const [editing, setEditing] = useState(false);
+  const [dateError, setDateError] = useState("");
   const [dueDate, setDueDate] = useState(member.dueDate || today(112));
   const daysRemaining = member.dueDate
     ? Math.ceil((Date.parse(member.dueDate) - Date.parse(today())) / 86400000)
@@ -41,8 +42,14 @@ export default function Motherhood() {
       ? 0
       : Math.max(0, Math.min(42, Math.floor((280 - daysRemaining) / 7)));
   async function saveTimeline() {
+    const parsed = memberSchema.safeParse({ ...member, dueDate });
+    if (!parsed.success) {
+      setDateError(parsed.error.issues[0].message);
+      return;
+    }
+    setDateError("");
     try {
-      await act({ type: "member.save", member: { ...member, dueDate } });
+      await act({ type: "member.save", member: parsed.data });
       setEditing(false);
       notify("Timeline updated");
     } catch {}
@@ -380,6 +387,7 @@ export default function Motherhood() {
             value={dueDate}
             onChangeText={setDueDate}
             placeholder="YYYY-MM-DD"
+            errorMessage={dateError}
             keyboardType="numbers-and-punctuation"
           />
           <Dialog.Footer>
