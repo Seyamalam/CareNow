@@ -12,8 +12,10 @@ export const API_URL =
   "https://carenow-api.seyamalam41.workers.dev";
 let token: string | null = null;
 const client = hc<AppType>(API_URL, {
-  headers: (): Record<string, string> =>
-    token ? { Authorization: `Bearer ${token}` } : {},
+  headers: async (): Promise<Record<string, string>> => {
+    token ??= await AsyncStorage.getItem("carenow.session");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  },
 });
 export class ApiError extends Error {
   constructor(

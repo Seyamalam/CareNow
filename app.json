@@ -5,13 +5,19 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "carenow",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.carenow.demo"
     },
     "android": {
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.carenow.demo",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/carenow-mark.png",
+        "backgroundColor": "#194E3E"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -20,12 +26,20 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-splash-screen",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/carenow-mark.png",
+          "imageWidth": 160,
+          "backgroundColor": "#194E3E"
+        }
+      ],
       "expo-image",
       "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "icon": "./assets/carenow-mark.png"
   }
 }
