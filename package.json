@@ -8,22 +8,40 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc -p server/tsconfig.json",
+    "api:dev": "wrangler dev --config server/wrangler.jsonc --port 8787",
+    "db:migrate": "wrangler d1 migrations apply carenow-demo --local --config server/wrangler.jsonc",
+    "api:deploy": "wrangler deploy --config server/wrangler.jsonc",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
+    "@expo-google-fonts/dm-sans": "^0.4.2",
+    "@expo-google-fonts/manrope": "^0.4.2",
+    "@hono/zod-validator": "^0.9.1",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-masked-view/masked-view": "0.3.2",
+    "@tanstack/react-query": "^5.102.8",
     "expo": "~57.0.10",
     "expo-constants": "~57.0.9",
+    "expo-document-picker": "~57.0.1",
+    "expo-file-system": "~57.0.6",
+    "expo-font": "~57.0.3",
+    "expo-haptics": "~57.0.2",
+    "expo-image": "~57.0.4",
     "expo-linear-gradient": "~57.0.1",
     "expo-linking": "~57.0.5",
     "expo-router": "~57.0.10",
+    "expo-sharing": "~57.0.18",
+    "expo-splash-screen": "~57.0.8",
     "expo-status-bar": "~57.0.1",
+    "hono": "^4.13.7",
     "lucide-react-native": "^1.28.0",
-    "panelui-native": "latest",
+    "panelui-native": "0.90.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
     "react-native-gesture-handler": "~2.32.0",
+    "react-native-keyboard-controller": "1.21.9",
     "react-native-reanimated": "4.5.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
@@ -31,10 +49,14 @@
     "react-native-web": "^0.21.0",
     "react-native-worklets": "0.10.1",
     "tailwindcss": "^4.3.3",
-    "uniwind": "^1.10.0"
+    "uniwind": "^1.10.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260904.1",
     "@types/react": "~19.2.2",
-    "typescript": "~6.0.3"
+    "tsx": "^4.23.13",
+    "typescript": "~6.0.3",
+    "wrangler": "^4.129.0"
   }
 }

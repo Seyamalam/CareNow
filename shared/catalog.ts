@@ -1,0 +1,42 @@
+export const specialties=['All','General Physician','Medicine','Cardiology','Gynecology','Pulmonology','Pediatrics','Gastroenterology','Psychiatry','Nutrition','Diabetes','Urology'] as const;
+export const doctors=[
+ {id:'dr-nadia',name:'Dr. Nadia Rahman',specialty:'General Physician',qualification:'MBBS, FCPS · Family medicine',experience:12,rating:4.9,reviews:248,fee:600,initials:'NR',tone:'mint',available:true,languages:'Bangla, English',focus:['Family health','Preventive care','Follow-up consultations']},
+ {id:'dr-farhan',name:'Dr. Farhan Ahmed',specialty:'Cardiology',qualification:'MBBS, MD · Cardiology',experience:15,rating:4.9,reviews:186,fee:1000,initials:'FA',tone:'sand',available:true,languages:'Bangla, English',focus:['Heart health','Blood pressure','Cardiac follow-up']},
+ {id:'dr-samira',name:'Dr. Samira Islam',specialty:'Gynecology',qualification:'MBBS, FCPS · Obstetrics & gynecology',experience:10,rating:4.8,reviews:213,fee:800,initials:'SI',tone:'rose',available:true,languages:'Bangla, English',focus:['Prenatal care','Postpartum care','Women’s health']},
+ {id:'dr-raihan',name:'Dr. Raihan Kabir',specialty:'Pediatrics',qualification:'MBBS, DCH · Pediatrics',experience:9,rating:4.9,reviews:174,fee:700,initials:'RK',tone:'lavender',available:true,languages:'Bangla, English',focus:['Child development','Newborn care','Family guidance']},
+ ...(['Medicine','Pulmonology','Gastroenterology','Psychiatry','Nutrition','Diabetes','Urology'] as const).map((specialty,i)=>({id:`dr-specialist-${i}`,name:['Dr. Ayesha Noor','Dr. Tanvir Hasan','Dr. Zarin Chowdhury','Dr. Safwan Ali','Dr. Nusrat Karim','Dr. Imran Haque','Dr. Rafiq Alam'][i]!,specialty,qualification:`MBBS · ${specialty}`,experience:8+i,rating:4.8,reviews:92+i*13,fee:700+i*50,initials:['AN','TH','ZC','SA','NK','IH','RA'][i]!,tone:['mint','sand','rose','lavender'][i%4]!,available:i%3!==1,languages:'Bangla, English',focus:[`${specialty} consultation`,'Follow-up care','Care coordination']}))
+];
+export type Doctor=typeof doctors[number];
+export const slots=['09:00 AM','10:30 AM','12:00 PM','02:30 PM','04:00 PM','05:30 PM','07:00 PM','08:30 PM'];
+export const categories=[
+ {id:'elderly',name:'Elderly care',subtitle:'Caregivers & nursing',icon:'heart',tone:'mint'},
+ {id:'motherhood',name:'Motherhood',subtitle:'Before & after birth',icon:'flower',tone:'rose'},
+ {id:'children',name:'Child development',subtitle:'Care & specialized therapy',icon:'sparkles',tone:'lavender'},
+ {id:'emergency',name:'Emergency support',subtitle:'Transport & assistance',icon:'ambulance',tone:'sand'},
+] as const;
+export type Category=typeof categories[number]['id'];
+const nursing=['Personal care','Health observation','Medication monitoring','Wound & catheter care','IV / IM administration','Oxygen support','Pain & symptom observation','Basic physiotherapy'];
+export const services=[
+ {id:'elderly-caregiver',category:'elderly',name:'Elderly caregiver',label:'Daily companionship',rate:1200,unit:'day',features:['Companionship','Personal care & feeding','Health status screening','Medication monitoring','Movement & basic physiotherapy','Post-hospital support','Dementia care support','Telemedicine scheduling']},
+ {id:'elderly-nurse',category:'elderly',name:'Home nursing',label:'Qualified nursing care',rate:1800,unit:'day',features:nursing},
+ {id:'prenatal-caregiver',category:'motherhood',name:'Prenatal caregiver',label:'Support through pregnancy',rate:1400,unit:'day',features:['Companionship','Meal & nutrition support','Daily activity support','Appointment coordination']},
+ {id:'prenatal-nurse',category:'motherhood',name:'Prenatal nursing',label:'A coordinated care plan',rate:1900,unit:'day',features:['Pregnancy timeline','Screening & appointment reminders','Supplement reminders','Weight & symptom journal','Movement log','Nutrition support']},
+ {id:'postpartum',category:'motherhood',name:'Postpartum care',label:'Recovery & wellbeing',rate:1500,unit:'day',features:['Companionship','Sleep & nutrition support','Medication support','Mental wellbeing support','Stress recovery support','Baby care support']},
+ {id:'nanny',category:'motherhood',name:'Newborn nanny',label:'Day & night support',rate:1300,unit:'day',features:['Newborn care','Feeding & bottle preparation','Baby bathing & hygiene','Sleep monitoring','Parent support']},
+ {id:'toddler',category:'children',name:'Toddler caregiver',label:'Everyday growth & play',rate:1200,unit:'day',features:['Personal care','Meals & feeding','Hygiene maintenance','Creative play & educational games','Tidy play areas','Parent coordination']},
+ {id:'child-caregiver',category:'children',name:'Neurodivergent child care',label:'Individual care & routines',rate:1600,unit:'day',features:['Companionship','Meals & feeding','Personal care & hygiene','Engaging activities','Parent coordination']},
+ {id:'child-nurse',category:'children',name:'Child nursing',label:'Personalized nursing support',rate:1800,unit:'day',features:nursing},
+ {id:'speech',category:'children',name:'Speech & language therapy',label:'Communication & expression',rate:1000,unit:'session',features:['Individual assessment','Communication activities','Assistive communication support','Parent coaching']},
+ {id:'occupational',category:'children',name:'Occupational therapy',label:'Daily skills & confidence',rate:1200,unit:'session',features:['Daily living skills','Sensory activities','Fine motor activities','Home routines']},
+ {id:'behavioral',category:'children',name:'Development & family support',label:'Personalized learning',rate:1000,unit:'session',features:['Behavioral support','Individual learning plans','Social skills','Physiotherapy coordination','Family counseling & parent training']},
+ {id:'ambulance',category:'emergency',name:'Ambulance',label:'Patient transport',rate:2500,unit:'trip',features:['Patient transport','Attendant coordination','Destination confirmation']},
+ {id:'companion',category:'emergency',name:'Hospital companion',label:'Hospital & doctor visits',rate:1200,unit:'visit',features:['Hospital accompaniment','Doctor visit support','Diagnostic visit support']},
+ {id:'diagnostics',category:'emergency',name:'Home sample collection',label:'Diagnostic assistance',rate:500,unit:'visit',features:['Home collection request','Time-slot coordination','Report organization']},
+ {id:'medicine',category:'emergency',name:'Medicine delivery',label:'Prescription collection',rate:150,unit:'delivery',features:['Prescription collection','Pharmacy coordination','Delivery tracking']},
+ {id:'burial',category:'emergency',name:'Pre-burial support',label:'Family assistance',rate:3000,unit:'request',features:['Coordination assistance','Family support','Transport arrangements']},
+ {id:'freezer',category:'emergency',name:'Freezer van',label:'Specialized transport',rate:4000,unit:'trip',features:['Vehicle coordination','Pickup & destination planning','Family contact support']},
+] as const;
+export type Service=typeof services[number];
+export function servicePrice(service:Service,shift:number,days:number){return service.unit==='day'? Math.round(service.rate*(shift/8)*days):service.rate;}
+export const medications=[{id:'vitamin',name:'Daily supplement',detail:'1 tablet · After breakfast',time:'09:00 AM',relation:'Self'},{id:'evening',name:'Evening medication',detail:'As prescribed · After dinner',time:'08:00 PM',relation:'Mother'}];
+export const routines=['Morning routine','Sensory play','Communication practice','Outdoor activity'];
