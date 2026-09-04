@@ -29,6 +29,7 @@ Integration tests create isolated sessions and verify authentication, duplicate 
 - Child routine completed for Arham, preserving other family members' state.
 - Family profile edited and saved.
 - PDF selected from Android Downloads, uploaded to D1 and attached to the consultation; reopening returned the saved file to the Android share sheet.
+- Network disabled on the final isolated emulator: a clear connection error and retry action appeared; connectivity restored before retrying.
 - Cold launch through the animated splash succeeds; selected family member and saved D1 data survive release APK reinstall and restart.
 - Family, profile, notification, record, emergency, postpartum and specialized care screens inspected.
 
