@@ -14,7 +14,7 @@
     "api:deploy": "wrangler deploy --config server/wrangler.jsonc",
     "test": "tsx --test tests/*.test.ts",
     "postinstall": "node scripts/prepare-map-worker.mjs",
-    "export:web": "node scripts/prepare-map-worker.mjs && CARENOW_METRO_LANE=web expo export --platform web"
+    "export:web": "node scripts/prepare-map-worker.mjs && CARENOW_METRO_LANE=web expo export --platform web && node scripts/prepare-web-routes.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/dm-sans": "^0.4.2",
