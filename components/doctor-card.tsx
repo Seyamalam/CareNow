@@ -83,7 +83,13 @@ export function DoctorCard({
           </Row>
         </View>
       </Row>
-      <Row style={{ justifyContent: "space-between", paddingTop: 2 }}>
+      <Row
+        style={{
+          justifyContent: "space-between",
+          paddingTop: 2,
+          flexWrap: "wrap",
+        }}
+      >
         <Type size={18} weight="bold">
           {money(doctor.fee)}{" "}
           <Type size={11} muted>

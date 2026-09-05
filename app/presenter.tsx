@@ -59,7 +59,7 @@ export default function Presenter() {
     <Screen back title="Presenter" right={<AccountSwitcher />}>
       <Box>
         <Row style={{ justifyContent: "space-between" }}>
-          <View style={{ gap: 4 }}>
+          <View style={{ gap: 4, flex: 1 }}>
             <Type size={18} weight="bold">
               Exhibition controls
             </Type>
@@ -114,7 +114,7 @@ export default function Presenter() {
         <Type size={18} weight="bold">
           Playback
         </Type>
-        <Row>
+        <Row style={{ flexWrap: "wrap" }}>
           <Button
             disabled={!s.exhibition.enabled}
             loading={pending}
@@ -160,7 +160,7 @@ export default function Presenter() {
         active.map((job) => (
           <Box key={job.id}>
             <Row style={{ justifyContent: "space-between" }}>
-              <Type size={17} weight="bold">
+              <Type size={17} weight="bold" style={{ flex: 1 }}>
                 {job.title}
               </Type>
               <Pill text={job.status} />

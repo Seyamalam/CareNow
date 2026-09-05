@@ -182,7 +182,7 @@ export default function Workspace() {
           disabled={pending}
         />
       </Row>
-      <Row style={{ gap: 10 }}>
+      <Row style={{ gap: 10, alignItems: "stretch" }}>
         {[
           [String(active.length), "Active jobs"],
           [String(done.length), "Completed"],
@@ -200,7 +200,13 @@ export default function Workspace() {
               gap: 6,
             }}
           >
-            <Type size={21} weight="bold">
+            <Type
+              size={21}
+              weight="bold"
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}
+              numberOfLines={1}
+            >
               {value}
             </Type>
             <Type size={10} muted>

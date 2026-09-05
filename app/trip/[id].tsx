@@ -111,6 +111,7 @@ export default function TrackTrip() {
           paddingHorizontal: 20,
           paddingVertical: 12,
           justifyContent: "space-between",
+          flexWrap: "wrap",
         }}
       >
         <Row>
@@ -130,7 +131,7 @@ export default function TrackTrip() {
         </Row>
         <AccountSwitcher />
       </Row>
-      <View style={{ flex: 1, minHeight: 200 }}>
+      <View style={{ flex: 1, minHeight: 100 }}>
         <RouteMap
           route={route}
           markers={markers}

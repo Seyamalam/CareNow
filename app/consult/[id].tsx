@@ -271,7 +271,7 @@ export default function Consult() {
           <Box>
             <Row>
               <DoctorAvatar doctor={doctor} size={46} />
-              <View>
+              <View style={{ flex: 1 }}>
                 <Type weight="bold">{doctor.name}</Type>
                 <Type size={11} muted>
                   Private session · Demo assistant replies

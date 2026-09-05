@@ -29,9 +29,10 @@ export default function TabLayout() {
         },
         tabBarLabelStyle: {
           fontFamily: "DMSans_600SemiBold",
-          fontSize: 11,
+          fontSize: 10,
           marginTop: 4,
         },
+        tabBarLabelPosition: "below-icon",
         sceneStyle: { backgroundColor: p.background },
       }}
     >
@@ -59,7 +60,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="transport"
         options={{
-          title: t("Transport", "যাতায়াত"),
+          title: t("Rides", "যাতায়াত"),
           tabBarIcon: ({ color }) => <Navigation size={22} color={color} />,
         }}
       />

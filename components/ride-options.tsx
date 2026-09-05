@@ -30,18 +30,23 @@ export function RideOptions({
       </Button>
       <BottomSheet open={open} onOpenChange={setOpen}>
         <BottomSheet.Content
+          size="full"
           style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}
         >
           <BottomSheet.Header
             title={kind === "truck" ? "Truck requirements" : "Group transport"}
           />
-          <View style={{ padding: 20, gap: 20 }}>
+          <BottomSheet.Body
+            keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets
+            contentContainerStyle={{ paddingVertical: 16, gap: 16 }}
+          >
             {kind === "truck" ? (
               <>
                 <Type size={14} weight="medium">
                   Truck capacity
                 </Type>
-                <Row>
+                <Row style={{ flexWrap: "wrap" }}>
                   {(["1 ton", "2 ton"] as const).map((truckSize) => (
                     <Choice
                       key={truckSize}
@@ -54,7 +59,7 @@ export function RideOptions({
                 <Type size={14} weight="medium">
                   Cargo
                 </Type>
-                <Row>
+                <Row style={{ flexWrap: "wrap" }}>
                   {(["General", "Furniture", "Equipment"] as const).map(
                     (cargo) => (
                       <Choice
@@ -68,7 +73,9 @@ export function RideOptions({
                 </Row>
               </>
             ) : (
-              <Row style={{ justifyContent: "space-between" }}>
+              <Row
+                style={{ justifyContent: "space-between", flexWrap: "wrap" }}
+              >
                 <Type size={16}>Passengers · max 24</Type>
                 <Row>
                   <Button
@@ -142,7 +149,7 @@ export function RideOptions({
               Schedule up to 30 days ahead.
             </Type>
             <Button onPress={() => setOpen(false)}>Save ride options</Button>
-          </View>
+          </BottomSheet.Body>
         </BottomSheet.Content>
       </BottomSheet>
     </>

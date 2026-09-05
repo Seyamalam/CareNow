@@ -26,12 +26,25 @@ export function Button({
       style={
         typeof props.style === "function"
           ? (state) => [
-              { boxShadow: "none", borderRadius: 14 },
+              {
+                boxShadow: "none",
+                borderRadius: 14,
+                minWidth: 0,
+                flexShrink: props.size === "icon" ? 0 : 1,
+              },
               typeof props.style === "function"
                 ? props.style(state)
                 : props.style,
             ]
-          : [{ boxShadow: "none", borderRadius: 14 }, props.style]
+          : [
+              {
+                boxShadow: "none",
+                borderRadius: 14,
+                minWidth: 0,
+                flexShrink: props.size === "icon" ? 0 : 1,
+              },
+              props.style,
+            ]
       }
       variant={variant}
       startContent={tint(startContent)}

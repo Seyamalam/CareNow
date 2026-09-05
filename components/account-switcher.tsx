@@ -55,6 +55,7 @@ export function AccountSwitcher() {
       </Button>
       <BottomSheet open={open} onOpenChange={setOpen}>
         <BottomSheet.Content
+          size="full"
           style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}
         >
           <BottomSheet.Header
@@ -65,7 +66,10 @@ export function AccountSwitcher() {
                 : "Exhibition accounts · Shared demo session"
             }
           />
-          <View style={{ padding: 20, gap: 8 }}>
+          <BottomSheet.Body
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ paddingVertical: 12, gap: 8 }}
+          >
             {accounts.map((a) => {
               const A = icons[a.id];
               return (
@@ -76,7 +80,9 @@ export function AccountSwitcher() {
                   onPress={() => void choose(a.id)}
                   accessibilityLabel={`Use ${a.title} account`}
                   style={{
-                    height: 72,
+                    minHeight: 72,
+                    height: "auto",
+                    paddingVertical: 14,
                     paddingHorizontal: 12,
                     justifyContent: "flex-start",
                     backgroundColor: account.id === a.id ? p.mint : p.card,
@@ -128,7 +134,7 @@ export function AccountSwitcher() {
             >
               Presenter controls
             </Button>
-          </View>
+          </BottomSheet.Body>
         </BottomSheet.Content>
       </BottomSheet>
     </>

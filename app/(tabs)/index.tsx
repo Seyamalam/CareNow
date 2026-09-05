@@ -83,7 +83,7 @@ export default function Home() {
   return (
     <Screen refresh>
       <Enter>
-        <Row style={{ justifyContent: "space-between" }}>
+        <Row style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
           <Row style={{ gap: 7 }}>
             <BrandMark size={29} />
             <Type size={22} weight="bold" style={{ letterSpacing: -0.8 }}>
@@ -154,7 +154,8 @@ export default function Home() {
               style={{
                 width: "47%",
                 flexGrow: 1,
-                height: 106,
+                minHeight: 112,
+                height: "auto",
                 borderRadius: 20,
                 backgroundColor: p.card,
                 borderWidth: 1,

@@ -36,6 +36,8 @@ export default function Transport() {
     wide = width > 900;
   const params = useLocalSearchParams<{ kind?: string }>();
   const [options, setOptions] = useState(defaultRideOptions);
+  const [mapHeight, setMapHeight] = useState(height * 0.7);
+  const [panelHeight, setPanelHeight] = useState(300);
   const [chosen, setChosen] = useState<VehicleKind>("ambulance"),
     [pickup, setPickup] = useState("banani"),
     [destination, setDestination] = useState("hospital"),
@@ -99,6 +101,7 @@ export default function Transport() {
           paddingHorizontal: 22,
           paddingVertical: 14,
           justifyContent: "space-between",
+          flexWrap: "wrap",
         }}
       >
         <View>
@@ -123,6 +126,7 @@ export default function Transport() {
         </Button>
       </Row>
       <View
+        onLayout={(event) => setMapHeight(event.nativeEvent.layout.height)}
         style={{
           flex: 1,
           flexDirection: wide ? "row" : "column",
@@ -131,12 +135,10 @@ export default function Transport() {
           alignSelf: "center",
         }}
       >
-        <View style={{ flex: 1, minHeight: 210, position: "relative" }}>
+        <View style={{ flex: 1, minHeight: 0, position: "relative" }}>
           <RouteMap
             offline={offline}
-            bottomInset={
-              wide ? 0 : Math.max(280, Math.min(440, height * 0.66 - 140))
-            }
+            bottomInset={wide ? 0 : panelHeight}
             route={route}
             markers={markers}
             recenter={recenter}
@@ -183,6 +185,8 @@ export default function Transport() {
         </View>
         <MapPanel
           wide={wide}
+          availableHeight={mapHeight}
+          onHeightChange={setPanelHeight}
           footer={
             <View
               style={{
@@ -194,8 +198,8 @@ export default function Transport() {
                 borderTopColor: p.border,
               }}
             >
-              <Row>
-                <View style={{ flex: 1 }}>
+              <Row style={{ flexWrap: "wrap" }}>
+                <View style={{ minWidth: 110, flexShrink: 0 }}>
                   <Type size={11} muted>
                     Estimated fare
                   </Type>
@@ -204,6 +208,7 @@ export default function Transport() {
                   </Type>
                 </View>
                 <Button
+                  style={{ flex: 1 }}
                   size="lg"
                   disabled={!!active}
                   loading={pending}
@@ -239,7 +244,11 @@ export default function Transport() {
                 {vehicle.eta} min away
               </Type>
             </Row>
-            <Row style={{ gap: 6, alignItems: "stretch" }}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 8, alignItems: "stretch" }}
+            >
               {vehicles.map((v) => (
                 <Button
                   key={v.id}
@@ -248,8 +257,10 @@ export default function Transport() {
                   accessibilityState={{ selected: kind === v.id }}
                   onPress={() => select(v.id)}
                   style={{
-                    flex: 1,
-                    height: 96,
+                    width: 102,
+                    flexShrink: 0,
+                    minHeight: 108,
+                    height: "auto",
                     paddingHorizontal: 2,
                     paddingVertical: 5,
                     borderWidth: kind === v.id ? 2 : 1,
@@ -258,26 +269,30 @@ export default function Transport() {
                     borderRadius: 14,
                   }}
                 >
-                  <View style={{ alignItems: "center", gap: 3 }}>
+                  <View style={{ alignItems: "center", gap: 3, width: "100%" }}>
                     <VehicleArt
                       kind={v.id}
                       size={60}
                       selected={kind === v.id}
                     />
-                    <Type size={11} weight="medium">
+                    <Type
+                      size={11}
+                      weight="medium"
+                      style={{ textAlign: "center" }}
+                    >
                       {v.id === "accessible"
                         ? "Access van"
                         : v.id === "truck"
                           ? "Truck"
                           : v.name}
                     </Type>
-                    <Type size={9} muted>
+                    <Type size={9} muted style={{ textAlign: "center" }}>
                       {v.capacity}
                     </Type>
                   </View>
                 </Button>
               ))}
-            </Row>
+            </ScrollView>
             <Type size={12} muted>
               {vehicle.detail}
             </Type>

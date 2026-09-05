@@ -8,6 +8,7 @@ import {
   StyleProp,
   KeyboardAvoidingView,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 import { Text, Card } from "panelui-native";
 import { Button } from "../components/button";
@@ -87,7 +88,10 @@ export function Row({
 }) {
   return (
     <View
-      style={[{ flexDirection: "row", alignItems: "center", gap: 12 }, style]}
+      style={[
+        { flexDirection: "row", alignItems: "center", gap: 12, minWidth: 0 },
+        style,
+      ]}
     >
       {children}
     </View>
@@ -155,13 +159,15 @@ export function Screen({
   const p = usePalette(),
     insets = useSafeAreaInsets();
   const care = useCare();
+  const { width, fontScale } = useWindowDimensions();
+  const stackedHeader = !!right && (width < 400 || fontScale > 1.15);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1, backgroundColor: p.background }}
     >
       <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
+        contentInsetAdjustmentBehavior="never"
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -184,8 +190,15 @@ export function Screen({
         }}
       >
         {(title || back) && (
-          <Row style={{ justifyContent: "space-between" }}>
-            <Row style={{ flex: 1 }}>
+          <Row
+            style={{
+              justifyContent: "space-between",
+              ...(stackedHeader
+                ? { flexDirection: "column", alignItems: "stretch" }
+                : {}),
+            }}
+          >
+            <Row style={{ flex: stackedHeader ? undefined : 1 }}>
               {back && (
                 <Button
                   size="icon"
@@ -218,7 +231,16 @@ export function Screen({
                 </Type>
               </View>
             </Row>
-            {right}
+            {right && (
+              <View
+                style={{
+                  alignSelf: stackedHeader ? "flex-end" : "center",
+                  flexShrink: 0,
+                }}
+              >
+                {right}
+              </View>
+            )}
           </Row>
         )}
         {children}
@@ -248,7 +270,7 @@ export function Section({
 }) {
   return (
     <Row style={{ justifyContent: "space-between" }}>
-      <Type size={20} weight="bold">
+      <Type size={20} weight="bold" style={{ flex: 1 }}>
         {title}
       </Type>
       {action && (
@@ -355,6 +377,7 @@ export function IconTile({
       style={{
         width: size,
         height: size,
+        flexShrink: 0,
         borderRadius: size * 0.27,
         backgroundColor: p[tone],
         justifyContent: "center",

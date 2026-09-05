@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from "react";
-import { View, useWindowDimensions } from "react-native";
+import { useEffect, useState, type ReactNode } from "react";
+import { View } from "react-native";
 import { Card } from "panelui-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -15,24 +15,36 @@ export function MapPanel({
   children,
   footer,
   wide,
+  availableHeight,
+  onHeightChange,
 }: {
   children: ReactNode;
   footer: ReactNode;
   wide: boolean;
+  availableHeight: number;
+  onHeightChange: (height: number) => void;
 }) {
   const p = usePalette(),
-    { height } = useWindowDimensions(),
     reduced = useReducedMotion(),
-    travel = 140,
+    travel = Math.min(140, availableHeight * 0.22),
     [expanded, setExpanded] = useState(false),
     offset = useSharedValue(travel),
     origin = useSharedValue(travel);
-  const maximum = Math.max(390, Math.min(560, height * 0.66));
+  const maximum = Math.min(560, Math.max(0, availableHeight - 64));
+  useEffect(() => {
+    onHeightChange(wide ? 0 : maximum - (expanded ? 0 : travel));
+    offset.set(
+      withSpring(expanded ? 0 : travel, {
+        duration: reduced ? 0 : 300,
+        dampingRatio: 1,
+      }),
+    );
+  }, [maximum, travel, wide, expanded, reduced, onHeightChange, offset]);
   const snap = (up: boolean) => {
     setExpanded(up);
     offset.set(
       withSpring(up ? 0 : travel, {
-        duration: 300,
+        duration: reduced ? 0 : 300,
         dampingRatio: 1,
         reduceMotion: undefined,
       }),
@@ -57,7 +69,7 @@ export function MapPanel({
       scheduleOnRN(setExpanded, up);
     });
   const style = useAnimatedStyle(() => ({
-    transform: [{ translateY: offset.get() }],
+    height: maximum - offset.get(),
   }));
   if (wide)
     return (
@@ -75,7 +87,6 @@ export function MapPanel({
         right: 0,
         bottom: 0,
         height: maximum,
-        overflow: "hidden",
       }}
     >
       <Animated.View
@@ -84,8 +95,8 @@ export function MapPanel({
             position: "absolute",
             left: 0,
             right: 0,
-            top: 0,
-            height: maximum,
+            bottom: 0,
+            overflow: "hidden",
             backgroundColor: p.card,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
@@ -103,7 +114,7 @@ export function MapPanel({
                 expanded ? "Collapse booking panel" : "Expand booking panel"
               }
               onPress={() => snap(!expanded)}
-              style={{ height: 30, padding: 0 }}
+              style={{ height: 30, minHeight: 30, padding: 0, flexShrink: 0 }}
             >
               <View
                 style={{
@@ -116,21 +127,9 @@ export function MapPanel({
             </Button>
           </View>
         </GestureDetector>
-        <View style={{ height: maximum - 30 - 118 - (expanded ? 0 : travel) }}>
-          {children}
-        </View>
+        <View style={{ flex: 1, minHeight: 0 }}>{children}</View>
+        <View style={{ flexShrink: 0, backgroundColor: p.card }}>{footer}</View>
       </Animated.View>
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: p.card,
-        }}
-      >
-        {footer}
-      </View>
     </View>
   );
 }

@@ -52,7 +52,8 @@ export function StopPicker({
                 setField(f);
               }}
               style={{
-                height: 48,
+                minHeight: 48,
+                height: "auto",
                 paddingHorizontal: 0,
                 justifyContent: "flex-start",
                 borderRadius: 0,
@@ -61,7 +62,7 @@ export function StopPicker({
               }}
             >
               <Row style={{ flex: 1, justifyContent: "space-between" }}>
-                <View>
+                <View style={{ flex: 1 }}>
                   <Type size={10} muted>
                     {i === 0 ? "PICKUP" : "DESTINATION"}
                   </Type>
@@ -90,13 +91,18 @@ export function StopPicker({
         }}
       >
         <BottomSheet.Content
+          size="full"
           style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}
         >
           <BottomSheet.Header
             title={field === "pickup" ? "Pickup location" : "Where to?"}
           />
 
-          <View style={{ gap: 16, paddingBottom: 24 }}>
+          <BottomSheet.Body
+            keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets
+            contentContainerStyle={{ gap: 16, paddingBottom: 24 }}
+          >
             <Input
               value={search}
               onChangeText={setSearch}
@@ -148,7 +154,7 @@ export function StopPicker({
             {!stops.some((s) =>
               s.name.toLowerCase().includes(search.toLowerCase()),
             ) && <Type muted>No matching demo locations</Type>}
-          </View>
+          </BottomSheet.Body>
         </BottomSheet.Content>
       </BottomSheet>
     </>

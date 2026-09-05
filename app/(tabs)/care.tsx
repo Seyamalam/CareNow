@@ -123,7 +123,9 @@ export default function Care() {
                     </Type>
                   </View>
                 </Row>
-                <Row style={{ justifyContent: "space-between" }}>
+                <Row
+                  style={{ justifyContent: "space-between", flexWrap: "wrap" }}
+                >
                   <Type size={17} weight="bold">
                     {s.id === "ambulance" ? "Route-based fare" : money(s.rate)}{" "}
                     {s.id !== "ambulance" && (
