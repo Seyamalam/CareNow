@@ -7,7 +7,7 @@
 - Native route motion verified in paired screenshots eight seconds apart. Fixed Reanimated dependency capture by reading shared values directly inside animation mappers. Fixed overlapping Lottie shape fills with separate illustration layers. Reduced-motion paths are implemented; physical-device accessibility/performance checks remain advisable.
 - Web: five-role account picker, provider operations, doctor completion and offline scenario persistence inspected. Main public URL now serves the new app, and HTML uses must-revalidate caching. Bundled SVG Lottie renderer avoids runtime animation/CDN dependencies.
 - Performance evidence is mixed: route sample about 59 rendered frames/s; later sheet test under host graphics load had substantial jank. See [all measurements and limitations](PERFORMANCE.md). No universal 60 fps claim. iOS remains untested.
-- APK SHA-256: `5fe8f5910710a44b577c8d844fad58e76bf33494c8649db5919b7941b02aed24`. Version 1.2.0, versionCode 3, ARM64, standalone, exhibition development signing key.
+- APK SHA-256: `29f363b8bd05b80dc7351aeff8e20b01ba7dbeb89ffe878b42739d5cc6de34af`. Version 1.2.0, versionCode 3, ARM64, standalone, exhibition development signing key.
 - All screenshots contain fictional exhibition data. The account switcher is an intentional demo persona selector, not production identity verification. No actual dispatch, GPS feed, payment or clinician connection was introduced.
 - GitHub-hosted CI was previously blocked by account billing; local verification completed. No unrelated running emulator or user application was stopped.
 

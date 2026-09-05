@@ -44,7 +44,7 @@ Verified: 22 domain tests, local/remote D1 integration, 21/21 Expo Doctor checks
 
 ## Screen gallery
 
-58 native Android captures. The new 1.2 screens appear first, followed by 1.1 and the original 1.0 walkthrough. Captures are added as each screen passes visual inspection. All visible people, records and bookings are fictional exhibition data.
+59 native Android captures. The new 1.2 screens appear first, followed by 1.1 and the original 1.0 walkthrough. Captures are added as each screen passes visual inspection. All visible people, records and bookings are fictional exhibition data.
 
 <!-- SCREENSHOTS:START -->
 <table>
