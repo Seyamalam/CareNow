@@ -51,11 +51,11 @@ export default function Doctor() {
             { value: String(d.rating), label: "Patient rating" },
             { value: `${d.reviews}`, label: "Reviews" },
           ].map((x) => (
-            <View key={x.label} style={{ alignItems: "center", gap: 4 }}>
+            <View key={x.label} style={{ flex: 1, minWidth: 0, alignItems: "center", gap: 4 }}>
               <Type size={23} weight="bold">
                 {x.value}
               </Type>
-              <Type size={10} muted>
+              <Type size={10} muted style={{ textAlign: "center" }}>
                 {x.label}
               </Type>
             </View>
