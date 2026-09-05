@@ -1,3 +1,4 @@
+import { AccountSwitcher } from "../../components/account-switcher";
 import { useState } from "react";
 import { View } from "react-native";
 import { Switch } from "panelui-native";
@@ -25,6 +26,7 @@ export default function Profile() {
     <Screen
       title={t("Your profile", "আপনার প্রোফাইল")}
       subtitle="FAMILY ACCOUNT"
+      right={<AccountSwitcher />}
     >
       <Box>
         <Row>
@@ -126,7 +128,7 @@ export default function Profile() {
           <Type size={19} weight="bold">
             CareNow
           </Type>
-          <Pill text="v1.0 DEMO" />
+          <Pill text="v1.2 DEMO" />
         </Row>
         <Type size={12} muted>
           Innovation Exhibitor · Bangladesh

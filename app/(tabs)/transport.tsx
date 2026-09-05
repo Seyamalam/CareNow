@@ -1,3 +1,7 @@
+import { MapPanel } from "../../components/map-panel";
+import { RideOptions } from "../../components/ride-options";
+import { defaultRideOptions } from "../../shared/transport";
+import { AccountSwitcher } from "../../components/account-switcher";
 import { useMemo, useState } from "react";
 import { View, ScrollView, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -31,14 +35,15 @@ export default function Transport() {
     { width, height } = useWindowDimensions(),
     wide = width > 900;
   const params = useLocalSearchParams<{ kind?: string }>();
+  const [options, setOptions] = useState(defaultRideOptions);
   const [chosen, setChosen] = useState<VehicleKind>("ambulance"),
     [pickup, setPickup] = useState("banani"),
     [destination, setDestination] = useState("hospital"),
     [recenter, setRecenter] = useState(0);
   const kind = vehicles.find((v) => v.id === params.kind)?.id ?? chosen;
-  const { act, pending, memberId, state } = useCare();
+  const { act, pending, memberId, state, offline } = useCare();
   const route = roadRoute(pickup, destination)!,
-    quote = quoteTrip(kind, pickup, destination)!,
+    quote = quoteTrip(kind, pickup, destination, options)!,
     vehicle = vehicles.find((v) => v.id === kind)!;
   const active = state!.trips.find(
     (t) => !["Completed", "Cancelled"].includes(t.status),
@@ -68,6 +73,7 @@ export default function Transport() {
     const v = vehicles.find((v) => v.id === id);
     if (v) {
       setChosen(v.id);
+      setOptions(defaultRideOptions);
       router.setParams({ kind: v.id });
     }
   }
@@ -79,6 +85,7 @@ export default function Transport() {
         pickup,
         destination,
         memberId,
+        options,
       });
       router.push({ pathname: "/trip/[id]", params: { id: next.trips[0].id } });
     } catch {}
@@ -105,6 +112,7 @@ export default function Transport() {
             </Type>
           </Type>
         </View>
+        <AccountSwitcher />
         <Button
           variant="outline"
           size="sm"
@@ -125,6 +133,10 @@ export default function Transport() {
       >
         <View style={{ flex: 1, minHeight: 210, position: "relative" }}>
           <RouteMap
+            offline={offline}
+            bottomInset={
+              wide ? 0 : Math.max(280, Math.min(440, height * 0.66 - 140))
+            }
             route={route}
             markers={markers}
             recenter={recenter}
@@ -156,7 +168,7 @@ export default function Transport() {
               </Type>
             </Row>
           </View>
-          <View style={{ position: "absolute", bottom: 14, right: 16 }}>
+          <View style={{ position: "absolute", top: 60, right: 16 }}>
             <Button
               size="icon"
               variant="outline"
@@ -167,15 +179,43 @@ export default function Transport() {
             </Button>
           </View>
         </View>
-        <Card
-          style={{
-            borderRadius: 0,
-            borderTopLeftRadius: wide ? 0 : 24,
-            borderTopRightRadius: wide ? 0 : 24,
-            width: wide ? 400 : "100%",
-            maxHeight: wide ? undefined : Math.max(340, height * 0.49),
-            marginTop: wide ? 0 : -4,
-          }}
+        <MapPanel
+          wide={wide}
+          footer={
+            <View
+              style={{
+                paddingHorizontal: 20,
+                paddingTop: 10,
+                paddingBottom: 16,
+                gap: 8,
+                borderTopWidth: 1,
+                borderTopColor: p.border,
+              }}
+            >
+              <Row>
+                <View style={{ flex: 1 }}>
+                  <Type size={11} muted>
+                    Estimated fare
+                  </Type>
+                  <Type size={25} weight="bold">
+                    {money(quote.fare)}
+                  </Type>
+                </View>
+                <Button
+                  size="lg"
+                  disabled={!!active}
+                  loading={pending}
+                  onPress={() => void book()}
+                  endContent={<ArrowRight size={18} />}
+                >
+                  {`Book ${kind === "accessible" ? "van" : kind}`}
+                </Button>
+              </Row>
+              <Type size={10} muted style={{ textAlign: "center" }}>
+                Demo booking · No dispatch or payment
+              </Type>
+            </View>
+          }
         >
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -239,6 +279,7 @@ export default function Transport() {
             <Type size={12} muted>
               {vehicle.detail}
             </Type>
+            <RideOptions kind={kind} value={options} onChange={setOptions} />
             {active && (
               <Button
                 variant="secondary"
@@ -255,40 +296,7 @@ export default function Transport() {
               </Button>
             )}
           </ScrollView>
-          <View
-            style={{
-              paddingHorizontal: 20,
-              paddingTop: 10,
-              paddingBottom: 16,
-              gap: 8,
-              borderTopWidth: 1,
-              borderTopColor: p.border,
-            }}
-          >
-            <Row>
-              <View style={{ flex: 1 }}>
-                <Type size={11} muted>
-                  Estimated fare
-                </Type>
-                <Type size={25} weight="bold">
-                  {money(quote.fare)}
-                </Type>
-              </View>
-              <Button
-                size="lg"
-                disabled={!!active}
-                loading={pending}
-                onPress={() => void book()}
-                endContent={<ArrowRight size={18} />}
-              >
-                {`Book ${kind === "accessible" ? "van" : kind}`}
-              </Button>
-            </Row>
-            <Type size={10} muted style={{ textAlign: "center" }}>
-              Demo booking · No dispatch or payment
-            </Type>
-          </View>
-        </Card>
+        </MapPanel>
       </View>
     </View>
   );

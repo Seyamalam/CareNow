@@ -1,3 +1,7 @@
+import { AccountSwitcher } from "../components/account-switcher";
+import { TripEta } from "../components/trip-eta";
+import { motionProgress, type RouteMotion } from "../components/maps/model";
+import { router } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
@@ -17,22 +21,26 @@ import { approachRoute, pointOnRoute } from "../shared/transport";
 import { useReducedMotion } from "react-native-reanimated";
 export default function CareLocation() {
   const { id } = useLocalSearchParams<{ id: string }>(),
-    { state, act, pending } = useCare(),
+    { state, act, pending, offline } = useCare(),
     p = usePalette(),
     reduced = useReducedMotion();
-  const r = state!.requests.find((r) => r.id === id),
-    [progress, setProgress] = useState(0.15);
-  useEffect(() => {
-    if (r?.status !== "On the way" || reduced) return;
-    const timer = setInterval(
-      () => setProgress((p) => Math.min(0.95, p + 0.008)),
-      500,
-    );
-    return () => clearInterval(timer);
-  }, [r?.status, reduced]);
+  const r = state!.requests.find((r) => r.id === id);
   const pickup = /dhanmondi/i.test(r?.address ?? "") ? "dhanmondi" : "banani";
   const route = approachRoute(pickup),
     arrived = r?.status === "Arrived" || r?.status === "Completed";
+  const motion = useMemo<RouteMotion | undefined>(
+    () =>
+      r?.status === "On the way"
+        ? {
+            route,
+            clock: state!.exhibition.clock,
+            start: r.motionStart,
+            duration: 60000,
+          }
+        : undefined,
+    [route, r?.status, r?.motionStart, state!.exhibition.clock],
+  );
+  const progress = motion ? motionProgress(motion) : 0;
   const markers = useMemo(
     () => [
       {
@@ -45,9 +53,10 @@ export default function CareLocation() {
         coordinate: pointOnRoute(route, arrived ? 1 : progress),
         label: "Demo care professional",
         kind: "person" as const,
+        motion,
       },
     ],
-    [route, arrived, progress],
+    [route, arrived, motion],
   );
   if (!r)
     return (
@@ -56,9 +65,9 @@ export default function CareLocation() {
       </Screen>
     );
   return (
-    <Screen back title="Care team" right={<Pill text="SIMULATION" />}>
+    <Screen back title="Care team" right={<AccountSwitcher />}>
       <View style={{ height: 350, borderRadius: 22, overflow: "hidden" }}>
-        <RouteMap route={route} markers={markers} />
+        <RouteMap route={route} markers={markers} offline={offline} />
       </View>
       <Box>
         <Row style={{ justifyContent: "space-between" }}>
@@ -77,9 +86,7 @@ export default function CareLocation() {
             </Type>
           </View>
           {!["Cancelled", "Completed", "Arrived"].includes(r.status) && (
-            <Pill
-              text={`${Math.max(1, Math.ceil((route.duration / 60) * 1.6 * (1 - progress)))} MIN`}
-            />
+            <View style={{alignItems:'center',padding:10,backgroundColor:p.mint,borderRadius:14}}><TripEta motion={motion} minutes={Math.ceil(route.duration/60*1.6)} arrived={arrived}/><Type size={10} muted>MIN</Type></View>
           )}
         </Row>
         <Row>
@@ -114,33 +121,12 @@ export default function CareLocation() {
           · Simulated position
         </Type>
       </Box>
-      {["Requested", "Assigned", "On the way"].includes(r.status) && (
-        <Button
-          fullWidth
-          size="lg"
-          loading={pending}
-          endContent={<ArrowRight size={18} />}
-          onPress={() =>
-            void act({
-              type: "request.status",
-              id: r.id,
-              status:
-                r.status === "Requested"
-                  ? "Assigned"
-                  : r.status === "Assigned"
-                    ? "On the way"
-                    : "Arrived",
-            }).catch(() => {})
-          }
-        >
-          Demo:{" "}
-          {r.status === "Requested"
-            ? "assign care team"
-            : r.status === "Assigned"
-              ? "start tracking"
-              : "mark arrived"}
-        </Button>
-      )}
+      {!["Cancelled", "Completed"].includes(r.status) &&
+        state!.exhibition.enabled && (
+          <Button onPress={() => router.push("/presenter")}>
+            Presenter controls
+          </Button>
+        )}
     </Screen>
   );
 }

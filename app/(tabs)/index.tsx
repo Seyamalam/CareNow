@@ -1,5 +1,6 @@
+import { AccountSwitcher } from "../../components/account-switcher";
 import { View, ScrollView } from "react-native";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import {
   Bell,
   ArrowRight,
@@ -35,6 +36,8 @@ import { today, shortDate } from "../../shared/contracts";
 export default function Home() {
   const p = usePalette(),
     { state, memberId, selectMember, act, t } = useCare();
+  if (state!.workspace.role !== "customer")
+    return <Redirect href="/workspace" />;
   const member =
       state!.members.find((m) => m.id === memberId) ?? state!.members[0],
     upcoming = state!.appointments.find(
@@ -88,7 +91,7 @@ export default function Home() {
             </Type>
           </Row>
           <Row style={{ gap: 8 }}>
-            <Pill text="DEMO" />
+            <AccountSwitcher />
             <Button
               size="icon"
               variant="outline"

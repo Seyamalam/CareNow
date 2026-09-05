@@ -1,3 +1,7 @@
+import { TripEta } from "../../components/trip-eta";
+import { MotionArt } from "../../components/motion-art";
+import { motionProgress, type RouteMotion } from "../../components/maps/model";
+import { AccountSwitcher } from "../../components/account-switcher";
 import { useEffect, useMemo, useState } from "react";
 import { View, ScrollView, useWindowDimensions } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
@@ -30,38 +34,38 @@ import {
 import { money } from "../../shared/contracts";
 export default function TrackTrip() {
   const { id } = useLocalSearchParams<{ id: string }>(),
-    { state, act, pending } = useCare(),
+    { state, act, pending, offline } = useCare(),
     p = usePalette(),
     insets = useSafeAreaInsets(),
     { height } = useWindowDimensions(),
     reduced = useReducedMotion();
-  const [now, setNow] = useState(Date.now()),
+  const [follow, setFollow] = useState(false),
     [recenter, setRecenter] = useState(0),
     [cancel, setCancel] = useState(false);
   const trip = state!.trips.find((t) => t.id === id);
-  useEffect(() => {
-    if (reduced || !trip || !["On the way", "On trip"].includes(trip.status))
-      return;
-    const timer = setInterval(() => setNow(Date.now()), 500);
-    return () => clearInterval(timer);
-  }, [trip?.status, reduced]);
   const route = trip
     ? trip.status === "On trip" || trip.status === "Completed"
       ? roadRoute(trip.pickup, trip.destination)!
       : approachRoute(trip.pickup)
     : roadRoute("banani", "hospital")!;
+  const motion = useMemo<RouteMotion | undefined>(
+    () =>
+      trip && ["On the way", "On trip"].includes(trip.status)
+        ? {
+            route,
+            clock: state!.exhibition.clock,
+            start: trip.motionStart,
+            duration: 60000,
+          }
+        : undefined,
+    [route, trip?.status, trip?.motionStart, state!.exhibition.clock],
+  );
   const progress =
     trip?.status === "At pickup" || trip?.status === "Completed"
       ? 1
-      : trip?.status === "Assigned"
-        ? 0
-        : Math.min(
-            0.95,
-            Math.max(
-              0,
-              (now - new Date(trip?.updatedAt ?? now).getTime()) / 60000,
-            ),
-          );
+      : motion
+        ? motionProgress(motion)
+        : 0;
   const travelling = trip?.status === "On trip" || trip?.status === "Completed";
   const markers = useMemo(
     () => [
@@ -79,9 +83,10 @@ export default function TrackTrip() {
         label: "Demo driver location",
         kind: trip?.vehicle ?? ("ambulance" as const),
         active: true,
+        motion,
       },
     ],
-    [route, progress, trip?.vehicle, travelling],
+    [route, motion, trip?.vehicle, travelling, trip?.status],
   );
   if (!trip)
     return (
@@ -97,15 +102,6 @@ export default function TrackTrip() {
     step = tripStatuses.findIndex((s) => s === trip.status),
     next = tripStatuses[step + 1],
     closed = ["Completed", "Cancelled"].includes(trip.status);
-  const eta = Math.max(
-    1,
-    Math.ceil(
-      (trip.status === "On trip"
-        ? quoteTrip(trip.vehicle, trip.pickup, trip.destination)!.minutes
-        : vehicle.eta) *
-        (1 - progress),
-    ),
-  );
   return (
     <View
       style={{ flex: 1, backgroundColor: p.background, paddingTop: insets.top }}
@@ -132,16 +128,25 @@ export default function TrackTrip() {
             Your trip
           </Type>
         </Row>
-        <Pill text="SIMULATION" />
+        <AccountSwitcher />
       </Row>
       <View style={{ flex: 1, minHeight: 200 }}>
-        <RouteMap route={route} markers={markers} recenter={recenter} />
+        <RouteMap
+          route={route}
+          markers={markers}
+          recenter={recenter}
+          follow={follow}
+          offline={offline}
+        />
         <View style={{ position: "absolute", right: 16, bottom: 15 }}>
           <Button
             size="icon"
-            variant="outline"
-            accessibilityLabel="Recenter trip"
-            onPress={() => setRecenter((x) => x + 1)}
+            variant={follow ? "primary" : "outline"}
+            accessibilityLabel={follow ? "Show whole route" : "Follow driver"}
+            onPress={() => {
+              setFollow(!follow);
+              setRecenter((x) => x + 1);
+            }}
           >
             <LocateFixed size={20} color={p.primary} />
           </Button>
@@ -192,9 +197,16 @@ export default function TrackTrip() {
                   alignItems: "center",
                 }}
               >
-                <Type size={24} weight="bold">
-                  {trip.status === "At pickup" ? 0 : eta}
-                </Type>
+                <TripEta
+                  motion={motion}
+                  minutes={
+                    travelling
+                      ? quoteTrip(trip.vehicle, trip.pickup, trip.destination)!
+                          .minutes
+                      : vehicle.eta
+                  }
+                  arrived={trip.status === "At pickup"}
+                />
                 <Type size={10} muted>
                   MIN
                 </Type>
@@ -239,18 +251,44 @@ export default function TrackTrip() {
               {money(trip.fare)}
             </Type>
           </Row>
-          {!closed && next && next !== "Assigned" && (
+          {trip.options.departure && (
+            <Type size={12}>
+              Departure ·{" "}
+              {new Date(trip.options.departure).toLocaleString("en-GB", {
+                timeZone: "Asia/Dhaka",
+              })}
+            </Type>
+          )}
+          {trip.vehicle === "bus" && (
+            <Type size={12}>
+              {trip.options.passengers} passengers · AC minibus
+            </Type>
+          )}
+          {trip.vehicle === "truck" && (
+            <Type size={12}>
+              {trip.options.truckSize} · {trip.options.cargo}
+            </Type>
+          )}
+          {trip.status === "Completed" && (
+            <View style={{ alignItems: "center" }}>
+              <MotionArt kind="success" size={80} />
+            </View>
+          )}
+          {!closed && (state!.workspace.role!=="customer"||state!.exhibition.enabled) && (
             <Button
-              fullWidth
-              size="lg"
-              loading={pending}
+              variant="secondary"
               onPress={() =>
-                void act({ type: "trip.status", id: trip.id, status: next })
-                  .then(() => setNow(Date.now()))
-                  .catch(() => {})
+                router.push(
+                  state!.exhibition.enabled ? "/presenter" : "/workspace",
+                )
               }
-              endContent={<ArrowRight size={18} />}
-            >{`Demo: ${next === "On the way" ? "start tracking" : next === "At pickup" ? "arrive at pickup" : next === "On trip" ? "start trip" : "complete trip"}`}</Button>
+            >
+              {state!.exhibition.enabled
+                ? "Presenter controls"
+                : state!.workspace.role === "driver"
+                  ? "Manage this trip"
+                  : "View account workspace"}
+            </Button>
           )}
           {closed ? (
             <Button fullWidth onPress={() => router.replace("/transport")}>

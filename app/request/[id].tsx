@@ -147,27 +147,10 @@ export default function TrackRequest() {
           </Type>
         </Row>
       </Box>
-      {next && r.status !== "Cancelled" && (
-        <>
-          <Button
-            fullWidth
-            size="lg"
-            loading={pending}
-            onPress={() =>
-              void act({
-                type: "request.status",
-                id: r.id,
-                status: next === "Requested" ? "Assigned" : next,
-              }).catch(() => {})
-            }
-            endContent={<ArrowRight size={18} />}
-          >
-            Simulate: {next}
-          </Button>
-          <Type size={11} muted style={{ textAlign: "center" }}>
-            Exhibition controls · No real team is dispatched
-          </Type>
-        </>
+      {next && state!.exhibition.enabled && (
+        <Button variant="secondary" onPress={() => router.push("/presenter")}>
+          Presenter controls
+        </Button>
       )}
       {!["Cancelled", "Completed"].includes(r.status) && (
         <Button variant="ghost" onPress={() => setCancel(true)}>

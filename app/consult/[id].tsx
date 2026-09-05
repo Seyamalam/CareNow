@@ -226,14 +226,24 @@ export default function Consult() {
                   loading={pending}
                   accessibilityLabel="End demo consultation"
                   onPress={() =>
-                    void act({
-                      type: "appointment.status",
-                      id,
-                      status: "Completed",
-                    })
+                    void (
+                      state!.workspace.role === "customer" &&
+                      !state!.exhibition.enabled
+                        ? Promise.resolve(state!)
+                        : act({
+                            type: "appointment.status",
+                            id,
+                            status: "Completed",
+                          })
+                    )
                       .then(() => {
                         setRunning(false);
-                        notify("Consultation summary saved");
+                        notify(
+                          state!.workspace.role === "customer" &&
+                            !state!.exhibition.enabled
+                            ? "Demo call ended"
+                            : "Consultation summary saved",
+                        );
                         router.replace({
                           pathname: "/appointment/[id]",
                           params: { id },

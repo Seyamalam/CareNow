@@ -89,7 +89,9 @@ export function StopPicker({
           if (!open) setField(null);
         }}
       >
-        <BottomSheet.Content>
+        <BottomSheet.Content
+          style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}
+        >
           <BottomSheet.Header
             title={field === "pickup" ? "Pickup location" : "Where to?"}
           />

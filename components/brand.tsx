@@ -1,3 +1,4 @@
+import { MotionArt } from "./motion-art";
 import React, { useEffect } from "react";
 import { View } from "react-native";
 import Svg, { Path, G } from "react-native-svg";
@@ -40,20 +41,6 @@ export function Splash({
   onRetry?: () => void;
 }) {
   const p = usePalette();
-  const reduced = useReducedMotion();
-  const rotation = useSharedValue(0);
-  useEffect(() => {
-    rotation.value = reduced
-      ? 0
-      : withRepeat(
-          withTiming(360, { duration: 10000, easing: Easing.linear }),
-          -1,
-          false,
-        );
-  }, [reduced, rotation]);
-  const style = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotation.value}deg` }],
-  }));
   return (
     <View
       style={{
@@ -64,9 +51,9 @@ export function Splash({
         gap: 20,
       }}
     >
-      <Animated.View style={style}>
-        <BrandMark size={112} inverse />
-      </Animated.View>
+      <View style={{ backgroundColor: p.card, borderRadius: 32 }}>
+        <MotionArt kind="logo" size={112} />
+      </View>
       <Type
         size={40}
         weight="bold"

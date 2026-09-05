@@ -41,7 +41,8 @@ import {
   LucideIcon,
 } from "lucide-react-native";
 import { usePalette, type Palette } from "../lib/theme";
-import { useCare } from "../lib/store";
+import { MotionArt } from "./motion-art";
+import { useCare, useNotice } from "../lib/store";
 export function Type({
   children,
   size = 15,
@@ -127,7 +128,7 @@ export function Enter({
       entering={
         reduced
           ? undefined
-          : FadeInDown.duration(420).delay(delay).springify().damping(22)
+          : FadeInDown.duration(180).delay(Math.min(delay, 80))
       }
       layout={LinearTransition.duration(reduced ? 0 : 220)}
       style={style}
@@ -166,7 +167,7 @@ export function Screen({
         refreshControl={
           refresh ? (
             <RefreshControl
-              refreshing={false}
+              refreshing={care.fetching}
               onRefresh={care.refresh}
               tintColor={p.primary}
             />
@@ -421,7 +422,7 @@ export function Empty({
   return (
     <Box>
       <View style={{ alignItems: "center", gap: 12, paddingVertical: 22 }}>
-        <IconTile name="heart" size={60} />
+        <MotionArt kind="empty" size={84} />
         <Type size={20} weight="bold">
           {title}
         </Type>
@@ -485,7 +486,7 @@ export function Success({
               justifyContent: "center",
             }}
           >
-            <Check color={p.primary} size={46} />
+            <MotionArt kind="success" size={100} />
           </View>
           <Type size={32} weight="bold" style={{ textAlign: "center" }}>
             {title}
@@ -508,7 +509,7 @@ export function Success({
   );
 }
 export function FloatingToast() {
-  const { toast } = useCare();
+  const toast = useNotice();
   const p = usePalette();
   const insets = useSafeAreaInsets();
   return toast ? (

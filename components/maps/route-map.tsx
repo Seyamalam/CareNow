@@ -7,6 +7,10 @@ import {
   Layer,
   type CameraRef,
 } from "@maplibre/maplibre-react-native";
+import { useMotionActive } from "../../lib/motion";
+import { OfflineMap } from "./offline-map";
+import { pointOnRoute } from "../../shared/transport";
+import { motionProgress } from "./model";
 import { MovingMarker } from "./animated-marker";
 import { UserRound } from "lucide-react-native";
 import { useReducedMotion } from "react-native-reanimated";
@@ -20,8 +24,12 @@ export function RouteMap({
   route,
   markers,
   recenter = 0,
+  follow = false,
+  offline = false,
+  bottomInset = 0,
   onMarkerPress,
 }: RouteMapProps) {
+  const active = useMotionActive();
   const p = usePalette(),
     camera = useRef<CameraRef>(null),
     reduced = useReducedMotion();
@@ -29,12 +37,28 @@ export function RouteMap({
     [failed, setFailed] = useState(false),
     [retry, setRetry] = useState(0);
   useEffect(() => {
-    if (loaded)
+    if (loaded && !follow)
       camera.current?.fitBounds(routeBounds(route), {
-        padding: { top: 60, bottom: 52, left: 55, right: 55 },
+        padding: { top: 60, bottom: 52 + bottomInset, left: 55, right: 55 },
         duration: reduced ? 0 : 650,
       });
-  }, [route, recenter, loaded, reduced]);
+  }, [route, recenter, loaded, reduced, follow, bottomInset]);
+  const moving = markers.find((m) => m.motion);
+  useEffect(() => {
+    if (!follow || !active || !loaded || !moving) return;
+    const update = () =>
+      camera.current?.easeTo({
+        center: moving.motion
+          ? pointOnRoute(moving.motion.route, motionProgress(moving.motion))
+          : moving.coordinate,
+        zoom: 15.5,
+        duration: reduced ? 0 : 900,
+      });
+    update();
+    const timer = setInterval(update, 1500);
+    return () => clearInterval(timer);
+  }, [follow, active, loaded, moving, reduced]);
+  if (offline) return <OfflineMap route={route} markers={markers} />;
   return (
     <View style={{ flex: 1, backgroundColor: p.muted }}>
       <Map
@@ -43,7 +67,7 @@ export function RouteMap({
         style={{ flex: 1 }}
         compass={false}
         logo={false}
-        attributionPosition={{ bottom: 8, left: 8 }}
+        attributionPosition={{ top: 8, right: 8 }}
         onDidFinishLoadingMap={() => {
           setLoaded(true);
           setFailed(false);
@@ -54,7 +78,7 @@ export function RouteMap({
           ref={camera}
           initialViewState={{
             bounds: routeBounds(route),
-            padding: { top: 60, bottom: 52, left: 55, right: 55 },
+            padding: { top: 60, bottom: 52 + bottomInset, left: 55, right: 55 },
           }}
         />
         <GeoJSONSource id="journey" data={lineFeature(route)}>
@@ -76,6 +100,8 @@ export function RouteMap({
             key={m.id}
             id={m.id}
             lngLat={m.coordinate}
+            motion={m.motion}
+            active={active}
             onPress={() => onMarkerPress?.(m.id)}
           >
             <View

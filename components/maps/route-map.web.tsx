@@ -1,3 +1,7 @@
+import { OfflineMap } from "./offline-map";
+import { useMotionActive } from "../../lib/motion";
+import { pointOnRoute } from "../../shared/transport";
+import { motionProgress } from "./model";
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { createPortal } from "react-dom";
@@ -19,8 +23,12 @@ export function RouteMap({
   route,
   markers,
   recenter = 0,
+  follow = false,
+  offline = false,
+  bottomInset = 0,
   onMarkerPress,
 }: RouteMapProps) {
+  const active = useMotionActive();
   const host = useRef<View>(null),
     map = useRef<LibreMap | null>(null),
     pins = useRef<
@@ -38,6 +46,9 @@ export function RouteMap({
     onPress = useRef(onMarkerPress);
   onPress.current = onMarkerPress;
   useEffect(() => {
+    if (offline) return;
+    setReady(false);
+    initialRoute.current = route;
     let disposed = false;
     let resize: ResizeObserver | undefined;
     const timeout = setTimeout(() => setFailed(true), 18000);
@@ -48,11 +59,17 @@ export function RouteMap({
         const m = new lib.Map({
           container: host.current as unknown as HTMLElement,
           style: MAP_STYLE,
-          attributionControl: { compact: true },
+          attributionControl: false,
           bounds: routeBounds(initialRoute.current),
-          fitBoundsOptions: { padding: 55 },
+          fitBoundsOptions: {
+            padding: { top: 55, left: 55, right: 55, bottom: 55 + bottomInset },
+          },
           renderWorldCopies: false,
         });
+        m.addControl(
+          new lib.AttributionControl({ compact: true }),
+          "top-right",
+        );
         map.current = m;
         m.on("load", () => {
           if (disposed) return;
@@ -95,16 +112,17 @@ export function RouteMap({
       map.current?.remove();
       map.current = null;
     };
-  }, [retry, p.card, p.primary]);
+  }, [retry, p.card, p.primary, offline]);
   useEffect(() => {
     if (!ready || !map.current) return;
     const source = map.current.getSource<GeoJSONSource>("journey");
     if (source) source.setData(lineFeature(route));
-    map.current.fitBounds(routeBounds(route), {
-      padding: 55,
-      duration: reduced ? 0 : 650,
-    });
-  }, [ready, route, recenter, reduced]);
+    if (!follow)
+      map.current.fitBounds(routeBounds(route), {
+        padding: { top: 55, left: 55, right: 55, bottom: 55 + bottomInset },
+        duration: reduced ? 0 : 650,
+      });
+  }, [ready, route, recenter, reduced, follow, bottomInset]);
   useEffect(() => {
     if (!ready || !map.current) return;
     let cancelled = false;
@@ -156,6 +174,45 @@ export function RouteMap({
       cancelled = true;
     };
   }, [ready, markers, p.card, p.primary, p.onPrimary, p.border]);
+  useEffect(() => {
+    if (!ready || !active || offline) return;
+    let frame = 0,
+      lastCamera = 0;
+    const moving = markers.filter((m) => m.motion);
+    if (!moving.length) return;
+    const tick = (now: number) => {
+      for (const m of moving) {
+        const pin = pins.current.find((p) => p.id === m.id);
+        if (pin && m.motion) {
+          const coordinate = pointOnRoute(
+            m.motion.route,
+            motionProgress(m.motion),
+          );
+          pin.marker.setLngLat(coordinate);
+          if (follow && now - lastCamera > 1500) {
+            map.current?.easeTo({
+              center: coordinate,
+              zoom: 15.5,
+              duration: reduced ? 0 : 900,
+            });
+            lastCamera = now;
+          }
+        }
+      }
+      if (!reduced && !document.hidden) frame = requestAnimationFrame(tick);
+    };
+    const restart = () => {
+      cancelAnimationFrame(frame);
+      if (!document.hidden) frame = requestAnimationFrame(tick);
+    };
+    restart();
+    document.addEventListener("visibilitychange", restart);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener("visibilitychange", restart);
+    };
+  }, [ready, active, offline, markers, follow, reduced]);
+  if (offline) return <OfflineMap route={route} markers={markers} />;
   return (
     <View style={{ flex: 1, backgroundColor: p.muted }}>
       <View
