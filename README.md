@@ -81,6 +81,8 @@ Verified: 22 domain tests, local/remote D1 integration, 21/21 Expo Doctor checks
 
 ## Exhibition report and presentation
 
+PDF editions uploaded to a new Paper Amigo project: [report](output/pdf/CareNow-Exhibition-Report.pdf) · [presentation](output/pdf/CareNow-Exhibition-Presentation-Edition-1.2.1.pdf).
+
 Prepared for judges, researchers, public leaders, investors and technical reviewers. The publications distinguish implemented demo behaviour, simulated services, dated market evidence and proposed pilot assumptions.
 
 - [42-page exhibition report](deliverables/CareNow-Exhibition-Report.docx): 25 chapters, 33 application screenshots, research, competition, architecture, costs, methodology, roadmap and references.

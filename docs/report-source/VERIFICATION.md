@@ -22,3 +22,12 @@ Sixteen references retain source titles, URLs, observation dates and limitations
 - Presentation PPTX: `8c59bdb8d890f7d825a4d0b0c9ab198a179d585c3b72102df4a41592b24133f3`
 
 Build logs, rendered page images, PDF and candidate decks remain private QA intermediates under `artifacts/report-build`. The deliverables directory contains only the requested DOCX and PPTX.
+
+## Paper Amigo PDF editions
+
+Uploaded on 5 September 2026 to the new project “CareNow: Family Care and Local Transport — Exhibition Report and Presentation” (ID `03945efa-4126-48bf-b2fe-3e7e8bb2de41`). Both stored file hashes were verified against the local editions. Two uploaded, zero skipped, zero failed.
+
+The report PDF is the previously reviewed 42-page DOCX render. The presentation PDF has 32 pages and selectable text; it was exported from the finalized PPTX with the bundled LibreOffice runtime. An initial font substitution was corrected using a Fontconfig file that includes the system font directories. All 32 exported slides were visually reviewed, and the chart value 3.6 was checked at full size.
+
+- Report PDF SHA-256: `b922ce072e69c56cd64d96165324ed72704b50be37dcdd58667311056b68e601`
+- Presentation PDF SHA-256: `886967419155d24d106fcdbd5b7ecdc604e2ae254455ea2a14e00c9012631c00`
