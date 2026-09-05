@@ -61,7 +61,7 @@ export default function Activity() {
           action="Explore care"
           onPress={() => router.push("/care")}
         />
-      )}{" "}
+      )}
       {trips.map((trip) => (
         <Box key={trip.id}>
           <Row style={{ justifyContent: "space-between" }}>

@@ -69,6 +69,7 @@ export function Type({
                 ? "DMSans_600SemiBold"
                 : "DMSans_400Regular",
           fontSize: size,
+          flexShrink: 1,
           lineHeight: size * 1.42,
           color: muted ? p.subtle : p.ink,
         },
@@ -160,7 +161,7 @@ export function Screen({
     insets = useSafeAreaInsets();
   const care = useCare();
   const { width, fontScale } = useWindowDimensions();
-  const stackedHeader = !!right && (width < 400 || fontScale > 1.15);
+  const stackedHeader = !!right && width < 360 && fontScale > 1.3;
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}

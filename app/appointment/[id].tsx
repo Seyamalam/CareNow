@@ -62,7 +62,7 @@ export default function Appointment() {
           <Type>{a.mode} consultation · 20 min</Type>
         </Row>
       </Box>
-      {a.note && (
+      {!!a.note && (
         <Box>
           <Type size={12} muted>
             VISIT NOTES

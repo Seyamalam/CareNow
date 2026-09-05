@@ -254,7 +254,7 @@ export default function TrackTrip() {
               {money(trip.fare)}
             </Type>
           </Row>
-          {trip.options.departure && (
+          {!!trip.options.departure && (
             <Type size={12}>
               Departure ·{" "}
               {new Date(trip.options.departure).toLocaleString("en-GB", {

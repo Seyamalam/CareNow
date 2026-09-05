@@ -172,7 +172,7 @@ export default function Book() {
         </Row>
         <Pill text="DEMO · NO PAYMENT REQUIRED" />
       </Box>
-      {error && <Type selectable>{error}</Type>}
+      {!!error && <Type selectable>{error}</Type>}
       <Button fullWidth size="lg" loading={pending} onPress={book}>
         {t("Confirm appointment", "অ্যাপয়েন্টমেন্ট নিশ্চিত করুন")}
       </Button>
