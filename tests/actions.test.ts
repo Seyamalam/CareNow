@@ -25,7 +25,7 @@ test("bookings reject foreign family members", () =>
     /not found/,
   ));
 test("closed consultation cannot be completed twice", () => {
-  let s = applyAction(initialState(), {
+  let s = applyAction(applyAction(initialState(), {type:"demo.configure",enabled:true}), {
     type: "appointment.status",
     id: "welcome-appointment",
     status: "Completed",

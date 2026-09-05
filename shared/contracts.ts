@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { tripSchema, transportActions } from "./transport";
 
+import {
+  workspaceSchema,
+  exhibitionSchema,
+  newExhibition,
+  workspaceActions,
+} from "./workspace";
+
 const validDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD")
@@ -31,6 +38,7 @@ export const appointmentSchema = z.object({
   createdAt: z.string(),
 });
 export const requestSchema = z.object({
+  motionStart: z.number().default(0),
   id: z.string(),
   memberId: z.string(),
   serviceId: z.string(),
@@ -86,6 +94,12 @@ export const notificationSchema = z.object({
   date: z.string(),
 });
 export const stateSchema = z.object({
+  workspace: workspaceSchema.default({
+    role: "customer",
+    available: true,
+    accepted: [],
+  }),
+  exhibition: exhibitionSchema.default(newExhibition),
   trips: z.array(tripSchema).default([]),
   members: z.array(memberSchema),
   appointments: z.array(appointmentSchema),
@@ -104,6 +118,7 @@ export const stateSchema = z.object({
 const date = validDate;
 export const actionSchema = z.discriminatedUnion("type", [
   ...transportActions,
+  ...workspaceActions,
   z.object({ type: z.literal("member.save"), member: memberSchema }),
   z.object({ type: z.literal("member.delete"), id: z.string() }),
   z.object({

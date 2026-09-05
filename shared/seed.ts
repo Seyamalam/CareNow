@@ -1,6 +1,9 @@
 import { type State, today } from "./contracts";
+import { newExhibition } from "./workspace";
 export function initialState(): State {
   return {
+    workspace: { role: "customer", available: true, accepted: [] },
+    exhibition: newExhibition(),
     members: [
       {
         id: "self",
@@ -47,6 +50,7 @@ export function initialState(): State {
     ],
     requests: [
       {
+        motionStart: 0,
         id: "welcome-care",
         memberId: "mother",
         serviceId: "elderly-caregiver",

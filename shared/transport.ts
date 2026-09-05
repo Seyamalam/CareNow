@@ -86,7 +86,22 @@ export const tripStatuses = [
   "On trip",
   "Completed",
 ] as const;
+export const rideOptionsSchema = z.object({
+  cargo: z.enum(["General", "Furniture", "Equipment"]).default("General"),
+  truckSize: z.enum(["1 ton", "2 ton"]).default("1 ton"),
+  passengers: z.number().int().min(1).max(24).default(1),
+  departure: z.string().max(40).default(""),
+});
+export type RideOptions = z.infer<typeof rideOptionsSchema>;
+export const defaultRideOptions: RideOptions = {
+  cargo: "General",
+  truckSize: "1 ton",
+  passengers: 1,
+  departure: "",
+};
 export const tripSchema = z.object({
+  options: rideOptionsSchema.default(defaultRideOptions),
+  motionStart: z.number().default(0),
   id: z.string(),
   memberId: z.string(),
   vehicle: z.enum(vehicleKinds),
@@ -101,6 +116,7 @@ export type Trip = z.infer<typeof tripSchema>;
 export const transportActions = [
   z.object({
     type: z.literal("trip.book"),
+    options: rideOptionsSchema.optional(),
     memberId: z.string(),
     vehicle: z.enum(vehicleKinds),
     pickup: z.string(),
@@ -128,12 +144,23 @@ const routes = z.record(z.string(), routeSchema).parse(routeData);
 export function roadRoute(from: string, to: string): RoadRoute | undefined {
   return routes[`${from}:${to}`];
 }
-export function quoteTrip(vehicle: VehicleKind, from: string, to: string) {
+export function quoteTrip(
+  vehicle: VehicleKind,
+  from: string,
+  to: string,
+  options: RideOptions = defaultRideOptions,
+) {
   const route = roadRoute(from, to),
     v = vehicles.find((v) => v.id === vehicle);
   if (!route || !v) return undefined;
   return {
-    fare: Math.ceil((v.base + (route.distance / 1000) * v.perKm) / 50) * 50,
+    fare:
+      Math.ceil(
+        (v.base +
+          (route.distance / 1000) * v.perKm +
+          (vehicle === "truck" && options.truckSize === "2 ton" ? 700 : 0)) /
+          50,
+      ) * 50,
     distance: route.distance,
     minutes: Math.max(4, Math.ceil((route.duration / 60) * 1.6)),
   };

@@ -26,8 +26,12 @@ try {
   assert.equal((await req('/state',ta)).body.trips[0].id,tripId);
   assert.equal((await req('/actions',tb,{type:'trip.status',id:tripId,status:'Cancelled'})).status,400);
   assert.equal((await req('/actions',ta,{type:'trip.status',id:tripId,status:'Completed'})).status,400);
+  assert.equal((await req('/actions',ta,{type:'trip.status',id:tripId,status:'On the way'})).status,400);
+  await req('/actions',ta,{type:'account.switch',role:'driver'});
+  assert.equal((await req('/actions',ta,{type:'work.accept',kind:'trip',id:tripId})).status,200);
   for(const status of ['On the way','At pickup','On trip','Completed']) assert.equal((await req('/actions',ta,{type:'trip.status',id:tripId,status})).body.trips[0].status,status);
   assert.equal((await req('/actions',ta,{type:'trip.status',id:tripId,status:'Cancelled'})).status,400);
+  await req('/actions',ta,{type:'account.switch',role:'customer'});
   const day = new Date(Date.now() + 3 * 86400000).toISOString().slice(0, 10);
   const booking = {
     type: "appointment.book",
@@ -89,12 +93,12 @@ try {
   });
   assert.equal(care.body.requests[0].price, 12600);
   const id = care.body.requests[0].id;
+  await req('/actions',ta,{type:'account.switch',role:'provider'});
   assert.equal(
     (
       await req("/actions", ta, {
-        type: "request.status",
+        type: "work.assign",
         id,
-        status: "Assigned",
       })
     ).status,
     200,
@@ -102,6 +106,8 @@ try {
   const persisted = await req("/state", ta);
   assert.equal(persisted.body.requests[0].status, "Assigned");
   assert.equal(persisted.body.messages[1].text, "Demo message");
+  await req('/actions',ta,{type:'account.switch',role:'doctor'});
+  await req('/actions',ta,{type:'work.accept',kind:'appointment',id:appointment});
   assert.equal(
     (
       await req("/actions", ta, {
@@ -112,6 +118,7 @@ try {
     ).body.records[0].type,
     "Consultation",
   );
+  await req('/actions',ta,{type:'account.switch',role:'customer'});
   const fileBody = {
     name: "demo-report.pdf",
     mime: "application/pdf",

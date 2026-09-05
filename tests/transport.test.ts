@@ -14,7 +14,7 @@ test('transport rejects unknown members, same stops, unsupported stops and dupli
  assert.throws(()=>applyAction(initialState(),{...booking,memberId:'missing'}));assert.throws(()=>applyAction(initialState(),{...booking,destination:'banani'}));assert.throws(()=>applyAction(initialState(),{...booking,pickup:'unknown'}));assert.throws(()=>applyAction(applyAction(initialState(),booking),booking));assert.equal(actionSchema.safeParse({...booking,vehicle:'plane'}).success,false);
 });
 test('transport progresses in order and closed trips cannot restart',()=>{
- let s=applyAction(initialState(),booking);const id=s.trips[0].id;
+ let s=applyAction(applyAction(initialState(),{type:'demo.configure',enabled:true}),booking);const id=s.trips[0].id;
  assert.throws(()=>applyAction(s,{type:'trip.status',id,status:'Completed'}));
  for(const status of tripStatuses.slice(1)){if(status==='Assigned')continue;s=applyAction(s,{type:'trip.status',id,status});assert.equal(s.trips[0].status,status);}
  assert.throws(()=>applyAction(s,{type:'trip.status',id,status:'On the way'}));assert.throws(()=>applyAction(s,{type:'trip.status',id,status:'Cancelled'}));assert.equal(applyAction(s,booking).trips.length,2);

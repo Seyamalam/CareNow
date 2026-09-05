@@ -7,7 +7,15 @@ import {
   medications,
   routines,
 } from "./catalog";
-import { quoteTrip, tripStatuses, vehicles } from "./transport";
+import {
+  quoteTrip,
+  tripStatuses,
+  vehicles,
+  defaultRideOptions,
+  rideOptionsSchema,
+} from "./transport";
+import { clockTime, newExhibition, type AccountRole } from "./workspace";
+import { initialState } from "./seed";
 export class ActionError extends Error {}
 export function applyAction(previous: State, action: Action): State {
   const s = structuredClone(previous);
@@ -27,13 +35,205 @@ export function applyAction(previous: State, action: Action): State {
     });
     s.notifications = s.notifications.slice(0, 50);
   }
+  function allow(...roles: AccountRole[]) {
+    if (!roles.includes(s.workspace.role))
+      throw new ActionError("Switch to the account that manages this action");
+  }
+  function accepted(kind: string, jobId: string) {
+    return s.workspace.accepted.some(
+      (a) => a.kind === kind && a.id === jobId && a.role === s.workspace.role,
+    );
+  }
   switch (action.type) {
+    case "account.switch":
+      s.workspace.role = action.role;
+      break;
+    case "account.availability":
+      s.workspace.available = action.available;
+      break;
+    case "demo.configure":
+      s.exhibition.enabled = action.enabled;
+      break;
+    case "demo.clock": {
+      if (!s.exhibition.enabled)
+        throw new ActionError("Open presenter mode first");
+      s.exhibition.clock = {
+        anchor: Date.now(),
+        elapsed: clockTime(s.exhibition.clock),
+        speed: action.speed,
+        paused: action.paused,
+      };
+      break;
+    }
+    case "demo.scenario": {
+      if (!s.exhibition.enabled)
+        throw new ActionError("Open presenter mode first");
+      const fresh = initialState();
+      fresh.version = s.version;
+      fresh.exhibition = {
+        ...newExhibition(),
+        enabled: true,
+        scenario: action.scenario,
+      };
+      fresh.requests = [];
+      fresh.appointments = [];
+      fresh.notifications = [];
+      if (action.scenario === "care") {
+        const care = initialState().requests[0];
+        fresh.requests = [
+          { ...care, id: "scenario-care", status: "Requested", motionStart: 0 },
+        ];
+      } else {
+        const vehicle = action.scenario === "group" ? "bus" : "ambulance";
+        const destination =
+          action.scenario === "group" ? "airport" : "hospital";
+        fresh.trips = [
+          {
+            id: "scenario-trip",
+            memberId: "self",
+            vehicle,
+            pickup: "banani",
+            destination,
+            status: "Assigned",
+            fare: quoteTrip(vehicle, "banani", destination)!.fare,
+            createdAt: now,
+            updatedAt: now,
+            motionStart: 0,
+            options: {
+              ...defaultRideOptions,
+              passengers: action.scenario === "group" ? 18 : 1,
+            },
+          },
+        ];
+      }
+      fresh.version++;
+      return fresh;
+    }
+    case "work.assign": {
+      allow("provider");
+      const r = s.requests.find((r) => r.id === action.id);
+      if (!r || r.status !== "Requested")
+        throw new ActionError("Choose an unassigned care request");
+      r.status = "Assigned";
+      notify("Care professional assigned", "Nusrat Jahan");
+      break;
+    }
+    case "work.accept": {
+      const expected =
+        action.kind === "trip"
+          ? "driver"
+          : action.kind === "care"
+            ? "caregiver"
+            : "doctor";
+      allow(expected);
+      if (!s.workspace.available)
+        throw new ActionError("Set yourself available to accept work");
+      const job =
+        action.kind === "trip"
+          ? s.trips.find((x) => x.id === action.id)
+          : action.kind === "care"
+            ? s.requests.find((x) => x.id === action.id)
+            : s.appointments.find((x) => x.id === action.id);
+      if (!job || !["Requested", "Assigned", "Confirmed"].includes(job.status))
+        throw new ActionError("This job is no longer available");
+      if (
+        s.workspace.accepted.some(
+          (a) => a.kind === action.kind && a.id === action.id,
+        )
+      )
+        throw new ActionError("This job is already accepted");
+      if (action.kind === "care" && job.status === "Requested")
+        job.status = "Assigned";
+      s.workspace.accepted.push({
+        id: action.id,
+        kind: action.kind,
+        role: expected,
+        at: now,
+      });
+      notify(
+        "Request accepted",
+        expected === "driver"
+          ? "Your driver is preparing to leave"
+          : expected === "caregiver"
+            ? "Nusrat Jahan accepted your visit"
+            : "Your doctor accepted the consultation",
+      );
+      break;
+    }
+    case "work.advance": {
+      if (action.kind === "trip") {
+        const t = s.trips.find((t) => t.id === action.id);
+        const next =
+          t &&
+          tripStatuses[
+            tripStatuses.indexOf(t.status as (typeof tripStatuses)[number]) + 1
+          ];
+        if (!next || next === "Assigned")
+          throw new ActionError("No next trip stage");
+        return applyAction(s, {
+          type: "trip.status",
+          id: action.id,
+          status: next,
+        });
+      }
+      if (action.kind === "appointment")
+        return applyAction(s, {
+          type: "appointment.status",
+          id: action.id,
+          status: "Completed",
+        });
+      const r = s.requests.find((r) => r.id === action.id);
+      const stages = [
+        "Requested",
+        "Assigned",
+        "On the way",
+        "Arrived",
+        "Completed",
+      ] as const;
+      const next =
+        r && stages[stages.indexOf(r.status as (typeof stages)[number]) + 1];
+      if (!next || next === "Requested")
+        throw new ActionError("No next care stage");
+      return applyAction(s, {
+        type: "request.status",
+        id: action.id,
+        status: next,
+      });
+    }
+
     case "trip.book": {
+      allow("customer");
       member(action.memberId);
+      const options = rideOptionsSchema.parse(
+        action.options ?? defaultRideOptions,
+      );
+      if (action.vehicle !== "bus" && options.passengers !== 1)
+        throw new ActionError(
+          "Passenger count is only available for minibuses",
+        );
+      if (
+        action.vehicle !== "truck" &&
+        (options.truckSize !== "1 ton" || options.cargo !== "General")
+      )
+        throw new ActionError("Cargo options are only available for trucks");
+      if (options.departure) {
+        const departure = Date.parse(options.departure);
+        if (
+          !Number.isFinite(departure) ||
+          departure < Date.now() + 60000 ||
+          departure > Date.now() + 30 * 86400000
+        )
+          throw new ActionError(
+            "Choose a departure between one minute and 30 days from now",
+          );
+        if (!["bus", "truck"].includes(action.vehicle))
+          throw new ActionError("Scheduling is available for trucks and buses");
+      }
       const quote = quoteTrip(
         action.vehicle,
         action.pickup,
         action.destination,
+        options,
       );
       if (!quote) throw new ActionError("Choose two different supported stops");
       if (s.trips.some((t) => !["Cancelled", "Completed"].includes(t.status)))
@@ -41,6 +241,8 @@ export function applyAction(previous: State, action: Action): State {
       s.trips.unshift({
         id,
         memberId: action.memberId,
+        options,
+        motionStart: clockTime(s.exhibition.clock),
         vehicle: action.vehicle,
         pickup: action.pickup,
         destination: action.destination,
@@ -66,6 +268,14 @@ export function applyAction(previous: State, action: Action): State {
         action.status !== tripStatuses[step + 1]
       )
         throw new ActionError("Advance one trip stage at a time");
+      if (action.status === "Cancelled")
+        allow("customer", "driver", "provider");
+      else if (!s.exhibition.enabled) {
+        allow("driver");
+        if (!accepted("trip", trip.id))
+          throw new ActionError("Accept this trip first");
+      }
+      trip.motionStart = clockTime(s.exhibition.clock);
       trip.status = action.status;
       trip.updatedAt = now;
       notify(
@@ -109,6 +319,7 @@ export function applyAction(previous: State, action: Action): State {
       break;
     }
     case "appointment.book": {
+      allow("customer");
       member(action.memberId);
       const d = doctors.find((d) => d.id === action.doctorId);
       if (!d || !slots.includes(action.time))
@@ -148,6 +359,13 @@ export function applyAction(previous: State, action: Action): State {
       if (!a) throw new ActionError("Appointment not found");
       if (a.status !== "Confirmed")
         throw new ActionError("This appointment is already closed");
+      if (action.status === "Cancelled")
+        allow("customer", "doctor", "provider");
+      else if (!s.exhibition.enabled) {
+        allow("doctor");
+        if (!accepted("appointment", a.id))
+          throw new ActionError("Accept this appointment first");
+      }
       a.status = action.status;
       if (a.status === "Completed") {
         s.records.unshift({
@@ -172,6 +390,7 @@ export function applyAction(previous: State, action: Action): State {
       break;
     }
     case "request.create": {
+      allow("customer");
       member(action.memberId);
       const service = services.find((x) => x.id === action.serviceId);
       if (!service) throw new ActionError("Service not found");
@@ -181,6 +400,7 @@ export function applyAction(previous: State, action: Action): State {
         id,
         memberId: action.memberId,
         serviceId: service.id,
+        motionStart: clockTime(s.exhibition.clock),
         city: action.city,
         address: action.address,
         contactName: action.contactName,
@@ -214,6 +434,14 @@ export function applyAction(previous: State, action: Action): State {
         steps.indexOf(action.status) !== steps.indexOf(r.status) + 1
       )
         throw new ActionError("Complete the previous step first");
+      if (action.status === "Cancelled")
+        allow("customer", "caregiver", "provider");
+      else if (!s.exhibition.enabled) {
+        allow("caregiver");
+        if (!accepted("care", r.id))
+          throw new ActionError("Accept this visit first");
+      }
+      r.motionStart = clockTime(s.exhibition.clock);
       r.status = action.status;
       break;
     }
