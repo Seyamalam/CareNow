@@ -11,6 +11,8 @@
 - Android APK SHA-256: `932220e9604f24bcad5a3ffebe37a57fce51c23410969393350124e9899d6133`. About 61 MiB, ARM64, development signing key, standalone JS/assets.
 - Known inherited limit: GitHub Actions billing lock prevents hosted CI jobs; equivalent checks ran locally. npm audit reports 16 moderate findings in dependencies; no high/critical findings. No billing or account settings were changed.
 
+- Release: [v1.1.0](https://github.com/Seyamalam/CareNow/releases/tag/v1.1.0), GitHub asset digest matches the local SHA-256. Final web deployment: https://ac14d787.carenow-demo.pages.dev. README contains 43 native captures.
+
 ## Earlier 1.0 verification
 
 ### Verification record
