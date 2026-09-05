@@ -1,0 +1,1007 @@
+{
+  "pages": [
+    {
+      "title": "Executive assessment",
+      "paras": [
+        "CareNow is a working exhibition prototype for coordinating family care and local transport in Bangladesh. One Expo application connects the customer experience with doctor, care professional, driver and service provider workspaces. The demonstration combines bookings, family records, service assignments and map-based progress in a shared workflow.",
+        "The strongest proposition is continuity between requesting help and understanding what happens next. A family can identify the person receiving care, arrange a visit or vehicle, follow a simulated arrival and return to the same activity history. Providers can inspect and progress those jobs without changing to another application. This is the central product hypothesis to test with households and service organisations.",
+        "The current release demonstrates real application behaviour and Cloudflare D1 persistence. Its people, prices, availability, medical records and earnings are fictional. Calls, vehicle dispatch, payments and location movement are simulated. The account switcher supports an exhibition session and does not establish production identity verification or professional authorisation.",
+        "The recommended next investment is a controlled, consented pilot after operational and clinical readiness work. Begin with a small Dhaka service area and scheduled, lower-acuity coordination. Broader truck and minibus hire remains part of the product vision, but each category needs its own supplier, pricing and safety validation.",
+        "This report gives judges a demonstrable product, researchers a testable methodology, public leaders an implementation and inclusion agenda, and investors an explicit economic model. No customer traction, clinical effectiveness, partnership, government approval or funding commitment is claimed. The proposed six-month budget is BDT 2.369 million, including contingency, and remains an estimate requiring quotations."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Reading guide and evidence boundaries",
+      "paras": [
+        "The report separates four kinds of information. Implemented features are supported by the source code and captured application states. Public context uses dated official or primary sources. Commercial numbers are transparent planning assumptions. Production requirements describe work that remains before real care or transport operations.",
+        "Read the executive assessment, opportunity model, pilot budget and roadmap for the investment case. Review the methodology, architecture, data model and pilot measures for technical or academic assessment. The product atlas provides captioned screenshots of the corrected interface. References identify each external source and its limits.",
+        "The original Project DBA brief was reviewed as rendered Word pages and as a separately extracted embedded handwritten scan. Its five service areas were emergency doctor access, elderly care, pre and post motherhood, support for autistic or neurodivergent children, and emergency support. CareNow is the current working name. Subsequent product decisions added broad transport and one account switcher. [16]",
+        "Capture edition: CareNow 1.2.1, 5 September 2026. The main atlas uses corrected native Android captures and current web captures, with platform identified in each caption. All visible identities and records are demonstration fixtures. Illustrations are AI-generated editorial scenes and do not depict customers, employees or partners.",
+        "Exhibition context follows the team’s stated Innovator Exhibitor intent. The official fair website distinguishes Innovator and Innovation Exhibitor registration. Its event information supplies context, not proof of acceptance or endorsement of CareNow. [15]"
+      ],
+      "table": [
+        [
+          "Evidence class",
+          "What it supports",
+          "What it cannot establish"
+        ],
+        [
+          "Working prototype",
+          "Flow, state and UI behaviour",
+          "Real-world fulfilment or safety"
+        ],
+        [
+          "Public research",
+          "Context and comparable offerings",
+          "CareNow demand or market share"
+        ],
+        [
+          "Planning model",
+          "Arithmetic under assumptions",
+          "Revenue forecast or valuation"
+        ],
+        [
+          "Proposed pilot",
+          "Evaluation design and decision gates",
+          "Completed research findings"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Bangladesh context and the coordination problem",
+      "paras": [
+        "Bangladesh has a large potential audience for digital services, but national scale does not translate directly into a paying market. The World Bank country profile reports 175.69 million people in 2025 and internet use by 53% of individuals in 2024. These are separate indicators with different reference years. [1]",
+        "BTRC reports 128.99 million internet subscriptions in January 2026, comprising 114.22 million mobile and 14.77 million ISP/PSTN subscriptions. Multiple subscriptions can belong to one person, while a fixed connection can serve several people. These counts must not be presented as unique app users. [2]",
+        "UNFPA’s population overview reports that people aged 60 and older represent 9.3% of the population. This supports attention to older households, although it does not measure their willingness or ability to purchase home care. The overview does not place a distinct observation year beside that share. [3]",
+        "Affordability requires equal attention. BSS reported that out-of-pocket spending accounted for 73% of Bangladesh health expenditure in 2021, citing the National Health Accounts. This historical figure is a reason to test total household cost and payment burden. It does not prove that a coordination app will reduce either. [4]",
+        "CareNow tests a specific problem hypothesis: households may struggle when information about a care recipient, a service booking and the arrival of a helper or vehicle sits across separate calls and messages. The prototype makes those handoffs visible. Interviews must establish how often this problem occurs, who performs the work, and whether better coordination is valuable enough to change behaviour."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Target audiences and service boundaries",
+      "paras": [
+        "The first user and the payer may be different people. An adult child may organise a parent’s visit, a household member may book transport, and a provider may assign the worker. Design research should follow the full decision chain, including the person receiving care, rather than assuming the phone owner represents everyone’s preferences.",
+        "The most suitable initial segment is a reachable cluster of households already arranging scheduled care or assisted travel in Dhaka. This is a proposed focus, not a measured market segment. Recruitment should include people with lower digital confidence and families who currently rely on phone coordination.",
+        "Care professionals, drivers and providers are users in their own right. They need clear job scope, arrival instructions, availability controls, transparent compensation and a route to challenge incorrect records. A consumer experience can look complete while hiding operational burden for workers. The pilot must measure both sides.",
+        "Clinical consultation, domestic assistance, skilled nursing, child support and vehicle hire have different competency requirements. A shared application does not make them interchangeable. Real providers must define permitted tasks and escalation procedures before accepting work. The demo’s service descriptions and sample rates are not clinical protocols or supplier quotations."
+      ],
+      "table": [
+        [
+          "Audience",
+          "Primary task",
+          "Pilot question"
+        ],
+        [
+          "Family organiser",
+          "Arrange help for a named person",
+          "Does shared context reduce follow-up calls?"
+        ],
+        [
+          "Care recipient",
+          "Understand and consent to a visit",
+          "Is the arrangement acceptable and accessible?"
+        ],
+        [
+          "Doctor or care professional",
+          "Accept and complete a scoped job",
+          "Are information and boundaries sufficient?"
+        ],
+        [
+          "Driver or fleet operator",
+          "Confirm route, capacity and timing",
+          "Can promised availability be fulfilled?"
+        ],
+        [
+          "Service provider",
+          "Assign staff and resolve exceptions",
+          "Does coordination save operational time?"
+        ],
+        [
+          "Research or public partner",
+          "Evaluate access and accountability",
+          "Who benefits and who remains excluded?"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Research foundation and unresolved questions",
+      "paras": [
+        "The evidence review combines official population and connectivity indicators, a primary telemedicine study, provider websites, platform pricing and project verification records. Sources were selected for relevance and traceability. This is a targeted desk review, not a systematic review or a commissioned national market survey.",
+        "Khatun and colleagues studied 2,097 users of Shastho Batayon during October to December 2020. Their cross-sectional analysis linked perceived service quality with satisfaction and intention to continue using teleconsultation. It offers useful constructs for CareNow’s evaluation: platform reliability, privacy, responsiveness and the quality of interaction. The study concerns a different service in a pandemic setting, so it cannot validate CareNow or establish causality. [5]",
+        "The prototype suggests several testable hypotheses. Families may value a shared record of bookings more than a larger service catalogue. Providers may value assignment visibility more than consumer-facing animation. Users may prefer telephone assistance for first bookings even when they use the app to check status. Each hypothesis needs observation and comparison against the existing workflow.",
+        "The review does not establish the number of households purchasing paid care, annual booking frequency, achievable take rate, worker supply, cancellation cost or acquisition cost. Those quantities drive the financial model and must be measured in a bounded pilot. Competitor websites also cannot establish current coverage or reliability without service testing.",
+        "To improve research quality, register the evaluation questions and primary metrics before recruitment. Maintain an interview guide, consent records, anonymised coding notes and a versioned dataset. Separate observed facts from researchers’ interpretations and retain negative findings. Seek appropriate ethics review before collecting health-related research data."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Competition and adjacent services",
+      "paras": [
+        "CareNow enters an existing service landscape. The comparison below records public offerings that overlap with parts of the demo. It is a desk review of official websites, not an exhaustive feature audit, service-quality ranking or claim that a competitor lacks unlisted capabilities. [6–10]",
+        "For families, the alternative may also be a known local doctor, a phone contact at a clinic, an independent caregiver or a neighbourhood vehicle operator. These informal alternatives can have strong trust and convenience advantages. The pilot must compare CareNow with the actual alternative used by each household.",
+        "The proposed distinction is a continuous family and job context across care and transport, with an operational view in the same application. This is a positioning hypothesis. CareNow has not demonstrated superior price, coverage, clinical outcomes, fulfilment or retention. Partnership may be more effective than duplicating specialist service networks."
+      ],
+      "table": [
+        [
+          "Organisation",
+          "Verified public offering",
+          "Relationship to CareNow"
+        ],
+        [
+          "DocTime [6]",
+          "Video consultations and enterprise services",
+          "Direct overlap in remote consultation"
+        ],
+        [
+          "Praava Ghore Lab [7]",
+          "Home sample collection and testing",
+          "Adjacent diagnostic fulfilment"
+        ],
+        [
+          "HelloTask [8]",
+          "Domestic worker service",
+          "Adjacent household assistance"
+        ],
+        [
+          "Truck Lagbe [9]",
+          "Truck booking, bidding, shifting and logistics",
+          "Direct overlap in general truck hire"
+        ],
+        [
+          "Shohoz [10]",
+          "Bus, train, flight and event tickets",
+          "Adjacent travel discovery and booking"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Product positioning and business model",
+      "paras": [
+        "CareNow’s product position is family service coordination. The customer starts with a person or a need, then moves through a request, an assignment and a visible job status. The provider sees the same operational object from an appropriate workspace. This shared context is the part of the prototype most worth validating.",
+        "Broad transport can increase the range of useful household and organisational tasks, but it also expands the operating model. Ambulance readiness cannot use the same acceptance criteria as moving furniture. Minibus charter requires capacity and schedule validation. A shared map and booking engine can support these categories while contracts and operating rules remain specific to each.",
+        "Two possible revenue streams are a disclosed fee on completed bookings and a provider subscription for operational tools. Both are hypotheses. The financial examples use a 12% booking fee and BDT 1,500 monthly provider subscription purely to make the model auditable. Real rates require supplier negotiations, customer research, tax treatment and an assessment of who bears the charge.",
+        "The platform should show the total payable amount before confirmation, distinguish provider charges from its own fee, and explain cancellation and refund rules. A service marketplace must decide whether it acts as an intermediary, a managed service or a direct provider. That decision affects liability, staffing and accounting and has not been resolved by the demo.",
+        "A plausible early advantage would come from reliable local supply, predictable handoffs and repeat household use. Screen polish is useful for comprehension, but it is not a durable commercial barrier on its own. Provider relationships, service quality, credible support and responsible data handling must carry the proposition."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Opportunity model with transparent assumptions",
+      "paras": [
+        "No validated national total addressable market is claimed. A bottom-up model is more useful at this stage because it exposes the assumptions the team can test. The planning unit is an active household, with 2.4 completed bookings per year and an average booking value of BDT 1,500.",
+        "Annual gross merchandise value equals active households multiplied by annual bookings per household multiplied by average booking value. Platform booking revenue equals that value multiplied by an assumed 12% fee. Gross merchandise value is the value of services transacted, not platform revenue.",
+        "The three rows are independent scale scenarios. The catchment of 100,000 households is an illustrative planning boundary, not a counted geographic market. The reachable and pilot scenarios are assumed active customer counts, not registrations, leads or secured users. None represents measured market share.",
+        "At 1,000 active households, the assumptions produce 2,400 annual bookings and BDT 432,000 in booking fees. If 25 providers also pay BDT 1,500 per month for a full year, subscription revenue adds BDT 450,000. Combined annual platform revenue would be BDT 882,000 before operating costs and tax. Supplier willingness to pay remains untested.",
+        "The next research step is to replace each assumption with observed or contract-backed evidence. Obtain a service-area household denominator, interview recent buyers, record actual booking values and measure completed repeat transactions. Do not infer purchasing demand from national population or internet subscription counts."
+      ],
+      "table": [
+        [
+          "Scenario",
+          "Active households",
+          "Annual GMV BDT",
+          "12% fee BDT"
+        ],
+        [
+          "Illustrative catchment",
+          "100,000",
+          "360,000,000",
+          "43,200,000"
+        ],
+        [
+          "Reachable scenario",
+          "20,000",
+          "72,000,000",
+          "8,640,000"
+        ],
+        [
+          "Pilot run-rate scenario",
+          "1,000",
+          "3,600,000",
+          "432,000"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Unit economics and sensitivity",
+      "paras": [
+        "The base example assumes one BDT 1,500 completed booking. A 12% platform fee yields BDT 180, leaving BDT 1,320 as the provider share before any provider-side expenses. The model then deducts BDT 30 for payment processing, BDT 35 for support and BDT 15 for refunds or service recovery. These are planning inputs, not measured costs.",
+        "Contribution is BDT 100 per completed booking before customer acquisition, fixed operating costs and tax. At an assumed BDT 600 acquisition cost, six completed bookings are required to recover acquisition spend. At 2.4 bookings per year, that implies approximately 30 months of payback if usage is evenly spread and the customer remains active.",
+        "That payback is a concern for the base case. It suggests testing lower-cost partner acquisition, more frequent use or a provider-funded model before broad consumer marketing. CareNow should not optimise volume while ignoring low completion rates, expensive support or churn.",
+        "The sensitivity table holds booking value and variable costs constant. It shows how the fee changes contribution and the minimum whole number of orders needed to recover BDT 600. Higher fees may reduce demand or supplier participation, so the most profitable arithmetic is not automatically the best commercial choice."
+      ],
+      "table": [
+        [
+          "Fee assumption",
+          "Fee per booking",
+          "Contribution BDT",
+          "Orders to repay CAC"
+        ],
+        [
+          "10%",
+          "150",
+          "70",
+          "9"
+        ],
+        [
+          "12%",
+          "180",
+          "100",
+          "6"
+        ],
+        [
+          "15%",
+          "225",
+          "145",
+          "5"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Six month pilot budget",
+      "paras": [
+        "The following is a proposed planning envelope in BDT, not a supplier quotation, hiring commitment or amount already spent. It assumes a small team that develops the production foundation while preparing and running a limited service pilot. The budget should be re-estimated after the service scope and partner responsibilities are agreed.",
+        "The base budget totals BDT 2,060,000. A 15% contingency adds BDT 309,000, producing BDT 2,369,000, or 23.69 lakh. The contingency should cover uncertainty rather than conceal an undefined delivery scope. Release funds against documented readiness gates and pilot evidence.",
+        "This envelope excludes vehicle purchases, a medical facility, large-scale paid acquisition, substantial insurance premiums, broad 24-hour dispatch staffing and financing of provider payouts. If the operating model requires those items, the budget must expand before commitments. Fees, taxes and legal requirements need local professional review.",
+        "The annual revenue example in the opportunity model is a steady-state scenario and should not be subtracted from this six-month development budget as if it were contracted cash flow. The pilot is primarily an evidence-building investment. A cash-flow forecast must model recruitment ramp, payment timing, refunds and working capital separately."
+      ],
+      "table": [
+        [
+          "Budget line",
+          "Six months BDT"
+        ],
+        [
+          "Engineering",
+          "900,000"
+        ],
+        [
+          "Design and user research",
+          "240,000"
+        ],
+        [
+          "Service operations",
+          "360,000"
+        ],
+        [
+          "Clinical and legal advice",
+          "200,000"
+        ],
+        [
+          "Security review",
+          "150,000"
+        ],
+        [
+          "Cloud and tools allowance",
+          "90,000"
+        ],
+        [
+          "Participant and travel costs",
+          "120,000"
+        ],
+        [
+          "Base subtotal",
+          "2,060,000"
+        ],
+        [
+          "Contingency 15%",
+          "309,000"
+        ],
+        [
+          "Total planning envelope",
+          "2,369,000"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Cloud cost and operational cost drivers",
+      "paras": [
+        "The chosen stack can keep early infrastructure costs modest. Cloudflare Workers Paid starts at USD 5 per account per month, including 10 million requests and 30 million CPU milliseconds. Additional usage is priced at USD 0.30 per million requests and USD 0.02 per million CPU milliseconds. [11]",
+        "D1 on the paid plan includes 25 billion rows read, 50 million rows written per month and 5 GB storage. Published overage rates are USD 0.001 per million rows read, USD 1 per million rows written and USD 0.75 per GB-month. Query scans and indexes affect billable row counts. [12]",
+        "The examples below assume no other account workloads consume the included allowances. They exclude media storage, map hosting, route services, messages, identity verification, observability vendors, payment fees and support labour. Prices were checked on 5 September 2026 and must be rechecked before procurement.",
+        "Actual operating cost will depend more on fulfilment and support than on the initial Worker subscription. Live location reporting creates repeated network traffic and battery use. Attachments require retention and storage planning. Failed deliveries, disputed fares and identity checks create human work. Instrument cost per completed job, not just cost per API request."
+      ],
+      "table": [
+        [
+          "Illustrative monthly load",
+          "Workers estimate",
+          "D1 assumption"
+        ],
+        [
+          "1m requests at 5 ms CPU each",
+          "USD 5.00",
+          "Below paid allowances"
+        ],
+        [
+          "15m requests at 7 ms CPU each",
+          "USD 8.00",
+          "Below paid allowances"
+        ],
+        [
+          "20m requests at 10 ms CPU each",
+          "USD 11.40",
+          "Below paid allowances"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Acquisition and supply strategy",
+      "paras": [
+        "The proposed launch strategy starts with supply reliability in one defined service area. Recruit a small number of accountable organisations before promoting general availability. Each must identify a responsible operator, define service hours, document worker qualifications and agree how failed assignments will be handled.",
+        "Household recruitment should use consented referrals from participating organisations, local community relationships and direct outreach to recent service buyers. These are proposed channels, not existing partnerships. Measure acquisition cost by completed first booking rather than app install, and record the channel that brought the household into the pilot.",
+        "Offer assisted onboarding for people who prefer a phone conversation. The organiser should be able to explain the task in Bangla and confirm the person receiving care understands the arrangement. Avoid promotions that encourage unnecessary clinical use or obscure the true price of service.",
+        "A weekly supply review should compare requested time windows with available staff and vehicles. Track rejected requests, unfilled jobs, cancellations and travel time. Expanding geography before supply can support it would undermine the coordination promise. Category expansion should follow operational evidence, not a larger catalogue alone.",
+        "Retention experiments should focus on a repeated job that users already perform. Examples include recurring assistance, follow-up transport and provider assignment management. Test whether families return without incentives and whether providers continue using the workspace after training. Record users who leave and their reasons, including those who return to familiar phone contacts."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Build methodology and iteration",
+      "paras": [
+        "The build began with the supplied service brief, including its handwritten source image, and a versioned product plan. Shared domain contracts established the structure of members, appointments, care requests and transport jobs. The application uses Expo React Native and PanelUI with a Hono API and Cloudflare D1. [16]",
+        "Implementation proceeded through complete user flows with deterministic fictional fixtures. Screens were captured as they became usable, and changes were committed and pushed frequently. Later iterations added street maps, route polylines, broader vehicle hire, workspaces for all account types and repeatable exhibition scenarios.",
+        "The latest layout pass reproduced narrow-screen problems at 360 by 640 logical pixels with 120% system text. Shared fixes replaced fixed heights and reserved footer space with flexible layout, equal-width statistics, bounded scrolling and keyboard-aware sheets. Regular-phone and mobile/desktop web captures provide the evidence used in this report.",
+        "Verification combines static type checks, domain tests, API integration evidence, release builds and visual inspection. Twenty-two domain tests cover core state rules. The latest web sweep inspected 23 routes and all five account roles. These checks demonstrate selected behaviour and layout, not comprehensive production safety or clinical validity.",
+        "The next methodological change is to involve representative users and independent reviewers. Developer-led testing can detect clipping and state errors, but it cannot establish whether a caregiver understands an instruction, whether a household trusts the service or whether the operating model fulfils a promise. Those are separate evaluation tasks."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Application architecture",
+      "paras": [
+        "The same Expo Router application presents customer and professional workspaces. Shared UI components compose PanelUI controls, while Reanimated handles interactions and native route movement. MapLibre renders street maps on native and web platforms. The interface sends typed actions through a shared contract to a Hono API. [16]",
+        "The Worker validates requests, resolves the isolated demo session and applies domain rules. D1 stores a versioned session aggregate and relational attachment records. A compare-and-swap update prevents concurrent changes from silently overwriting each other, with bounded conflict retries. The client refreshes the resulting state after successful actions.",
+        "The architecture deliberately favours a bounded exhibition session. One aggregate keeps related bookings, notifications and assignments coherent for a demonstration, but it is not a production multi-tenant clinical data model. A live marketplace requires independent identities, organisation boundaries, job permissions and normalized operational records.",
+        "Offline rehearsal uses separate local state and saved route geometry. It does not queue clinical transactions for later cloud synchronisation. That separation makes a booth demonstration repeatable without silently merging fictional offline activity into the cloud session. Cold web access still requires the application assets to be available."
+      ],
+      "table": [
+        [
+          "Layer",
+          "Implemented responsibility",
+          "Production evolution"
+        ],
+        [
+          "Expo and PanelUI",
+          "Navigation, forms, workspaces, motion",
+          "Accessibility and physical-device acceptance"
+        ],
+        [
+          "Shared TypeScript and Zod",
+          "Action and state contracts",
+          "Versioning and compatibility policy"
+        ],
+        [
+          "Hono on Workers",
+          "Validation and session-scoped commands",
+          "Identity, RBAC and audited operations"
+        ],
+        [
+          "D1",
+          "Versioned demo aggregate and attachments",
+          "Normalized entities and retention controls"
+        ],
+        [
+          "MapLibre and routes",
+          "Street rendering and saved road geometry",
+          "Live GPS, commercial service guarantees"
+        ],
+        [
+          "Offline rehearsal",
+          "Separate persistent local fixtures",
+          "No automatic production sync assumed"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Domain model and state integrity",
+      "paras": [
+        "The domain centres on a family member and a job. An appointment identifies a doctor, recipient, date, time and consultation mode. A care request records the recipient, contact, address, shift length and plan duration. A transport job adds origin, destination, vehicle type and relevant capacity or schedule options.",
+        "A provider assigns work and a service professional or driver accepts it. Ordered transitions make requested, assigned, accepted, travelling, arrived and completed states meaningful within the relevant workflow. Cancellation and completion must remain mutually coherent. The source enforces role and state conditions for demo commands. [16]",
+        "The account switcher changes the active exhibition role within a shared session. It should be understood as a way to demonstrate both sides of one transaction. It does not prove that separate authenticated users can access a production organisation safely. Real deployment needs account membership, object-level permissions and server-side audit trails.",
+        "The D1 session aggregate uses optimistic concurrency through a version field. A successful update must match the version read by the command. If another action has already changed the aggregate, the command retries within a bound. This avoids a lost update during the demonstration but does not remove the need to model idempotency and external side effects in production.",
+        "For a production migration, separate people, memberships, providers, bookings, assignments, status events, consents and payment records. Use stable identifiers and append-only operational events for audit. Keep media in an appropriate object store with scoped access. Design refunds, repeated network submissions and delayed supplier responses before integrating payment or live dispatch."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Privacy security and trust",
+      "paras": [
+        "The demonstration creates an isolated bearer-token session, hashes tokens at rest and expires sessions after seven days. API operations scope access by session and validate request data. Prepared SQL statements and attachment ownership checks reduce common classes of accidental access. These controls are useful demo safeguards, not a clinical security certification. [16]",
+        "Attachments accept PDF, JPEG and PNG with server-side signature checks, a limit of 20 files per session and a 750 KB request-body limit. They use the demo’s storage design. Production media handling needs a different retention, scanning, access and audit plan. Users should never interpret sample records as an invitation to upload sensitive real medical information to an exhibition.",
+        "The native client currently stores the session token using AsyncStorage. Offline rehearsal also persists local demonstration state. A real service must decide what data may remain on a device and use appropriate secure storage for credentials. Device loss, shared phones and revocation are material requirements.",
+        "Before a pilot, establish explicit consent for the recipient and any family delegate, purpose-based access to records, limited location-sharing periods, deletion and retention procedures, and a support process for account recovery. Log access to sensitive objects and operational changes without copying clinical content into general telemetry.",
+        "Threat modelling should cover a stolen session, a malicious attachment, an unauthorised provider, false location updates, a reused booking request and accidental cross-household access. An independent security review should test these cases against a production design. The application must also document incident ownership, containment, notification assessment and recovery procedures."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Clinical and service governance",
+      "paras": [
+        "CareNow currently offers an exhibition interface, not medical care. Real consultation and skilled home services require a responsible clinical organisation, verified professional credentials and clearly defined scope. The platform must not infer that a person is qualified because they can switch into a doctor or care professional workspace.",
+        "DGHS lists a National Telehealth Guideline for Bangladesh with a publication date of 29 March 2026. Its hosted document discusses governance, workforce and the continuing legal and ethical responsibilities of providers. The team should review the applicable DGHS and BMDC requirements with competent advisers before any live pilot. This report is not a legal interpretation or compliance opinion. [13,14]",
+        "A clinical lead should define which requests are appropriate for remote consultation, when an in-person service is needed and how urgent symptoms are escalated. Consent, prescribing, record access and identity verification must be documented. The demo’s appointment interface and simulated call cannot validate the quality of a consultation.",
+        "Ambulance operations need verified vehicle capability, staff readiness, dispatch responsibility and escalation arrangements. The displayed route and estimated arrival time are a simulation and must never become an unverified emergency promise. General trucks, accessible vans and minibuses require separate checks for capacity, licensing, insurance and local operating rules.",
+        "For child and neurodivergent support, use respectful language, obtain appropriate consent and involve qualified practitioners and families in defining services. A routine tracker is an organisational tool, not a diagnostic or therapeutic assessment. Worker safeguarding, household safety, complaint handling and incident escalation should be agreed before services begin."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Accessibility motion and performance",
+      "paras": [
+        "The design uses a restrained forest and mint palette, clear hierarchy, familiar controls and local fonts. Motion gives feedback through button responses, screen entrances, loading skeletons, Lottie artwork and route movement. Reduced-motion preferences and background state stop unnecessary animation. [16]",
+        "The 1.2.1 layout correction replaces assumptions about available space with responsive measurements. Narrow headers use a compact account control. Longer labels wrap, doctor statistics receive equal columns, and the transport footer participates in layout. Compact phones use a scrollable map and booking form. Sheets scroll and account for the visible keyboard.",
+        "The current accessibility evidence is limited. Enlarged text at 120% and selected control labels were checked, but a complete TalkBack, VoiceOver, contrast, switch-control and low-vision audit has not been completed. Bangla navigation exists, while full content translation and language-specific usability testing remain future work.",
+        "Performance evidence must be read carefully. A prior release route sample rendered roughly 59 frames per second during a 25.3-second emulator observation, with 0.80% Android deadline jank. Its legacy jank measure and frame-duration percentiles did not establish a universally smooth 60 fps pipeline. A sheet sample under host graphics load performed worse. [16]",
+        "The acceptance plan should profile a controlled release build on a midrange physical Android phone. Measure startup, first usable screen, booking submission, map gestures, keyboard response, memory and battery over repeated sessions. Keep raw traces and report percentiles as well as medians. Cosmetic animation should never delay a required action or hide a failed request."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Proposed pilot methodology",
+      "paras": [
+        "The pilot should answer whether the combined workflow improves coordination at an acceptable cost. Start only after the identity, consent, supplier and clinical readiness gates pass. Use scheduled services in a defined Dhaka area and retain an assisted phone route for participants who need it.",
+        "Phase one is qualitative discovery. A proposed sample is 24 household organisers or recipients, 8 care professionals, 6 drivers and 4 provider operators. Recruit across digital confidence, age, gender and service experience. These are suggested recruitment targets, not a statistically representative sample or completed interviews.",
+        "Phase two is formative usability. Ask participants to identify the care recipient, compare a service, enter a request, understand a status change and find help. Observe errors without coaching, then interview participants about the point of confusion. Test Bangla content and large text. Iterate before collecting operational outcomes.",
+        "Phase three is a six-week operational evaluation, with up to 100 households and a deliberately limited supplier pool. Compare each participant’s current coordination process with the pilot process where feasible. A randomized or staggered design may be suitable if ethics, sample size and operating constraints allow it. Do not withhold necessary care to create a comparison.",
+        "Collect task completion, coordination contacts, fulfilled bookings, cancellations, support time, total cost and participant experience. Treat health outcomes as outside the initial product study unless a qualified research team designs an appropriate protocol. Predefine exclusions, missing-data handling and adverse-event reporting. Publish limitations, including selection bias and learning effects."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Pilot measures and decision criteria",
+      "paras": [
+        "The proposed measures below make the pilot falsifiable. Thresholds are planning targets that require agreement with partners and an independent clinical or research lead where relevant. They are not current CareNow results.",
+        "Record the denominator for every rate. A fulfilled-booking rate should count all accepted requests within the defined service area and operating hours. An unassisted task-completion rate should include participants who stop or request help. Report absolute counts beside percentages to avoid overstating a small pilot.",
+        "Review operational measures weekly and safety issues immediately. Do not average a serious incident into a favourable satisfaction score. A material privacy event, unverified clinical service or inability to provide an agreed escalation route should pause the affected activity while the responsible team investigates.",
+        "The expansion decision should combine usability, fulfilment and economics. Good screen usability cannot compensate for absent supply, and bookings cannot justify a business whose support costs exceed its margin. Repeat use must be observed over a meaningful period rather than inferred from stated intention alone."
+      ],
+      "table": [
+        [
+          "Measure",
+          "Proposed target or rule",
+          "Evidence collection"
+        ],
+        [
+          "Core task completion",
+          "At least 85% without coaching",
+          "Observed sessions with denominators"
+        ],
+        [
+          "Accepted job fulfilment",
+          "At least 90% in defined scope",
+          "Job and cancellation records"
+        ],
+        [
+          "Coordination burden",
+          "Reduction versus documented baseline",
+          "Calls, messages and staff minutes"
+        ],
+        [
+          "Support cost",
+          "Fits measured contribution margin",
+          "Time logs and cost allocation"
+        ],
+        [
+          "Repeat use",
+          "Report 30 and 60 day cohorts",
+          "Completed jobs, no install proxy"
+        ],
+        [
+          "Safety and privacy",
+          "Investigate every material event",
+          "Incident register and escalation"
+        ],
+        [
+          "Performance",
+          "No blocked actions or persistent stalls",
+          "Physical-device traces and user reports"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Risks and mitigation ownership",
+      "paras": [
+        "The most consequential risks concern real-world service delivery, privacy and economic viability. The exhibit can demonstrate an interface without resolving them. A risk owner should have authority to pause an activity, not merely record a concern.",
+        "Use a living register during the pilot. Review whether mitigation evidence exists and whether residual risk is acceptable for the specific service. New categories, geographies and external integrations require a fresh review because they change both the operating and technical assumptions.",
+        "Ownership below identifies proposed responsibilities, not appointed staff. The team must assign named accountable people before real operations. Some functions can be provided by qualified partners, but contractual delegation should not leave an incident without a clear decision maker."
+      ],
+      "table": [
+        [
+          "Risk",
+          "Required response",
+          "Proposed owner"
+        ],
+        [
+          "Unfilled or late service",
+          "Limit area and hours, confirm capacity, escalate",
+          "Operations lead"
+        ],
+        [
+          "Unqualified clinical task",
+          "Credential review and defined scope",
+          "Clinical lead"
+        ],
+        [
+          "Data or location exposure",
+          "Least privilege, consent, audit, revocation",
+          "Security lead"
+        ],
+        [
+          "Supplier or household harm",
+          "Safeguarding process and incident support",
+          "Operations and clinical leads"
+        ],
+        [
+          "Unviable acquisition cost",
+          "Measure contribution and cohort payback",
+          "Commercial lead"
+        ],
+        [
+          "Map or network outage",
+          "Clear status, assisted fallback, retry policy",
+          "Engineering lead"
+        ],
+        [
+          "Category expansion overload",
+          "Separate launch gates for each service",
+          "Product and operations leads"
+        ],
+        [
+          "Research bias",
+          "Protocol, diverse recruitment, negative findings",
+          "Research lead"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Roadmap and investment gates",
+      "paras": [
+        "The roadmap is a sequence of readiness decisions rather than a promise of nationwide launch. The exhibition build is complete enough to demonstrate the interaction model. Production identity, operational agreements and evaluation evidence remain the next priorities.",
+        "Weeks one to four should establish the pilot’s service scope, participating organisations, clinical boundaries and privacy design. Weeks five to eight should implement and test identity, permissions, consent, media handling and operational exception paths. Timing is illustrative and depends on partner availability and review outcomes.",
+        "Weeks nine to twelve should focus on observed usability and a rehearsed operating process. Only then should the team begin the bounded operational evaluation. Expansion follows measured fulfilment, safe practice, acceptable costs and repeat use. A failed gate should result in a narrower scope or redesign, not a larger marketing budget.",
+        "Longer-term features may include live GPS with consent, verified supplier onboarding, payments and refunds, appointment reminders, recurring service plans, comprehensive Bangla content and partner data exchange. None should be presented as already integrated. Avoid adding automated clinical decision-making until a separate evidence and governance case exists."
+      ],
+      "table": [
+        [
+          "Stage",
+          "Outcome",
+          "Gate to proceed"
+        ],
+        [
+          "Exhibition release",
+          "Working app and repeatable scenarios",
+          "Verified build and honest demonstration"
+        ],
+        [
+          "Pilot preparation",
+          "Partners, protocol and scoped services",
+          "Named owners and approved operating rules"
+        ],
+        [
+          "Production foundation",
+          "Identity, access and consent controls",
+          "Security and workflow acceptance"
+        ],
+        [
+          "Formative evaluation",
+          "Observed tasks and corrected content",
+          "Usability target and resolved critical defects"
+        ],
+        [
+          "Operational pilot",
+          "Measured jobs, costs and experience",
+          "Fulfilment, safety and economic review"
+        ],
+        [
+          "Selective expansion",
+          "Additional area or service",
+          "Evidence supports each new commitment"
+        ]
+      ],
+      "heads": null
+    },
+    {
+      "title": "Partnership and public value agenda",
+      "paras": [
+        "The immediate collaboration request is access to a bounded, evaluable service environment. Potential partners include care organisations, clinics, vehicle operators, universities and community groups. No partnership is claimed in this report. A useful agreement would specify the service scope, participant recruitment, data responsibilities and escalation process.",
+        "For researchers, the opportunity is to study coordination work across households and providers using a functioning prototype. The study should produce reusable insight about accessibility, trust, service fulfilment and cost, even if the original product hypothesis proves weak. An anonymised methods package can support replication without publishing private records.",
+        "For public institutions, the relevant questions are inclusion and accountability. Can assisted access reach people who do not independently use apps? Does the service expose transparent prices and a complaint path? Are rural users or lower-income households excluded by supply and affordability? The current Dhaka-focused demo cannot answer those questions on its own.",
+        "For investors, the proposed next step is milestone-based support for the pilot envelope and production foundation. Evidence should include supplier commitments, observed repeat bookings, contribution after support, customer acquisition cost and a credible governance plan. This report does not propose a valuation or imply an investment return.",
+        "Public value should be measured rather than assumed. Possible benefits include fewer repeated coordination contacts, clearer job responsibility and easier access to a record of arrangements. Possible harms include digital exclusion, surveillance of workers, opaque fees and inappropriate reliance on simulated emergency capability. The pilot should collect evidence on both."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Exhibition demonstration guide",
+      "paras": [
+        "A short booth demonstration should follow one coherent job. Begin in the customer account, select a family member and show the available care or transport service. Explain that the data is fictional before demonstrating a booking. Use the account switcher to show how a provider or professional receives the same work.",
+        "For a transport demonstration, open the map, select an origin and destination, compare ambulance, accessible van, truck and minibus options, and inspect the fare and capacity fields. Show the assigned trip and a driver status change. Explain that the moving marker follows saved route geometry and does not represent a dispatched vehicle.",
+        "For care, show a request with a recipient, contact, address, shift and duration. Switch to the provider and care professional workspaces, then return to the family’s status and map view. For consultation, show doctor discovery, a scheduled visit, messages and sample records. Call controls remain a simulation.",
+        "Presenter mode supplies ambulance, caregiver-arrival and group-transport scenarios, with pause, replay and 1×, 3× or 8× playback. Offline rehearsal stores a separate local demo state and survives app restarts. Prepare the standalone Android APK before the event and rehearse the exact scenario on the presentation device.",
+        "A suggested five-minute sequence allocates one minute to the problem and household context, two minutes to a complete job, one minute to the provider handoff and one minute to evidence and next steps. Keep the detailed report available for technical, research and investor questions. Never enter real patient information during the exhibit."
+      ],
+      "table": null,
+      "heads": null
+    },
+    {
+      "title": "Feature inventory and production boundary",
+      "paras": [
+        "The inventory records the scope visible in the current prototype. “Demo” means implemented application behaviour with fictional data. It does not mean a live supplier or payment integration. [16]",
+        "The feature set is broad enough to test a shared coordination model, but breadth also introduces complexity. The pilot should choose a subset of these workflows with clear ownership and measurable outcomes. Features outside the pilot can remain available as exhibition scenarios without being advertised as live services."
+      ],
+      "table": [
+        [
+          "Capability",
+          "Current demonstration",
+          "Required for real operation"
+        ],
+        [
+          "Family and care records",
+          "Member profiles, records, routine logs",
+          "Consent, delegation and retention"
+        ],
+        [
+          "Doctor discovery",
+          "11 specialties, filters and profiles",
+          "Verified supply and clinical scope"
+        ],
+        [
+          "Visits and messages",
+          "Bookings, chat, PDF/photo attachments",
+          "Identity, secure media and real communications"
+        ],
+        [
+          "Home services",
+          "Requests, shifts, plans and job status",
+          "Staffing, training and safeguarding"
+        ],
+        [
+          "Transport",
+          "Four vehicle classes and schedule options",
+          "Contracts, capacity, payments and dispatch"
+        ],
+        [
+          "Maps",
+          "Street tiles, route lines and moving markers",
+          "Consented GPS and service reliability"
+        ],
+        [
+          "One application",
+          "Five role workspaces in one session",
+          "Individual accounts and role-based access"
+        ],
+        [
+          "Exhibition tools",
+          "Scenario replay and offline rehearsal",
+          "Clearly separate from live operations"
+        ],
+        [
+          "Motion and design",
+          "Lottie, skeletons and responsive controls",
+          "Physical-device and accessibility acceptance"
+        ]
+      ],
+      "heads": null
+    }
+  ],
+  "sources": [
+    [
+      "World Bank",
+      "Bangladesh country indicators",
+      "Population 175,686,899 in 2025 and individuals using the internet 53% in 2024. Different indicators have different observation years.",
+      "https://data.worldbank.org/country/bangladesh?lang=en"
+    ],
+    [
+      "BTRC",
+      "Internet subscribers",
+      "January 2026: 114.22 million mobile and 14.77 million ISP/PSTN subscriptions, 128.99 million total. Subscriptions are not unique people.",
+      "https://btrc.gov.bd/site/page/347df7fe-409f-451e-a415-65b109a207f5/-"
+    ],
+    [
+      "UNFPA Bangladesh",
+      "Population trends",
+      "Overview reports the share aged 60 and older as 9.3%. The overview does not identify a separate year next to that share. No population multiplication is used here.",
+      "https://bangladesh.unfpa.org/en/topics/population-trends-0?page=1"
+    ],
+    [
+      "Bangladesh Sangbad Sangstha",
+      "Out of pocket healthcare expenditure rises to 73pc study",
+      "15 July 2024 report of Bangladesh National Health Accounts: 73% out of pocket in 2021. Historical expenditure context, not a current app market estimate.",
+      "https://www.bssnews.net/news/200361"
+    ],
+    [
+      "Khatun et al",
+      "Users Perceived Service Quality of National Telemedicine Services During the COVID 19 Pandemic in Bangladesh",
+      "JMIR Human Factors 2024;11:e46566. Cross-sectional study of 2,097 Shastho Batayon users surveyed in October to December 2020. DOI 10.2196/46566.",
+      "https://humanfactors.jmir.org/2024/1/e46566/"
+    ],
+    [
+      "DocTime",
+      "Official service website",
+      "Public website advertises video consultation and an enterprise offering. This review did not test service delivery.",
+      "https://doctime.com.bd/"
+    ],
+    [
+      "Praava Health",
+      "Ghore Lab",
+      "Public page describes home sample collection and laboratory testing with an online request form.",
+      "https://web.praavahealth.com/ghore-lab"
+    ],
+    [
+      "HelloTask",
+      "Official service website",
+      "Public website identifies a domestic worker service. Domestic assistance and regulated clinical care are distinct.",
+      "https://www.hellotask.app/"
+    ],
+    [
+      "Truck Lagbe",
+      "Official service website",
+      "Truck booking, vendor bidding, cargo/loading details, shifting and business logistics. Marketing volume and savings claims are excluded.",
+      "https://www.trucklagbe.com/"
+    ],
+    [
+      "Shohoz",
+      "Official service website",
+      "Bus, train, flight and event ticket booking. Bus ticketing is distinct from whole-vehicle charter.",
+      "https://www.shohoz.com/"
+    ],
+    [
+      "Cloudflare",
+      "Workers pricing",
+      "Paid plan minimum USD 5 per account per month, 10 million requests and 30 million CPU milliseconds included. Additional requests USD 0.30 per million and CPU USD 0.02 per million milliseconds.",
+      "https://developers.cloudflare.com/workers/platform/pricing/"
+    ],
+    [
+      "Cloudflare",
+      "D1 pricing",
+      "Paid plan includes 25 billion rows read, 50 million rows written per month and 5 GB storage. Overage USD 0.001 per million reads, USD 1 per million writes, USD 0.75 per GB-month.",
+      "https://developers.cloudflare.com/d1/platform/pricing/"
+    ],
+    [
+      "DGHS",
+      "National Telehealth Guideline for Bangladesh",
+      "Official publication listing dated 29 March 2026. The linked PDF discusses governance, workforce and legal and ethical responsibilities. Applicability must be confirmed with competent advisers before a pilot.",
+      "https://dghs.portal.gov.bd/pages/miscellaneous-infos"
+    ],
+    [
+      "DGHS",
+      "National Telehealth Guideline PDF",
+      "Official hosted PDF, executive summary and scope. This report does not interpret it as an approval for CareNow.",
+      "https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/n/axvjbnqprylg/b/V2Ministry/o/office-dghs/2026/2/0420ffe2-8247-454a-8902-4f2cdfe85c18.pdf"
+    ],
+    [
+      "Bangladesh Innovation Fair",
+      "Official event website",
+      "Innovation Exhibitor category and health, medical and life sciences sector. Team-supplied participation intent does not imply selection, an award or endorsement.",
+      "https://innovationfairbd.org/"
+    ],
+    [
+      "CareNow repository",
+      "Product and verification evidence",
+      "Source, release APK, README screenshots, QA, transport, performance and visual review of the private original brief. Repository evidence is project-authored, not independent evaluation.",
+      "https://github.com/Seyamalam/CareNow"
+    ]
+  ],
+  "atlas": [
+    [
+      "Family home and account context",
+      [
+        [
+          "61-home-responsive.png",
+          "Android 1.2.1 · Family home"
+        ],
+        [
+          "71-family-responsive.png",
+          "Android 1.2.1 · Family members"
+        ],
+        [
+          "70-profile-responsive.png",
+          "Android 1.2.1 · Profile"
+        ]
+      ],
+      "The home screen starts with the selected family member and routes into care, doctors, transport and records. The profile retains account and navigation preferences. These screens demonstrate a household context, while production delegation and consent remain future requirements."
+    ],
+    [
+      "Doctor discovery and booking",
+      [
+        [
+          "64-doctors-responsive.png",
+          "Android 1.2.1 · Doctor discovery"
+        ],
+        [
+          "63-doctor-responsive.png",
+          "Android 1.2.1 · Doctor profile"
+        ],
+        [
+          "65-booking-responsive.png",
+          "Android 1.2.1 · Visit form"
+        ]
+      ],
+      "Search and specialty selection lead to a fictional doctor profile and a dated booking form. The corrected statistics use equal columns. The form records the care recipient, time and consultation mode. Ratings, credentials and fees are fictional exhibit data."
+    ],
+    [
+      "Consultation and records",
+      [
+        [
+          "web-appointment.png",
+          "Web · Appointment"
+        ],
+        [
+          "web-messages.png",
+          "Web · Messages"
+        ],
+        [
+          "web-call.png",
+          "Web · Simulated call"
+        ]
+      ],
+      "A populated demonstration appointment links to messages and call controls. Messages exercise persisted application state. The call screen demonstrates controls and completion, with no real audio or video connection. These are current web captures after the layout pass."
+    ],
+    [
+      "Home care and request details",
+      [
+        [
+          "66-care-responsive.png",
+          "Android 1.2.1 · Service catalogue"
+        ],
+        [
+          "67-elderly-responsive.png",
+          "Android 1.2.1 · Elderly care"
+        ],
+        [
+          "68-care-request-responsive.png",
+          "Android 1.2.1 · Request form"
+        ]
+      ],
+      "Service discovery leads to a request with a named recipient, city, full address, start date, shift and plan duration. The source brief’s 8, 12 and 24 hour shifts and 7, 15 and 30 day plans are represented. Service descriptions are demonstration scope, not approved clinical instructions."
+    ],
+    [
+      "Care status and arrival visibility",
+      [
+        [
+          "78-care-tracking-responsive.png",
+          "Android 1.2.1 · Job status"
+        ],
+        [
+          "79-care-map-responsive.png",
+          "Android 1.2.1 · Care team map"
+        ],
+        [
+          "web-role-Care-professional.png",
+          "Web · Care professional"
+        ]
+      ],
+      "The family can inspect an ordered job status and a simulated arrival route. The care professional workspace shows the operational side of a visit. The marker follows a saved route and the displayed estimate does not promise real arrival time."
+    ],
+    [
+      "Transport and location selection",
+      [
+        [
+          "62-transport-responsive.png",
+          "Android 1.2.1 · Transport map"
+        ],
+        [
+          "web-picker-360.png",
+          "Web · Location picker"
+        ],
+        [
+          "web-role-Driver.png",
+          "Web · Driver workspace"
+        ]
+      ],
+      "The map connects pickup and destination through a road polyline. Location selection uses saved Dhaka landmarks. The driver workspace shares the job model with the customer. The live prototype includes truck cargo and minibus passenger options, with dispatch and payment remaining simulated."
+    ],
+    [
+      "One application for every role",
+      [
+        [
+          "web-account-switcher.png",
+          "Web · Account switcher"
+        ],
+        [
+          "web-role-Service-provider.png",
+          "Web · Service provider"
+        ],
+        [
+          "web-role-Doctor.png",
+          "Web · Doctor workspace"
+        ]
+      ],
+      "The account switcher makes a complete transaction reviewable within one demonstration session. Providers can inspect assignments and fleet or service information. Doctors see their relevant work. In production, separate authentication and object permissions must govern each person’s access."
+    ],
+    [
+      "Motherhood and child routines",
+      [
+        [
+          "72-motherhood-responsive.png",
+          "Android 1.2.1 · Motherhood"
+        ],
+        [
+          "73-child-responsive.png",
+          "Android 1.2.1 · Child routines"
+        ],
+        [
+          "69-records-responsive.png",
+          "Android 1.2.1 · Health records"
+        ]
+      ],
+      "The product includes a pregnancy timeline, daily checklists, child routines and sample health records. These tools organise family information. They do not diagnose a condition, replace professional advice or demonstrate a clinical benefit."
+    ],
+    [
+      "Daily activity and support",
+      [
+        [
+          "76-activity-responsive.png",
+          "Android 1.2.1 · Activity"
+        ],
+        [
+          "77-notifications-responsive.png",
+          "Android 1.2.1 · Notifications"
+        ],
+        [
+          "75-emergency-responsive.png",
+          "Android 1.2.1 · Support services"
+        ]
+      ],
+      "Activity combines appointments, care requests and trips. Notifications make state changes visible. The support catalogue links to transport and other sample services. The exhibition must preserve the distinction between browsing a workflow and contacting a real emergency service."
+    ],
+    [
+      "Responsive layout verification",
+      [
+        [
+          "81-small-home-responsive.png",
+          "Android · 360 × 640 at 120% text"
+        ],
+        [
+          "82-small-switcher-responsive.png",
+          "Android · Scrollable role sheet"
+        ],
+        [
+          "74-member-responsive.png",
+          "Android 1.2.1 · Editable profile"
+        ]
+      ],
+      "Narrow-screen testing reproduced clipped controls and crowded fixed geometry. The corrected home tiles expand with text, the account control fits the header, and sheets keep long content scrollable. Screenshots show viewports of scrollable pages, so content can continue below the visible edge."
+    ],
+    [
+      "Exhibition and detailed records",
+      [
+        [
+          "80-presenter-responsive.png",
+          "Android 1.2.1 · Presenter controls"
+        ],
+        [
+          "web-record.png",
+          "Web · Sample record"
+        ],
+        [
+          "web-request-status.png",
+          "Web · Request status"
+        ]
+      ],
+      "Presenter controls allow repeatable scenarios and a separate offline rehearsal. Record and request screens expose details behind summary cards. These views help a judge inspect state transitions and the relationship between a family record and a service request."
+    ]
+  ]
+}

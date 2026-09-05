@@ -4,10 +4,10 @@ Audience: judges, researchers, public leaders, investors and technical reviewers
 
 - [x] Correct shared layouts before publication imagery.
 - [x] Capture and inspect populated product flows.
-- [ ] Validate public market sources and transparent planning assumptions.
-- [ ] Generate original editorial illustrations and record provenance.
-- [ ] Author detailed report with product atlas, evidence, architecture, economics, risks and pilot methodology.
-- [ ] Author coordinated editable presentation with source notes and technical appendix.
+- [x] Validate public market sources and transparent planning assumptions.
+- [x] Generate original editorial illustrations and record provenance.
+- [x] Author detailed report with product atlas, evidence, architecture, economics, risks and pilot methodology.
+- [x] Author coordinated editable presentation with source notes and technical appendix.
 - [ ] Render and inspect every document page and slide.
 - [ ] Commit source material and final deliverables and push.
 
