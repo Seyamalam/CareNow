@@ -149,7 +149,7 @@ export default function TrackTrip() {
                 setRecenter((x) => x + 1);
               }}
             >
-              <LocateFixed size={20} color={p.primary} />
+              <LocateFixed size={20} color={follow ? p.onPrimary : p.primary} />
             </Button>
           </View>
         )}
