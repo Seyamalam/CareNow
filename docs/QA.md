@@ -1,4 +1,19 @@
-# Verification record
+# CareNow 1.1 verification — 5 September 2026
+
+- TypeScript checks passed for Expo and Worker; 14 domain tests passed.
+- Remote D1 smoke tests passed, including server-derived trip fares, trip ownership, persistence, ordered transitions and rejection of updates to closed trips.
+- Expo Doctor: 21/21. Web export and standalone Android ARM64 release build passed. MapLibre tested in the native app, not Expo Go. iOS remains untested.
+- Android: inspected native street tiles, route geometry, original vehicle markers, location sheet, all four choices, ambulance booking/approach/trip/completion and persistence across APK reinstall. Reanimated marker positions visibly change along the route.
+- Web: tested at desktop and 390 px phone width. Searched for Airport, selected minibus, booked, reloaded during the approach, advanced to the destination route and completed the trip. Native truck cancellation and care worker approach/arrival were also verified. Native/web screenshots are represented by the latest README gallery entries.
+- Fixed issues found during visual QA: Card.Content top padding, vehicle button horizontal padding, sheet body collapsing in auto height, overlapping fleet markers, duplicate Fabric registration from mixed MapLibre exports, web worker/shared-module delivery, and Cloudflare skipping exported font files under node_modules. Fonts now live in app-owned assets and are served with font/ttf content type.
+- Web startup uses Expo’s single-page export with Cloudflare route fallback. The earlier static export emitted an unfinished Suspense boundary and recovered through client rendering; single-page output removes that hydration error for this session-based app.
+- Map data: OpenFreeMap Positron with visible attribution; 20 OSRM road snapshots between five Dhaka stops. Routing is illustrative and does not account for live traffic or vehicle restrictions. Positions, fare and ETA are simulations.
+- Android APK SHA-256: `932220e9604f24bcad5a3ffebe37a57fce51c23410969393350124e9899d6133`. About 61 MiB, ARM64, development signing key, standalone JS/assets.
+- Known inherited limit: GitHub Actions billing lock prevents hosted CI jobs; equivalent checks ran locally. npm audit reports 16 moderate findings in dependencies; no high/critical findings. No billing or account settings were changed.
+
+## Earlier 1.0 verification
+
+### Verification record
 
 Verified 2026-09-05 on macOS, a dedicated Android 15 ARM64 emulator (Pixel 7 profile), Expo Go SDK 57, the standalone release APK, local Wrangler/D1 and deployed Cloudflare services.
 

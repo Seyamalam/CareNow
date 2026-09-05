@@ -69,3 +69,5 @@ npm run export:web
 9. `npx wrangler pages deploy dist --project-name carenow-demo --branch main`
 
 The public routing rules serve Expo's shell for session-specific dynamic routes; Expo Router resolves the actual path. CI verifies code and local D1, and does not contain deployment credentials.
+
+The web target uses Expo single-page output. Cloudflare `_redirects` serves `index.html` for app routes, including direct links to saved trips.

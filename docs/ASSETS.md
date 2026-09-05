@@ -19,3 +19,5 @@ The app links to these English-language sources, rather than reproducing or adap
 ## Transport maps (1.1)
 
 Original fleet SVGs: `components/vehicle-art.tsx`. Native MapLibre and MapLibre GL JS are BSD licensed. Map attribution and OSRM/OSM road data provenance are documented in [TRANSPORT.md](TRANSPORT.md). No remote portrait or icon asset is required.
+
+The three bundled font files are in `assets/fonts/`, with their SIL Open Font License files. Keeping these under app assets makes them deployable on Cloudflare Pages, which omits node_modules paths.

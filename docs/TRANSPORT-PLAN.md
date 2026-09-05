@@ -10,11 +10,11 @@ The map has a clear route, labelled endpoints, vehicle positions and a floating 
 
 ## Milestones
 
-- [ ] M1: MapLibre native + web, OpenFreeMap street tiles and attribution; road-following route fixtures from OSRM / OSM.
-- [ ] M2: Shared validated transport models, server-priced bookings, D1 persistence, ordered status/cancel controls, meaningful domain tests.
-- [ ] M3: Map transport selection, route/location picker, ambulance/van/truck/bus quotes, booking and animated tracking. Demo controls labelled.
-- [ ] M4: Care worker tracking map tied to existing requests; shared design cleanup and redesigned Home, navigation, emergency entry.
-- [ ] M5: Native build and visual inspection, screenshots for every completed screen in README, API / type / unit / web verification.
+- [x] M1: MapLibre native + web, OpenFreeMap street tiles and attribution; road-following route fixtures from OSRM / OSM.
+- [x] M2: Shared validated transport models, server-priced bookings, D1 persistence, ordered status/cancel controls, meaningful domain tests.
+- [x] M3: Map transport selection, route/location picker, ambulance/van/truck/bus quotes, booking and animated tracking. Demo controls labelled.
+- [x] M4: Care worker tracking map tied to existing requests; shared design cleanup and redesigned Home, navigation, emergency entry.
+- [x] M5: Native build and visual inspection, screenshots for every completed screen in README, API / type / unit / web verification.
 - [ ] M6: Deploy updated web and Worker, publish updated Android APK, commit and push documentation and evidence.
 
 ## Boundaries and verification

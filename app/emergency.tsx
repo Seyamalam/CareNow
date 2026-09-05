@@ -25,7 +25,7 @@ export default function Emergency() {
         Book ambulance on map
       </Button>
       {services
-        .filter((s) => s.category === "emergency")
+        .filter((s) => s.category === "emergency" && s.id !== "ambulance")
         .map((s) => (
           <Box key={s.id}>
             <Row>

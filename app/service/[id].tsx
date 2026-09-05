@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Button } from "../../components/button";
-import { router, useLocalSearchParams } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { Check, ArrowRight } from "lucide-react-native";
 import {
   Screen,
@@ -20,6 +20,12 @@ export default function Service() {
     p = usePalette();
   const s = services.find((x) => x.id === id),
     c = categories.find((x) => x.id === s?.category);
+  if (id === "ambulance")
+    return (
+      <Redirect
+        href={{ pathname: "/transport", params: { kind: "ambulance" } }}
+      />
+    );
   if (!s || !c)
     return (
       <Screen back title="Care service">

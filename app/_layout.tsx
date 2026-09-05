@@ -8,12 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PanelUIProvider } from "panelui-native";
 import { Uniwind } from "uniwind";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  useFonts,
-  DMSans_400Regular,
-  DMSans_600SemiBold,
-} from "@expo-google-fonts/dm-sans";
-import { Manrope_700Bold } from "@expo-google-fonts/manrope";
+import { useFonts } from "expo-font";
 import * as NativeSplash from "expo-splash-screen";
 import { CareProvider, useCare } from "../lib/store";
 import { usePalette } from "../lib/theme";
@@ -62,9 +57,9 @@ function Navigation() {
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient());
   const [loaded, error] = useFonts({
-    DMSans_400Regular,
-    DMSans_600SemiBold,
-    Manrope_700Bold,
+    DMSans_400Regular: require("../assets/fonts/DMSans_400Regular.ttf"),
+    DMSans_600SemiBold: require("../assets/fonts/DMSans_600SemiBold.ttf"),
+    Manrope_700Bold: require("../assets/fonts/Manrope_700Bold.ttf"),
   });
   if (!loaded && !error) return null;
   return (

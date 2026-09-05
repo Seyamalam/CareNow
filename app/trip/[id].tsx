@@ -178,7 +178,7 @@ export default function TrackTrip() {
                         : `Trip ${trip.status.toLowerCase()}`}
               </Type>
               <Type size={12} muted>
-                {trip.status === "On trip"
+                {travelling
                   ? stopName(trip.destination)
                   : stopName(trip.pickup)}
               </Type>

@@ -123,6 +123,7 @@ export function RouteMap({
         const existing = pins.current.find((p) => p.id === pin.id);
         if (existing) {
           existing.marker.setLngLat(pin.coordinate);
+          existing.element.setAttribute("aria-label", pin.label);
           continue;
         }
         const element = document.createElement("button");

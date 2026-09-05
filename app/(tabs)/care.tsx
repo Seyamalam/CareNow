@@ -125,10 +125,12 @@ export default function Care() {
                 </Row>
                 <Row style={{ justifyContent: "space-between" }}>
                   <Type size={17} weight="bold">
-                    {money(s.rate)}{" "}
-                    <Type muted size={11}>
-                      / {s.unit}
-                    </Type>
+                    {s.id === "ambulance" ? "Route-based fare" : money(s.rate)}{" "}
+                    {s.id !== "ambulance" && (
+                      <Type muted size={11}>
+                        / {s.unit}
+                      </Type>
+                    )}
                   </Type>
                   <Button
                     variant="secondary"
