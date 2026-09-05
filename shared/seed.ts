@@ -147,6 +147,7 @@ export function initialState(): State {
         date: new Date().toISOString(),
       },
     ],
+    trips: [],
     medicationEvents: [],
     preferences: { language: "en", reminders: true },
     version: 0,

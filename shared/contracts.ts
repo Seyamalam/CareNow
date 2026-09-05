@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { tripSchema, transportActions } from "./transport";
 
 const validDate = z
   .string()
@@ -85,6 +86,7 @@ export const notificationSchema = z.object({
   date: z.string(),
 });
 export const stateSchema = z.object({
+  trips: z.array(tripSchema).default([]),
   members: z.array(memberSchema),
   appointments: z.array(appointmentSchema),
   requests: z.array(requestSchema),
@@ -101,6 +103,7 @@ export const stateSchema = z.object({
 });
 const date = validDate;
 export const actionSchema = z.discriminatedUnion("type", [
+  ...transportActions,
   z.object({ type: z.literal("member.save"), member: memberSchema }),
   z.object({ type: z.literal("member.delete"), id: z.string() }),
   z.object({

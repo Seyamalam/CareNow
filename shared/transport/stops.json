@@ -1,0 +1,47 @@
+[
+  {
+    "id": "banani",
+    "name": "Banani · Road 11",
+    "detail": "Banani, Dhaka",
+    "coordinate": [
+      90.406,
+      23.7935
+    ]
+  },
+  {
+    "id": "gulshan",
+    "name": "Gulshan 2 Circle",
+    "detail": "Gulshan Avenue, Dhaka",
+    "coordinate": [
+      90.4147,
+      23.794
+    ]
+  },
+  {
+    "id": "hospital",
+    "name": "Evercare Hospital",
+    "detail": "Bashundhara R/A, Dhaka",
+    "coordinate": [
+      90.4311,
+      23.8104
+    ]
+  },
+  {
+    "id": "dhanmondi",
+    "name": "Dhanmondi 27",
+    "detail": "Mirpur Road, Dhaka",
+    "coordinate": [
+      90.3754,
+      23.7565
+    ]
+  },
+  {
+    "id": "airport",
+    "name": "Airport · Terminal 2",
+    "detail": "Airport Road, Dhaka",
+    "coordinate": [
+      90.4087,
+      23.8513
+    ]
+  }
+]

@@ -7,6 +7,7 @@ import {
   medications,
   routines,
 } from "./catalog";
+import { quoteTrip, tripStatuses, vehicles } from "./transport";
 export class ActionError extends Error {}
 export function applyAction(previous: State, action: Action): State {
   const s = structuredClone(previous);
@@ -27,6 +28,52 @@ export function applyAction(previous: State, action: Action): State {
     s.notifications = s.notifications.slice(0, 50);
   }
   switch (action.type) {
+    case "trip.book": {
+      member(action.memberId);
+      const quote = quoteTrip(
+        action.vehicle,
+        action.pickup,
+        action.destination,
+      );
+      if (!quote) throw new ActionError("Choose two different supported stops");
+      if (s.trips.some((t) => !["Cancelled", "Completed"].includes(t.status)))
+        throw new ActionError("Finish or cancel your active trip first");
+      s.trips.unshift({
+        id,
+        memberId: action.memberId,
+        vehicle: action.vehicle,
+        pickup: action.pickup,
+        destination: action.destination,
+        status: "Assigned",
+        fare: quote.fare,
+        createdAt: now,
+        updatedAt: now,
+      });
+      notify(
+        "Transport booked",
+        `${vehicles.find((v) => v.id === action.vehicle)!.name} · Demo driver assigned`,
+      );
+      break;
+    }
+    case "trip.status": {
+      const trip = s.trips.find((t) => t.id === action.id);
+      if (!trip) throw new ActionError("Trip not found");
+      if (["Cancelled", "Completed"].includes(trip.status))
+        throw new ActionError("This trip is already closed");
+      const step = tripStatuses.findIndex((s) => s === trip.status);
+      if (
+        action.status !== "Cancelled" &&
+        action.status !== tripStatuses[step + 1]
+      )
+        throw new ActionError("Advance one trip stage at a time");
+      trip.status = action.status;
+      trip.updatedAt = now;
+      notify(
+        `Trip ${action.status.toLowerCase()}`,
+        vehicles.find((v) => v.id === trip.vehicle)!.name,
+      );
+      break;
+    }
     case "member.save": {
       const i = s.members.findIndex((m) => m.id === action.member.id);
       if (i < 0) {
@@ -41,6 +88,11 @@ export function applyAction(previous: State, action: Action): State {
       if (s.members.length === 1)
         throw new ActionError("Keep at least one family member");
       if (
+        s.trips.some(
+          (t) =>
+            t.memberId === action.id &&
+            !["Cancelled", "Completed"].includes(t.status),
+        ) ||
         s.appointments.some(
           (a) => a.memberId === action.id && a.status === "Confirmed",
         ) ||
