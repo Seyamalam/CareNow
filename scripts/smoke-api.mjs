@@ -20,6 +20,14 @@ const ta = a.body.token,
   tb = b.body.token;
 try {
   assert.equal((await req("/state")).status, 401);
+  const trip=await req('/actions',ta,{type:'trip.book',memberId:'self',vehicle:'truck',pickup:'banani',destination:'hospital'});
+  assert.equal(trip.status,200);assert.equal(trip.body.trips[0].fare,1400);
+  const tripId=trip.body.trips[0].id;
+  assert.equal((await req('/state',ta)).body.trips[0].id,tripId);
+  assert.equal((await req('/actions',tb,{type:'trip.status',id:tripId,status:'Cancelled'})).status,400);
+  assert.equal((await req('/actions',ta,{type:'trip.status',id:tripId,status:'Completed'})).status,400);
+  for(const status of ['On the way','At pickup','On trip','Completed']) assert.equal((await req('/actions',ta,{type:'trip.status',id:tripId,status})).body.trips[0].status,status);
+  assert.equal((await req('/actions',ta,{type:'trip.status',id:tripId,status:'Cancelled'})).status,400);
   const day = new Date(Date.now() + 3 * 86400000).toISOString().slice(0, 10);
   const booking = {
     type: "appointment.book",

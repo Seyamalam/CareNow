@@ -16,6 +16,7 @@ import {
 } from "../../components/ui";
 import { useCare } from "../../lib/store";
 import { doctors, services } from "../../shared/catalog";
+import { vehicles, stopName } from "../../shared/transport";
 import { shortDate, money } from "../../shared/contracts";
 export default function Activity() {
   const { state, t } = useCare();
@@ -34,18 +35,26 @@ export default function Activity() {
         ? !["Cancelled", "Completed"].includes(r.status)
         : ["Cancelled", "Completed"].includes(r.status)),
   );
+  const trips = state!.trips.filter(
+    (t) =>
+      filter === "All" ||
+      (filter === "Upcoming"
+        ? !["Cancelled", "Completed"].includes(t.status)
+        : ["Cancelled", "Completed"].includes(t.status)),
+  );
   return (
     <Screen
+      back
       refresh
       title={t("Your activity", "আপনার কার্যক্রম")}
-      subtitle="APPOINTMENTS & CARE"
+      subtitle="APPOINTMENTS · CARE · TRIPS"
     >
       <Choices
         values={["Upcoming", "Past", "All"]}
         value={filter}
         onChange={setFilter}
       />
-      {!appointments.length && !requests.length && (
+      {!appointments.length && !requests.length && !trips.length && (
         <Empty
           title="No care scheduled"
           detail="Your appointments and requests appear here."
@@ -53,6 +62,34 @@ export default function Activity() {
           onPress={() => router.push("/care")}
         />
       )}{" "}
+      {trips.map((trip) => (
+        <Box key={trip.id}>
+          <Row style={{ justifyContent: "space-between" }}>
+            <Pill text={trip.status} />
+            <Type size={11} muted>
+              Transport
+            </Type>
+          </Row>
+          <Type size={18} weight="bold">
+            {vehicles.find((v) => v.id === trip.vehicle)!.name}
+          </Type>
+          <Type size={12} muted>
+            {stopName(trip.pickup)} → {stopName(trip.destination)}
+          </Type>
+          <Row style={{ justifyContent: "space-between" }}>
+            <Type weight="bold">{money(trip.fare)}</Type>
+            <Button
+              size="sm"
+              variant="secondary"
+              onPress={() =>
+                router.push({ pathname: "/trip/[id]", params: { id: trip.id } })
+              }
+            >
+              View trip
+            </Button>
+          </Row>
+        </Box>
+      ))}
       {appointments.map((a) => {
         const doctor = doctors.find((d) => d.id === a.doctorId);
         return (

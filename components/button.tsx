@@ -23,6 +23,16 @@ export function Button({
   return (
     <PanelButton
       {...props}
+      style={
+        typeof props.style === "function"
+          ? (state) => [
+              { boxShadow: "none", borderRadius: 14 },
+              typeof props.style === "function"
+                ? props.style(state)
+                : props.style,
+            ]
+          : [{ boxShadow: "none", borderRadius: 14 }, props.style]
+      }
       variant={variant}
       startContent={tint(startContent)}
       endContent={tint(endContent)}

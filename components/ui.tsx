@@ -25,6 +25,10 @@ import {
   ChevronRight,
   Check,
   Heart,
+  HeartHandshake,
+  Baby,
+  Truck,
+  Navigation,
   Flower2,
   Sparkles,
   Ambulance,
@@ -96,8 +100,15 @@ export function Box({
   style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <Card style={[{ borderRadius: 24, overflow: "hidden" }, style]}>
-      <Card.Content style={{ padding: 20, gap: 14 }}>{children}</Card.Content>
+    <Card
+      style={[
+        { borderRadius: 20, overflow: "hidden", boxShadow: "none" },
+        style,
+      ]}
+    >
+      <Card.Content style={{ padding: 18, paddingTop: 18, gap: 14 }}>
+        {children}
+      </Card.Content>
     </Card>
   );
 }
@@ -164,8 +175,8 @@ export function Screen({
         contentContainerStyle={{
           paddingTop: insets.top + 18,
           paddingBottom: insets.bottom + 32,
-          paddingHorizontal: 24,
-          gap: 24,
+          paddingHorizontal: 20,
+          gap: 20,
           width: "100%",
           maxWidth: 720,
           alignSelf: "center",
@@ -201,7 +212,7 @@ export function Screen({
                     {subtitle}
                   </Type>
                 )}
-                <Type size={back ? 25 : 31} weight="bold">
+                <Type size={back ? 23 : 28} weight="bold">
                   {title}
                 </Type>
               </View>
@@ -314,9 +325,11 @@ export function Choices({
   );
 }
 const icons: Record<string, LucideIcon> = {
-  heart: Heart,
+  heart: HeartHandshake,
+  truck: Truck,
+  transport: Navigation,
   flower: Flower2,
-  sparkles: Sparkles,
+  sparkles: Baby,
   ambulance: Ambulance,
   doctor: Stethoscope,
   calendar: CalendarDays,
@@ -341,13 +354,13 @@ export function IconTile({
       style={{
         width: size,
         height: size,
-        borderRadius: size * 0.32,
+        borderRadius: size * 0.27,
         backgroundColor: p[tone],
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <Icon size={size * 0.44} color={p.ink} strokeWidth={1.7} />
+      <Icon size={size * 0.44} color={p.ink} strokeWidth={1.8} />
     </View>
   );
 }

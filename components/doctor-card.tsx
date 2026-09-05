@@ -34,17 +34,6 @@ export function DoctorAvatar({
         overflow: "hidden",
       }}
     >
-      <View
-        style={{
-          position: "absolute",
-          width: size * 0.85,
-          height: size * 0.7,
-          borderRadius: size,
-          backgroundColor: p.card,
-          opacity: 0.6,
-          bottom: -size * 0.3,
-        }}
-      />
       <Type size={size * 0.29} weight="bold">
         {doctor.initials}
       </Type>

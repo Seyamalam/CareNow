@@ -8,7 +8,7 @@
 @layer theme {
   :root {
     @variant light {
-      --color-background: #f7f8f3;
+      --color-background: #f5f8f7;
       --color-foreground: #183d35;
       --color-card: #ffffff;
       --color-card-foreground: #183d35;
@@ -17,10 +17,10 @@
       --color-secondary: #e8f0e8;
       --color-secondary-foreground: #194e3e;
       --color-muted: #f0f2ed;
-      --color-muted-foreground: #77877d;
+      --color-muted-foreground: #596f65;
       --color-accent: #d7edc5;
       --color-accent-foreground: #194e3e;
-      --color-border: #e5eae3;
+      --color-border: #dfe8e3;
       --color-input: #e0e7df;
       --color-ring: #588873;
       --color-chart-1: #a2beac;

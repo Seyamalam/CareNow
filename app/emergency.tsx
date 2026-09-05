@@ -14,20 +14,16 @@ export default function Emergency() {
       title="Emergency support"
       right={<Pill text="DEMO" tone="sand" />}
     >
-      <View
-        style={{
-          backgroundColor: p.sand,
-          borderRadius: 26,
-          padding: 24,
-          gap: 14,
-        }}
+      <Button
+        fullWidth
+        size="lg"
+        onPress={() =>
+          router.push({ pathname: "/transport", params: { kind: "ambulance" } })
+        }
+        startContent={<ArrowUpRight size={20} />}
       >
-        <IconTile name="ambulance" tone="card" size={64} />
-        <Type size={26} weight="bold">
-          Transport & assistance
-        </Type>
-        <Type size={12}>Simulated requests · No real dispatch</Type>
-      </View>
+        Book ambulance on map
+      </Button>
       {services
         .filter((s) => s.category === "emergency")
         .map((s) => (

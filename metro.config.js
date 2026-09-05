@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const { getDefaultConfig } = require('expo/metro-config');
-const { withUniwindConfig } = require('uniwind/metro');
+const fs = require("fs");
+const path = require("path");
+const { getDefaultConfig } = require("expo/metro-config");
+const { withUniwindConfig } = require("uniwind/metro");
 
 /**
  * Refuse to start from inside the PanelUI repository.
@@ -24,15 +24,15 @@ function refuseToRunInPlace(from) {
     if (isPanelUICheckout(dir)) {
       throw new Error(
         `This template is being run in place, inside the PanelUI checkout at ${dir}.\n\n` +
-          'It resolves its dependencies up into the monorepo from here, which is ' +
-          'not what a generated project does, and the mismatched copies it finds ' +
-          'fail in ways that look like bugs in the template.\n\n' +
-          'Scaffold a real project instead, from the repository root:\n\n' +
-          '  npm run template\n'
+          "It resolves its dependencies up into the monorepo from here, which is " +
+          "not what a generated project does, and the mismatched copies it finds " +
+          "fail in ways that look like bugs in the template.\n\n" +
+          "Scaffold a real project instead, from the repository root:\n\n" +
+          "  npm run template\n",
       );
     }
 
-    const parent = path.resolve(dir, '..');
+    const parent = path.resolve(dir, "..");
     if (parent === dir) return;
     dir = parent;
   }
@@ -40,10 +40,13 @@ function refuseToRunInPlace(from) {
 
 /** The library's own workspace root, and nothing that merely resembles one. */
 function isPanelUICheckout(dir) {
-  if (!fs.existsSync(path.join(dir, 'packages', 'panelui', 'package.json'))) return false;
+  if (!fs.existsSync(path.join(dir, "packages", "panelui", "package.json")))
+    return false;
   try {
-    const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'));
-    return (manifest.workspaces ?? []).includes('packages/*');
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(dir, "package.json"), "utf8"),
+    );
+    return (manifest.workspaces ?? []).includes("packages/*");
   } catch {
     return false;
   }
@@ -52,15 +55,33 @@ function isPanelUICheckout(dir) {
 refuseToRunInPlace(__dirname);
 
 const config = getDefaultConfig(__dirname);
+const { FileStore } = require("metro-cache");
+// Keep concurrent projects and native/web builds out of the shared temp cache.
+config.cacheStores = [new FileStore({root:path.join(__dirname,".expo","metro-cache",process.env.CARENOW_METRO_LANE || "dev")})];
+// MapLibre's ESM and CommonJS export branches each register Fabric views.
+// Expo's generated imports use require while screens use import; resolve both
+// through one source entry so native components are registered exactly once.
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName === "@maplibre/maplibre-react-native") {
+    return {
+      type: "sourceFile",
+      filePath: path.join(
+        __dirname,
+        "node_modules/@maplibre/maplibre-react-native/src/index.ts",
+      ),
+    };
+  }
+  return context.resolveRequest(context, moduleName, platform);
+};
 
 module.exports = withUniwindConfig(config, {
-  cssEntryFile: './global.css',
+  cssEntryFile: "./global.css",
   // Generates uniwind-types.d.ts, which is what makes `setTheme` know the
   // theme names below rather than accepting any string.
-  dtsFile: './uniwind-types.d.ts',
+  dtsFile: "./uniwind-types.d.ts",
   // Only `light` and `dark` work without being listed here. Any other theme
   // throws "it was not registered" from `setTheme`, and a change to this list
   // needs the dev server restarted rather than reloaded — a running server
   // rewrites the generated CSS from the list it started with.
-  extraThemes: ['moon', 'moon-dark', 'grass', 'grass-dark'],
+  extraThemes: ["moon", "moon-dark", "grass", "grass-dark"],
 });

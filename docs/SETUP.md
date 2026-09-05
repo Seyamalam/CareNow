@@ -11,7 +11,7 @@ npm ci
 npm start
 ```
 
-Press `a` for a connected Android emulator or scan with Expo Go for SDK 57. `npm run web` opens the same React Native app in a browser. The default API is the deployed Hono Worker; no secrets or signup are needed. Each installation/browser receives a separate random demo session.
+Run `npm run android` for a connected Android emulator. MapLibre requires a native build; Expo Go is no longer supported. `npm run web` opens the same React Native app in a browser. The default API is the deployed Hono Worker; no secrets or signup are needed. Each installation/browser receives a separate random demo session.
 
 ## Full local stack
 
@@ -38,7 +38,7 @@ The downloadable APK is a standalone ARM64 build. It includes JS, fonts and bran
 ```sh
 npx expo prebuild --platform android
 cd android
-./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
+CARENOW_METRO_LANE=android ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
 adb install -r app/build/outputs/apk/release/app-release.apk
 ```
 
@@ -51,7 +51,7 @@ npm run typecheck
 npm test
 npx expo-doctor
 node scripts/smoke-api.mjs
-npx expo export --platform web
+npm run export:web
 ```
 
 `smoke-api.mjs` creates two temporary sessions, exercises the running Hono/D1 service, and deletes those sessions in cleanup. Set `API_URL` to test local Wrangler. The gallery generator runs with `node scripts/update-gallery.mjs` after adding inspected PNGs under `docs/screenshots/`.
@@ -65,7 +65,7 @@ npx expo export --platform web
 5. `npm run api:deploy`
 6. Set `EXPO_PUBLIC_API_URL` to your Worker URL and rebuild native/web artifacts.
 7. `npx wrangler pages project create carenow-demo --production-branch main`
-8. `npx expo export --platform web`
+8. `npm run export:web`
 9. `npx wrangler pages deploy dist --project-name carenow-demo --branch main`
 
 The public routing rules serve Expo's shell for session-specific dynamic routes; Expo Router resolves the actual path. CI verifies code and local D1, and does not contain deployment credentials.

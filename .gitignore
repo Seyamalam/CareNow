@@ -22,3 +22,5 @@ Project DBA.docx
 
 expo-env.d.ts
 # @end expo-cli
+/public/maplibre-gl-worker.mjs
+/public/maplibre-gl-shared.mjs

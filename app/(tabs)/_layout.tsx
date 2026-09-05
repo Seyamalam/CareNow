@@ -5,11 +5,14 @@ import {
   Heart,
   CalendarDays,
   UserRound,
+  Navigation,
 } from "lucide-react-native";
 import { usePalette } from "../../lib/theme";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCare } from "../../lib/store";
 export default function TabLayout() {
   const p = usePalette();
+  const insets = useSafeAreaInsets();
   const { t } = useCare();
   return (
     <Tabs
@@ -20,13 +23,13 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: p.card,
           borderTopColor: p.border,
-          height: 84,
-          paddingTop: 12,
-          paddingBottom: 20,
+          height: 62 + Math.max(insets.bottom, 12),
+          paddingTop: 9,
+          paddingBottom: Math.max(insets.bottom, 12),
         },
         tabBarLabelStyle: {
           fontFamily: "DMSans_600SemiBold",
-          fontSize: 10,
+          fontSize: 11,
           marginTop: 4,
         },
         sceneStyle: { backgroundColor: p.background },
@@ -54,12 +57,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="activity"
+        name="transport"
         options={{
-          title: t("Activity", "কার্যক্রম"),
-          tabBarIcon: ({ color }) => <CalendarDays size={22} color={color} />,
+          title: t("Transport", "যাতায়াত"),
+          tabBarIcon: ({ color }) => <Navigation size={22} color={color} />,
         }}
       />
+      <Tabs.Screen name="activity" options={{ href: null }} />
       <Tabs.Screen
         name="profile"
         options={{

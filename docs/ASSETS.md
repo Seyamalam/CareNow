@@ -15,3 +15,7 @@ External education links, verified during implementation on 2026-09-05:
 - NHS postpartum recovery: https://www.nhs.uk/baby/support-and-services/your-post-pregnancy-body/
 
 The app links to these English-language sources, rather than reproducing or adapting treatment advice. NHS service arrangements are UK-specific; users should plan local care with their own clinician.
+
+## Transport maps (1.1)
+
+Original fleet SVGs: `components/vehicle-art.tsx`. Native MapLibre and MapLibre GL JS are BSD licensed. Map attribution and OSRM/OSM road data provenance are documented in [TRANSPORT.md](TRANSPORT.md). No remote portrait or icon asset is required.

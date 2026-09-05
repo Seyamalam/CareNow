@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { Button } from "../../components/button";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   Check,
   MapPin,
@@ -68,6 +68,19 @@ export default function TrackRequest() {
           Request #{r.id.slice(0, 8).toUpperCase()}
         </Type>
       </Box>
+      {!["Cancelled", "Completed"].includes(r.status) && (
+        <Button
+          fullWidth
+          variant="secondary"
+          size="lg"
+          startContent={<MapPin size={19} />}
+          onPress={() =>
+            router.push({ pathname: "/care-location", params: { id: r.id } })
+          }
+        >
+          See care team on map
+        </Button>
+      )}
       {r.status !== "Cancelled" && (
         <Box>
           {steps.map((s, i) => (

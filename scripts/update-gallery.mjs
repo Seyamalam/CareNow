@@ -2,7 +2,7 @@ import fs from "node:fs";
 const files = fs
   .readdirSync("docs/screenshots")
   .filter((x) => x.endsWith(".png"))
-  .sort();
+  .sort((a,b) => Number(Number(a.slice(0,2)) < 29) - Number(Number(b.slice(0,2)) < 29) || a.localeCompare(b));
 const cells = files.map(
   (f) =>
     `<td align="center"><img src="docs/screenshots/${f}" width="230" alt="${f.replace(/\.png$/, "").replaceAll("-", " ")}" /><br/><sub>${f
