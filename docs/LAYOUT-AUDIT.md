@@ -23,3 +23,7 @@ The report and presentation are paused until the screens are corrected and re-ca
 - [ ] Produce the detailed report and presentation using corrected product images.
 
 Private baseline captures are in artifacts/layout-audit. Public screenshots will be added only after visual review.
+
+## Publication follow-up
+
+The finalized report and deck use the corrected release. Final main-domain web checks found stale static route HTML and an attribution overlap. Explicit SPA route entries replace the old cached pages; web attribution now stays above the panel at the lower edge. Narrow web viewports use the scrollable booking form. Native release behaviour is unchanged by this web-only follow-up.

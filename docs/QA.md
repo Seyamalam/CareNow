@@ -11,9 +11,9 @@ Verified on 5 September 2026. Android ARM64 release version code 4.
 
 APK SHA-256: `ae19f1a7c84a7472d9a52ec280c8e3d20861ed2a754371ae021ac422ee2f4e27`.
 
-Web deployment: https://3e11a65d.carenow-demo.pages.dev
+Web deployment: https://f0a636da.carenow-demo.pages.dev
 
-Publication follow-up: the main `/transport` URL retained an old static HTML object after SPA migration. The export now emits explicit current HTML entries for static routes. A fresh production deployment replaced the stale transport page; its response matches the 1,570-byte current shell. The account control, four vehicle grid and location picker were rechecked on the main URL.
+Publication follow-up: the main `/transport` URL retained an old static HTML object after SPA migration. The export now emits explicit current HTML entries for static routes. A fresh production deployment replaced the stale transport page; its response matches the 1,570-byte current shell. The account control, four vehicle grid and location picker were rechecked on the main URL. Compact web transport now scrolls at phone widths below 420 px. Map attribution sits above the booking footer, and route bounds leave space for attribution and recenter controls. Final production captures at 360 × 740 and 1440 × 900 show loaded street tiles, route markers and the four vehicle classes; the minibus selection succeeds with no page errors.
 
 # CareNow 1.2 verification — 5 September 2026
 

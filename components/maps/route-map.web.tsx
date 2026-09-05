@@ -62,13 +62,13 @@ export function RouteMap({
           attributionControl: false,
           bounds: routeBounds(initialRoute.current),
           fitBoundsOptions: {
-            padding: { top: 55, left: 55, right: 55, bottom: 55 + bottomInset },
+            padding: { top: 55, left: 55, right: 95, bottom: 95 + bottomInset },
           },
           renderWorldCopies: false,
         });
         m.addControl(
           new lib.AttributionControl({ compact: true }),
-          "top-right",
+          "bottom-right",
         );
         map.current = m;
         m.on("load", () => {
@@ -114,12 +114,18 @@ export function RouteMap({
     };
   }, [retry, p.card, p.primary, offline]);
   useEffect(() => {
+    const control = map.current
+      ?.getContainer()
+      .querySelector<HTMLElement>(".maplibregl-ctrl-bottom-right");
+    if (control) control.style.bottom = `${bottomInset + 8}px`;
+  }, [ready, bottomInset]);
+  useEffect(() => {
     if (!ready || !map.current) return;
     const source = map.current.getSource<GeoJSONSource>("journey");
     if (source) source.setData(lineFeature(route));
     if (!follow)
       map.current.fitBounds(routeBounds(route), {
-        padding: { top: 55, left: 55, right: 55, bottom: 55 + bottomInset },
+        padding: { top: 55, left: 55, right: 95, bottom: 95 + bottomInset },
         duration: reduced ? 0 : 650,
       });
   }, [ready, route, recenter, reduced, follow, bottomInset]);
@@ -289,7 +295,7 @@ export function RouteMap({
           : null;
       })}
       {failed && (
-        <View style={{ position: "absolute", top: 12, left: 16, right: 16 }}>
+        <View style={{ position: "absolute", top: 62, left: 16, right: 16 }}>
           <Button
             variant="secondary"
             onPress={() => {

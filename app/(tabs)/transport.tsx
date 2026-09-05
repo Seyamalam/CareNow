@@ -3,7 +3,7 @@ import { RideOptions } from "../../components/ride-options";
 import { defaultRideOptions } from "../../shared/transport";
 import { AccountSwitcher } from "../../components/account-switcher";
 import { useMemo, useState } from "react";
-import { View, ScrollView, useWindowDimensions } from "react-native";
+import { View, ScrollView, Platform, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -34,7 +34,11 @@ export default function Transport() {
     insets = useSafeAreaInsets(),
     { width, height, fontScale } = useWindowDimensions(),
     wide = width > 900,
-    compact = !wide && (height < 740 || fontScale > 1.15);
+    compact =
+      !wide &&
+      (height < 740 ||
+        fontScale > 1.15 ||
+        (Platform.OS === "web" && width < 420));
   const Layout = compact ? ScrollView : View;
   const params = useLocalSearchParams<{ kind?: string }>();
   const [options, setOptions] = useState(defaultRideOptions);
