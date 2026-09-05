@@ -11,6 +11,8 @@
 - All screenshots contain fictional exhibition data. The account switcher is an intentional demo persona selector, not production identity verification. No actual dispatch, GPS feed, payment or clinician connection was introduced.
 - GitHub-hosted CI was previously blocked by account billing; local verification completed. No unrelated running emulator or user application was stopped.
 
+Release [v1.2.0](https://github.com/Seyamalam/CareNow/releases/tag/v1.2.0) is public; GitHub asset SHA-256 matches the tested final APK. Final Pages deployment: https://34773423.carenow-demo.pages.dev. README contains 61 inspected native screenshots.
+
 ## Earlier release verification
 
 # CareNow 1.1 verification — 5 September 2026

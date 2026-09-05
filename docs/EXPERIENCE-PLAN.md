@@ -15,7 +15,7 @@ Keep forest ink, mint selection, white panels, Manrope headings and DM Sans body
 - [x] M5 — Remove fixed startup delay, add skeletons and content reveals, scope refresh/mutation feedback, reduce broad store rerenders. Add bundled original Lottie logo/success/empty illustrations with reduced-motion and visibility handling.
 - [x] M6 — Draggable map booking panel, follow mode, road heading, arrival feedback and efficient tracking/ETA updates.
 - [x] M7 — Test shared contracts and remote API, inspect every new screen on Android and web, add demo screenshots to README as screens finish. Compare release-build frame timing against baseline; report device limitations honestly.
-- [ ] M8 — Deploy Worker/web, publish Android 1.2, commit and push all work and verification evidence.
+- [x] M8 — Deploy Worker/web, publish Android 1.2, commit and push all work and verification evidence.
 
 M7 performance measurement is complete; controlled physical-device 60 fps acceptance remains open, as documented in PERFORMANCE.md.
 
