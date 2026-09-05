@@ -8,14 +8,16 @@ Keep forest ink, mint selection, white panels, Manrope headings and DM Sans body
 
 ## Milestones
 
-- [ ] M1 — Record release-build Android performance baseline; domain plan and tests.
-- [ ] M2 — Persist account roles, acceptance/assignment and authorized job progression; add truck cargo/size, bus passenger count and scheduled departures with server validation.
-- [ ] M3 — Account switcher and customer/provider/driver/caregiver/doctor workspaces. Complete a booking by changing accounts in the same app; show history and session persistence.
-- [ ] M4 — Presenter panel with ambulance, care and group-transport scenarios, reset/replay/pause/speed controls. Explicit offline rehearsal uses local fixtures and map geometry, with no writes replayed to the cloud.
-- [ ] M5 — Remove fixed startup delay, add skeletons and content reveals, scope refresh/mutation feedback, reduce broad store rerenders. Add bundled original Lottie logo/success/empty illustrations with reduced-motion and visibility handling.
-- [ ] M6 — Draggable map booking panel, follow mode, road heading, arrival feedback and efficient tracking/ETA updates.
-- [ ] M7 — Test shared contracts and remote API, inspect every new screen on Android and web, add demo screenshots to README as screens finish. Compare release-build frame timing against baseline; report device limitations honestly.
+- [x] M1 — Record release-build Android performance baseline; domain plan and tests.
+- [x] M2 — Persist account roles, acceptance/assignment and authorized job progression; add truck cargo/size, bus passenger count and scheduled departures with server validation.
+- [x] M3 — Account switcher and customer/provider/driver/caregiver/doctor workspaces. Complete a booking by changing accounts in the same app; show history and session persistence.
+- [x] M4 — Presenter panel with ambulance, care and group-transport scenarios, reset/replay/pause/speed controls. Explicit offline rehearsal uses local fixtures and map geometry, with no writes replayed to the cloud.
+- [x] M5 — Remove fixed startup delay, add skeletons and content reveals, scope refresh/mutation feedback, reduce broad store rerenders. Add bundled original Lottie logo/success/empty illustrations with reduced-motion and visibility handling.
+- [x] M6 — Draggable map booking panel, follow mode, road heading, arrival feedback and efficient tracking/ETA updates.
+- [x] M7 — Test shared contracts and remote API, inspect every new screen on Android and web, add demo screenshots to README as screens finish. Compare release-build frame timing against baseline; report device limitations honestly.
 - [ ] M8 — Deploy Worker/web, publish Android 1.2, commit and push all work and verification evidence.
+
+M7 performance measurement is complete; controlled physical-device 60 fps acceptance remains open, as documented in PERFORMANCE.md.
 
 ## Performance acceptance
 

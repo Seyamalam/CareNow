@@ -239,7 +239,10 @@ export function RouteMap({
       document.removeEventListener("visibilitychange", restart);
     };
   }, [ready, active, offline, markers, follow, reduced]);
-  if (offline) return <OfflineMap route={route} markers={markers} />;
+  if (offline)
+    return (
+      <OfflineMap route={route} markers={markers} bottomInset={bottomInset} />
+    );
   return (
     <View style={{ flex: 1, backgroundColor: p.muted }}>
       <View

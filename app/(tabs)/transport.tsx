@@ -168,16 +168,18 @@ export default function Transport() {
               </Type>
             </Row>
           </View>
-          <View style={{ position: "absolute", top: 60, right: 16 }}>
-            <Button
-              size="icon"
-              variant="outline"
-              accessibilityLabel="Show whole route"
-              onPress={() => setRecenter((x) => x + 1)}
-            >
-              <LocateFixed size={20} color={p.primary} />
-            </Button>
-          </View>
+          {!offline && (
+            <View style={{ position: "absolute", top: 60, right: 16 }}>
+              <Button
+                size="icon"
+                variant="outline"
+                accessibilityLabel="Show whole route"
+                onPress={() => setRecenter((x) => x + 1)}
+              >
+                <LocateFixed size={20} color={p.primary} />
+              </Button>
+            </View>
+          )}
         </View>
         <MapPanel
           wide={wide}

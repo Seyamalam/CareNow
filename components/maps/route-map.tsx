@@ -58,7 +58,10 @@ export function RouteMap({
     const timer = setInterval(update, 1500);
     return () => clearInterval(timer);
   }, [follow, active, loaded, moving, reduced]);
-  if (offline) return <OfflineMap route={route} markers={markers} />;
+  if (offline)
+    return (
+      <OfflineMap route={route} markers={markers} bottomInset={bottomInset} />
+    );
   return (
     <View style={{ flex: 1, backgroundColor: p.muted }}>
       <Map

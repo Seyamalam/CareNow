@@ -33,12 +33,13 @@ On a physical phone, use your machine's LAN IP instead of 127.0.0.1. Restart Met
 
 ## Android release demo
 
-The downloadable APK is a standalone ARM64 build. It includes JS, fonts and branding and needs internet for the API. It does not require Metro or Expo Go.
+The downloadable APK is a standalone ARM64 build. It includes JS, fonts, Lottie assets and saved road geometry. Cloud sessions need internet; explicit offline rehearsal runs locally. It does not require Metro or Expo Go.
 
 ```sh
 npx expo prebuild --platform android
+mkdir -p .expo/tmp-android
 cd android
-CARENOW_METRO_LANE=android ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
+TMPDIR="$PWD/../.expo/tmp-android" CARENOW_METRO_LANE=android ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
 adb install -r app/build/outputs/apk/release/app-release.apk
 ```
 
@@ -71,3 +72,5 @@ npm run export:web
 The public routing rules serve Expo's shell for session-specific dynamic routes; Expo Router resolves the actual path. CI verifies code and local D1, and does not contain deployment credentials.
 
 The web target uses Expo single-page output. Cloudflare `_redirects` serves `index.html` for app routes, including direct links to saved trips.
+
+Metro build lanes and the scoped `TMPDIR` keep Android/web builds from sharing temporary cache entries with other Expo projects. For simultaneous web export, use `mkdir -p .expo/tmp-web` followed by `TMPDIR="$PWD/.expo/tmp-web" npm run export:web`.

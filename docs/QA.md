@@ -1,3 +1,18 @@
+# CareNow 1.2 verification — 5 September 2026
+
+- Strict Expo and Worker TypeScript checks passed; 22 shared-domain tests passed, including role permissions, acceptance, ordered completion, per-role availability, presenter clocks, native UUID injection, truck pricing and passenger/schedule validation.
+- Remote Hono/D1 smoke suite passed and cleaned up its isolated test sessions. Expo Doctor passed 21/21. Web export and Android ARM64 release build passed.
+- Android release: account picker, provider assignment → caregiver acceptance → journey/map; driver acceptance and trip status progression; doctor acceptance/completion/history/earnings; empty-state and success Lottie; truck cargo/capacity/schedule; bus passenger options; booking-panel drag; cloud/offline separation.
+- Airplane mode: account switching, consultation completion, group scenario loading and route playback worked. Local state survived force-stop/restart. Paused map captures six seconds apart were byte-identical; resuming at 3× visibly moved the marker and changed ETA. Returning online restored the earlier cloud caregiver session.
+- Native route motion verified in paired screenshots eight seconds apart. Fixed Reanimated dependency capture by reading shared values directly inside animation mappers. Fixed overlapping Lottie shape fills with separate illustration layers. Reduced-motion paths are implemented; physical-device accessibility/performance checks remain advisable.
+- Web: five-role account picker, provider operations, doctor completion and offline scenario persistence inspected. Main public URL now serves the new app, and HTML uses must-revalidate caching. Bundled SVG Lottie renderer avoids runtime animation/CDN dependencies.
+- Performance evidence is mixed: route sample about 59 rendered frames/s; later sheet test under host graphics load had substantial jank. See [all measurements and limitations](PERFORMANCE.md). No universal 60 fps claim. iOS remains untested.
+- APK SHA-256: `5fe8f5910710a44b577c8d844fad58e76bf33494c8649db5919b7941b02aed24`. Version 1.2.0, versionCode 3, ARM64, standalone, exhibition development signing key.
+- All screenshots contain fictional exhibition data. The account switcher is an intentional demo persona selector, not production identity verification. No actual dispatch, GPS feed, payment or clinician connection was introduced.
+- GitHub-hosted CI was previously blocked by account billing; local verification completed. No unrelated running emulator or user application was stopped.
+
+## Earlier release verification
+
 # CareNow 1.1 verification — 5 September 2026
 
 - TypeScript checks passed for Expo and Worker; 14 domain tests passed.

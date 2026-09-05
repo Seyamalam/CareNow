@@ -21,3 +21,7 @@ The app links to these English-language sources, rather than reproducing or adap
 Original fleet SVGs: `components/vehicle-art.tsx`. Native MapLibre and MapLibre GL JS are BSD licensed. Map attribution and OSRM/OSM road data provenance are documented in [TRANSPORT.md](TRANSPORT.md). No remote portrait or icon asset is required.
 
 The three bundled font files are in `assets/fonts/`, with their SIL Open Font License files. Keeping these under app assets makes them deployable on Cloudflare Pages, which omits node_modules paths.
+
+## Original Lottie illustrations (1.2)
+
+`assets/motion/logo.json`, `success.json`, and `empty.json` are original vector animations authored for CareNow. Recreate them with `node scripts/create-motion.mjs`. They are bundled in native/web exports, contain no external images, and do not depend on a remote animation service. Lottie React Native uses Apache-2.0; lottie-web uses MIT. Assets render at 60 timeline frames per second, which is an asset setting, not a device-performance claim.

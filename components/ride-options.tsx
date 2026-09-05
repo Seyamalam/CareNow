@@ -26,10 +26,7 @@ export function RideOptions({
         startContent={<Settings2 size={16} />}
         onPress={() => setOpen(true)}
       >
-        {kind === "truck"
-          ? `${value.truckSize} · ${value.cargo}`
-          : `${value.passengers} passenger${value.passengers === 1 ? "" : "s"}`}{" "}
-        · {value.departure ? "Scheduled" : "Now"}
+        {`${kind === "truck" ? `${value.truckSize} · ${value.cargo}` : `${value.passengers} passenger${value.passengers === 1 ? "" : "s"}`} · ${value.departure ? "Scheduled" : "Now"}`}
       </Button>
       <BottomSheet open={open} onOpenChange={setOpen}>
         <BottomSheet.Content

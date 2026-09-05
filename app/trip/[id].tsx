@@ -135,10 +135,10 @@ export default function TrackTrip() {
           route={route}
           markers={markers}
           recenter={recenter}
-          follow={follow}
+          follow={follow && !!motion}
           offline={offline}
         />
-        {!offline && (
+        {!offline && motion && (
           <View style={{ position: "absolute", right: 16, bottom: 15 }}>
             <Button
               size="icon"
@@ -258,6 +258,10 @@ export default function TrackTrip() {
               Departure ·{" "}
               {new Date(trip.options.departure).toLocaleString("en-GB", {
                 timeZone: "Asia/Dhaka",
+                day: "numeric",
+                month: "short",
+                hour: "2-digit",
+                minute: "2-digit",
               })}
             </Type>
           )}
