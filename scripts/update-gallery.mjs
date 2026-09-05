@@ -27,5 +27,6 @@ readme = readme.replace(
   /<!-- SCREENSHOTS:START -->[\s\S]*<!-- SCREENSHOTS:END -->/,
   `<!-- SCREENSHOTS:START -->\n${gallery}\n<!-- SCREENSHOTS:END -->`,
 );
+readme = readme.replace(/\d+ native Android captures\./, `${files.length} native Android captures.`);
 fs.writeFileSync("README.md", readme);
 console.log(`Gallery: ${files.length} verified screen captures`);

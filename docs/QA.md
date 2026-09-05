@@ -2,12 +2,12 @@
 
 - Strict Expo and Worker TypeScript checks passed; 22 shared-domain tests passed, including role permissions, acceptance, ordered completion, per-role availability, presenter clocks, native UUID injection, truck pricing and passenger/schedule validation.
 - Remote Hono/D1 smoke suite passed and cleaned up its isolated test sessions. Expo Doctor passed 21/21. Web export and Android ARM64 release build passed.
-- Android release: account picker, provider assignment → caregiver acceptance → journey/map; driver acceptance and trip status progression; doctor acceptance/completion/history/earnings; empty-state and success Lottie; truck cargo/capacity/schedule; bus passenger options; booking-panel drag; cloud/offline separation.
+- Android release: initial Lottie logo and skeletons captured during delayed-network cold start;  account picker, provider assignment → caregiver acceptance → journey/map; driver acceptance and trip status progression; doctor acceptance/completion/history/earnings; empty-state and success Lottie; truck cargo/capacity/schedule; bus passenger options; booking-panel drag; cloud/offline separation. Final follow-camera capture verifies its active icon contrast.
 - Airplane mode: account switching, consultation completion, group scenario loading and route playback worked. Local state survived force-stop/restart. Paused map captures six seconds apart were byte-identical; resuming at 3× visibly moved the marker and changed ETA. Returning online restored the earlier cloud caregiver session.
 - Native route motion verified in paired screenshots eight seconds apart. Fixed Reanimated dependency capture by reading shared values directly inside animation mappers. Fixed overlapping Lottie shape fills with separate illustration layers. Reduced-motion paths are implemented; physical-device accessibility/performance checks remain advisable.
 - Web: five-role account picker, provider operations, doctor completion and offline scenario persistence inspected. Main public URL now serves the new app, and HTML uses must-revalidate caching. Bundled SVG Lottie renderer avoids runtime animation/CDN dependencies.
 - Performance evidence is mixed: route sample about 59 rendered frames/s; later sheet test under host graphics load had substantial jank. See [all measurements and limitations](PERFORMANCE.md). No universal 60 fps claim. iOS remains untested.
-- APK SHA-256: `29f363b8bd05b80dc7351aeff8e20b01ba7dbeb89ffe878b42739d5cc6de34af`. Version 1.2.0, versionCode 3, ARM64, standalone, exhibition development signing key.
+- APK SHA-256: `aad72e411562aa246dec9196659fc6761a4dfcd52870fb506f46fae7b4ad2d98`. Version 1.2.0, versionCode 3, ARM64, standalone, exhibition development signing key.
 - All screenshots contain fictional exhibition data. The account switcher is an intentional demo persona selector, not production identity verification. No actual dispatch, GPS feed, payment or clinician connection was introduced.
 - GitHub-hosted CI was previously blocked by account billing; local verification completed. No unrelated running emulator or user application was stopped.
 
@@ -79,6 +79,6 @@ GitHub Actions run 33915928563 failed before executing any steps. The check anno
 
 - Web: https://carenow-demo.pages.dev
 - API: https://carenow-api.seyamalam41.workers.dev/api/health
-- Android release: https://github.com/Seyamalam/CareNow/releases/tag/v1.0.0
+- Android release: initial Lottie logo and skeletons captured during delayed-network cold start;  https://github.com/Seyamalam/CareNow/releases/tag/v1.0.0
 - APK SHA-256: `d56c239df95f3e1a953790ad7e9a3269dcf34420ca16e84be189bee785bb5452`
 - Gallery: 29 inspected PNGs, including the animated splash and network error state.
