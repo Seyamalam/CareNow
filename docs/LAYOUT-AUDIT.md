@@ -16,10 +16,10 @@ The report and presentation are paused until the screens are corrected and re-ca
 
 - [x] Capture baseline screens and identify shared causes.
 - [x] Replace fixed geometry with flexible content and bounded scrolling.
-- [ ] Inspect corrected screens on small and regular Android sizes, including enlarged text and keyboard-open forms.
-- [ ] Inspect web layouts at phone and desktop widths.
-- [ ] Build and publish the corrected APK and web app.
-- [ ] Add corrected screenshots to the README gallery.
+- [x] Inspect corrected screens on small and regular Android sizes, including enlarged text and keyboard-open forms.
+- [x] Inspect web layouts at phone and desktop widths.
+- [x] Build and publish the corrected APK and web app.
+- [x] Add corrected screenshots to the README gallery.
 - [ ] Produce the detailed report and presentation using corrected product images.
 
 Private baseline captures are in artifacts/layout-audit. Public screenshots will be added only after visual review.

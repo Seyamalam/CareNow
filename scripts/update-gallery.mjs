@@ -2,15 +2,10 @@ import fs from "node:fs";
 const files = fs
   .readdirSync("docs/screenshots")
   .filter((x) => x.endsWith(".png"))
-  .sort(
-    (a, b) =>
-      (Number(a.slice(0, 2)) >= 43 ? 0 : Number(a.slice(0, 2)) >= 29 ? 1 : 2) -
-        (Number(b.slice(0, 2)) >= 43
-          ? 0
-          : Number(b.slice(0, 2)) >= 29
-            ? 1
-            : 2) || a.localeCompare(b),
-  );
+  .sort((a,b) => {
+    const group = (f) => Number(f.slice(0,2)) >= 61 ? 0 : Number(f.slice(0,2)) >= 43 ? 1 : Number(f.slice(0,2)) >= 29 ? 2 : 3;
+    return group(a)-group(b) || a.localeCompare(b);
+  });
 const cells = files.map(
   (f) =>
     `<td align="center"><img src="docs/screenshots/${f}" width="230" alt="${f.replace(/\.png$/, "").replaceAll("-", " ")}" /><br/><sub>${f

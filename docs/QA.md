@@ -1,3 +1,18 @@
+# Layout release 1.2.1
+
+Verified on 5 September 2026. Android ARM64 release version code 4.
+
+- Visually reviewed 21 regular-phone routes, plus populated care status and map captures. Missing demo IDs display the expected empty state and were excluded from the gallery.
+- Reproduced and corrected narrow headers, crowded doctor statistics, fixed-height tiles, overlapping map footer and unscrollable sheets.
+- Final release checked at 411 × 914 and 360 × 640 logical pixels with 120% text. Keyboard-open scheduled-departure form verified during development on the same layout implementation.
+- Web sweep: 23 routes at 390 × 844, five account roles at 360 px, and transport/picker at 360 px and desktop at 1440 px. No page errors or unexpected-text-node warnings in the final full sweep.
+- Expo and Worker TypeScript checks, 22 domain tests, native release build and web export pass. No backend behavior changed. This is layout verification, not a universal 60 fps or physical-device certification.
+- 22 corrected native captures added to README. Older captures remain a versioned development archive.
+
+APK SHA-256: `ae19f1a7c84a7472d9a52ec280c8e3d20861ed2a754371ae021ac422ee2f4e27`.
+
+Web deployment: https://d63d36db.carenow-demo.pages.dev
+
 # CareNow 1.2 verification — 5 September 2026
 
 - Strict Expo and Worker TypeScript checks passed; 22 shared-domain tests passed, including role permissions, acceptance, ordered completion, per-role availability, presenter clocks, native UUID injection, truck pricing and passenger/schedule validation.
