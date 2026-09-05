@@ -17,12 +17,14 @@ export function MapPanel({
   wide,
   availableHeight,
   onHeightChange,
+  inline = false,
 }: {
   children: ReactNode;
   footer: ReactNode;
   wide: boolean;
   availableHeight: number;
   onHeightChange: (height: number) => void;
+  inline?: boolean;
 }) {
   const p = usePalette(),
     reduced = useReducedMotion(),
@@ -32,14 +34,23 @@ export function MapPanel({
     origin = useSharedValue(travel);
   const maximum = Math.min(560, Math.max(0, availableHeight - 64));
   useEffect(() => {
-    onHeightChange(wide ? 0 : maximum - (expanded ? 0 : travel));
+    onHeightChange(wide || inline ? 0 : maximum - (expanded ? 0 : travel));
     offset.set(
       withSpring(expanded ? 0 : travel, {
         duration: reduced ? 0 : 300,
         dampingRatio: 1,
       }),
     );
-  }, [maximum, travel, wide, expanded, reduced, onHeightChange, offset]);
+  }, [
+    maximum,
+    travel,
+    wide,
+    inline,
+    expanded,
+    reduced,
+    onHeightChange,
+    offset,
+  ]);
   const snap = (up: boolean) => {
     setExpanded(up);
     offset.set(
@@ -71,9 +82,11 @@ export function MapPanel({
   const style = useAnimatedStyle(() => ({
     height: maximum - offset.get(),
   }));
-  if (wide)
+  if (wide || inline)
     return (
-      <Card style={{ width: 400, borderRadius: 0, flexShrink: 0 }}>
+      <Card
+        style={{ width: wide ? 400 : "100%", borderRadius: 0, flexShrink: 0 }}
+      >
         {children}
         {footer}
       </Card>

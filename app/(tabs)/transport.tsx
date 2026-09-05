@@ -32,8 +32,10 @@ import { money } from "../../shared/contracts";
 export default function Transport() {
   const p = usePalette(),
     insets = useSafeAreaInsets(),
-    { width, height } = useWindowDimensions(),
-    wide = width > 900;
+    { width, height, fontScale } = useWindowDimensions(),
+    wide = width > 900,
+    compact = !wide && (height < 740 || fontScale > 1.15);
+  const Layout = compact ? ScrollView : View;
   const params = useLocalSearchParams<{ kind?: string }>();
   const [options, setOptions] = useState(defaultRideOptions);
   const [mapHeight, setMapHeight] = useState(height * 0.7);
@@ -58,16 +60,18 @@ export default function Transport() {
         coordinate: route.coordinates[route.coordinates.length - 1],
         label: "B",
       },
-      ...vehicles.map((v, i) => ({
-        id: v.id,
-        coordinate: pointOnRoute(
-          i === 0 ? approachRoute(pickup) : route,
-          i === 0 ? 0.1 : 0.15 + i * 0.2,
-        ),
-        label: `${v.name} · demo vehicle`,
-        kind: v.id,
-        active: v.id === kind,
-      })),
+      ...vehicles
+        .map((v, i) => ({
+          id: v.id,
+          coordinate: pointOnRoute(
+            i === 0 ? approachRoute(pickup) : route,
+            i === 0 ? 0.1 : 0.15 + i * 0.2,
+          ),
+          label: `${v.name} · demo vehicle`,
+          kind: v.id,
+          active: v.id === kind,
+        }))
+        .filter((marker) => marker.active),
     ],
     [route, pickup, kind],
   );
@@ -118,203 +122,228 @@ export default function Transport() {
         <AccountSwitcher />
         <Button
           variant="outline"
-          size="sm"
+          size="icon"
+          accessibilityLabel="Trip history"
           onPress={() => router.push("/activity")}
-          startContent={<History size={16} />}
         >
-          Trips
+          <History size={20} color={p.ink} />
         </Button>
       </Row>
-      <View
-        onLayout={(event) => setMapHeight(event.nativeEvent.layout.height)}
-        style={{
-          flex: 1,
-          flexDirection: wide ? "row" : "column",
-          width: "100%",
-          maxWidth: 1200,
-          alignSelf: "center",
-        }}
+      <Layout
+        style={{ flex: 1 }}
+        {...(compact ? { contentContainerStyle: { flexGrow: 1 } } : {})}
       >
-        <View style={{ flex: 1, minHeight: 0, position: "relative" }}>
-          <RouteMap
-            offline={offline}
-            bottomInset={wide ? 0 : panelHeight}
-            route={route}
-            markers={markers}
-            recenter={recenter}
-            onMarkerPress={select}
-          />
+        <View
+          onLayout={(event) => setMapHeight(event.nativeEvent.layout.height)}
+          style={{
+            flex: compact ? undefined : 1,
+            flexDirection: wide ? "row" : "column",
+            width: "100%",
+            maxWidth: 1200,
+            alignSelf: "center",
+          }}
+        >
           <View
-            pointerEvents="none"
             style={{
-              position: "absolute",
-              top: 14,
-              left: 18,
-              backgroundColor: p.card,
-              borderRadius: 12,
-              paddingHorizontal: 12,
-              paddingVertical: 8,
+              flex: compact ? undefined : 1,
+              height: compact ? 230 : undefined,
+              minHeight: 0,
+              position: "relative",
             }}
           >
-            <Row style={{ gap: 6 }}>
+            <RouteMap
+              offline={offline}
+              bottomInset={wide || compact ? 0 : panelHeight}
+              route={route}
+              markers={markers}
+              recenter={recenter}
+              onMarkerPress={select}
+            />
+            <View
+              pointerEvents="none"
+              style={{
+                position: "absolute",
+                top: 14,
+                left: 18,
+                backgroundColor: p.card,
+                borderRadius: 12,
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+              }}
+            >
+              <Row style={{ gap: 6 }}>
+                <View
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 3,
+                    backgroundColor: p.primary,
+                  }}
+                />
+                <Type size={12} weight="medium">
+                  {(quote.distance / 1000).toFixed(1)} km · ~{quote.minutes} min
+                </Type>
+              </Row>
+            </View>
+            {!offline && (
+              <View style={{ position: "absolute", top: 60, right: 16 }}>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  accessibilityLabel="Show whole route"
+                  onPress={() => setRecenter((x) => x + 1)}
+                >
+                  <LocateFixed size={20} color={p.primary} />
+                </Button>
+              </View>
+            )}
+          </View>
+          <MapPanel
+            wide={wide}
+            inline={compact}
+            availableHeight={mapHeight}
+            onHeightChange={setPanelHeight}
+            footer={
               <View
                 style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: 3,
-                  backgroundColor: p.primary,
+                  paddingHorizontal: 20,
+                  paddingTop: 10,
+                  paddingBottom: 16,
+                  gap: 8,
+                  borderTopWidth: 1,
+                  borderTopColor: p.border,
                 }}
-              />
-              <Type size={12} weight="medium">
-                {(quote.distance / 1000).toFixed(1)} km · ~{quote.minutes} min
-              </Type>
-            </Row>
-          </View>
-          {!offline && (
-            <View style={{ position: "absolute", top: 60, right: 16 }}>
-              <Button
-                size="icon"
-                variant="outline"
-                accessibilityLabel="Show whole route"
-                onPress={() => setRecenter((x) => x + 1)}
               >
-                <LocateFixed size={20} color={p.primary} />
-              </Button>
-            </View>
-          )}
-        </View>
-        <MapPanel
-          wide={wide}
-          availableHeight={mapHeight}
-          onHeightChange={setPanelHeight}
-          footer={
-            <View
-              style={{
-                paddingHorizontal: 20,
-                paddingTop: 10,
-                paddingBottom: 16,
-                gap: 8,
-                borderTopWidth: 1,
-                borderTopColor: p.border,
-              }}
-            >
-              <Row style={{ flexWrap: "wrap" }}>
-                <View style={{ minWidth: 110, flexShrink: 0 }}>
-                  <Type size={11} muted>
-                    Estimated fare
-                  </Type>
-                  <Type size={25} weight="bold">
-                    {money(quote.fare)}
-                  </Type>
-                </View>
-                <Button
-                  style={{ flex: 1 }}
-                  size="lg"
-                  disabled={!!active}
-                  loading={pending}
-                  onPress={() => void book()}
-                  endContent={<ArrowRight size={18} />}
-                >
-                  {`Book ${kind === "accessible" ? "van" : kind}`}
-                </Button>
-              </Row>
-              <Type size={10} muted style={{ textAlign: "center" }}>
-                Demo booking · No dispatch or payment
-              </Type>
-            </View>
-          }
-        >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ padding: 20, paddingBottom: 10, gap: 14 }}
-          >
-            <StopPicker
-              pickup={pickup}
-              destination={destination}
-              onChange={(a, b) => {
-                setPickup(a);
-                setDestination(b);
-              }}
-            />
-            <Row style={{ justifyContent: "space-between" }}>
-              <Type size={17} weight="bold">
-                Choose your ride
-              </Type>
-              <Type size={11} muted>
-                {vehicle.eta} min away
-              </Type>
-            </Row>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: 8, alignItems: "stretch" }}
-            >
-              {vehicles.map((v) => (
-                <Button
-                  key={v.id}
-                  variant="ghost"
-                  accessibilityLabel={`Select ${v.name}`}
-                  accessibilityState={{ selected: kind === v.id }}
-                  onPress={() => select(v.id)}
-                  style={{
-                    width: 102,
-                    flexShrink: 0,
-                    minHeight: 108,
-                    height: "auto",
-                    paddingHorizontal: 2,
-                    paddingVertical: 5,
-                    borderWidth: kind === v.id ? 2 : 1,
-                    borderColor: kind === v.id ? p.primary : p.border,
-                    backgroundColor: kind === v.id ? p.mint : p.card,
-                    borderRadius: 14,
-                  }}
-                >
-                  <View style={{ alignItems: "center", gap: 3, width: "100%" }}>
-                    <VehicleArt
-                      kind={v.id}
-                      size={60}
-                      selected={kind === v.id}
-                    />
-                    <Type
-                      size={11}
-                      weight="medium"
-                      style={{ textAlign: "center" }}
-                    >
-                      {v.id === "accessible"
-                        ? "Access van"
-                        : v.id === "truck"
-                          ? "Truck"
-                          : v.name}
+                <Row style={{ flexWrap: "wrap" }}>
+                  <View style={{ minWidth: 110, flexShrink: 0 }}>
+                    <Type size={11} muted>
+                      Estimated fare
                     </Type>
-                    <Type size={9} muted style={{ textAlign: "center" }}>
-                      {v.capacity}
+                    <Type size={25} weight="bold">
+                      {money(quote.fare)}
                     </Type>
                   </View>
-                </Button>
-              ))}
-            </ScrollView>
-            <Type size={12} muted>
-              {vehicle.detail}
-            </Type>
-            <RideOptions kind={kind} value={options} onChange={setOptions} />
-            {active && (
-              <Button
-                variant="secondary"
-                size="sm"
-                onPress={() =>
-                  router.push({
-                    pathname: "/trip/[id]",
-                    params: { id: active.id },
-                  })
-                }
-                endContent={<ChevronRight size={16} />}
+                  <Button
+                    style={{ flex: 1 }}
+                    size="lg"
+                    disabled={!!active}
+                    loading={pending}
+                    onPress={() => void book()}
+                    endContent={<ArrowRight size={18} />}
+                  >
+                    {`Book ${kind === "accessible" ? "van" : kind}`}
+                  </Button>
+                </Row>
+                <Type size={10} muted style={{ textAlign: "center" }}>
+                  Demo booking · No dispatch or payment
+                </Type>
+              </View>
+            }
+          >
+            <ScrollView
+              scrollEnabled={!compact}
+              style={compact ? { flexGrow: 0 } : { flex: 1 }}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                padding: 20,
+                paddingBottom: 10,
+                gap: 14,
+              }}
+            >
+              <StopPicker
+                pickup={pickup}
+                destination={destination}
+                onChange={(a, b) => {
+                  setPickup(a);
+                  setDestination(b);
+                }}
+              />
+              <Row style={{ justifyContent: "space-between" }}>
+                <Type size={17} weight="bold">
+                  Choose your ride
+                </Type>
+                <Type size={11} muted>
+                  {vehicle.eta} min away
+                </Type>
+              </Row>
+              <View
+                style={{
+                  gap: 8,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  alignItems: "stretch",
+                }}
               >
-                Track active trip
-              </Button>
-            )}
-          </ScrollView>
-        </MapPanel>
-      </View>
+                {vehicles.map((v) => (
+                  <Button
+                    key={v.id}
+                    variant="ghost"
+                    accessibilityLabel={`Select ${v.name}`}
+                    accessibilityState={{ selected: kind === v.id }}
+                    onPress={() => select(v.id)}
+                    style={{
+                      width: "47%",
+                      flexGrow: 1,
+                      flexShrink: 0,
+                      minHeight: 108,
+                      height: "auto",
+                      paddingHorizontal: 2,
+                      paddingVertical: 5,
+                      borderWidth: kind === v.id ? 2 : 1,
+                      borderColor: kind === v.id ? p.primary : p.border,
+                      backgroundColor: kind === v.id ? p.mint : p.card,
+                      borderRadius: 14,
+                    }}
+                  >
+                    <View
+                      style={{ alignItems: "center", gap: 3, width: "100%" }}
+                    >
+                      <VehicleArt
+                        kind={v.id}
+                        size={60}
+                        selected={kind === v.id}
+                      />
+                      <Type
+                        size={11}
+                        weight="medium"
+                        style={{ textAlign: "center" }}
+                      >
+                        {v.id === "accessible"
+                          ? "Access van"
+                          : v.id === "truck"
+                            ? "Truck"
+                            : v.name}
+                      </Type>
+                      <Type size={9} muted style={{ textAlign: "center" }}>
+                        {v.capacity}
+                      </Type>
+                    </View>
+                  </Button>
+                ))}
+              </View>
+              <Type size={12} muted>
+                {vehicle.detail}
+              </Type>
+              <RideOptions kind={kind} value={options} onChange={setOptions} />
+              {active && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onPress={() =>
+                    router.push({
+                      pathname: "/trip/[id]",
+                      params: { id: active.id },
+                    })
+                  }
+                  endContent={<ChevronRight size={16} />}
+                >
+                  Track active trip
+                </Button>
+              )}
+            </ScrollView>
+          </MapPanel>
+        </View>
+      </Layout>
     </View>
   );
 }

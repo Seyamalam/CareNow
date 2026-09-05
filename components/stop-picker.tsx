@@ -6,6 +6,7 @@ import { stops, stopName } from "../shared/transport";
 import { usePalette } from "../lib/theme";
 import { Button } from "./button";
 import { Type, Row } from "./ui";
+import { useSheetLayout } from "../lib/sheet-layout";
 export function StopPicker({
   pickup,
   destination,
@@ -18,6 +19,7 @@ export function StopPicker({
   const p = usePalette(),
     [field, setField] = useState<"pickup" | "destination" | null>(null),
     [search, setSearch] = useState("");
+  const sheet = useSheetLayout();
   return (
     <>
       <Row style={{ gap: 12 }}>
@@ -90,10 +92,7 @@ export function StopPicker({
           if (!open) setField(null);
         }}
       >
-        <BottomSheet.Content
-          size="full"
-          style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}
-        >
+        <BottomSheet.Content size="full" style={sheet.style}>
           <BottomSheet.Header
             title={field === "pickup" ? "Pickup location" : "Where to?"}
           />

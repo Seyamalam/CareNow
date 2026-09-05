@@ -1,9 +1,10 @@
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import { Input } from "panelui-native";
 import { Type, Row, Choice } from "./ui";
 import { Button } from "./button";
 import { Minus, Plus, Settings2 } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSheetLayout } from "../lib/sheet-layout";
 import { BottomSheet } from "panelui-native";
 import type { RideOptions as Options, VehicleKind } from "../shared/transport";
 export function RideOptions({
@@ -17,6 +18,16 @@ export function RideOptions({
 }) {
   const [open, setOpen] = useState(false),
     [departure, setDeparture] = useState("");
+  const sheet = useSheetLayout();
+  const body = useRef<ScrollView | null>(null);
+  useEffect(() => {
+    if (!open || !sheet.keyboardVisible) return;
+    const timer = setTimeout(
+      () => body.current?.scrollToEnd({ animated: true }),
+      100,
+    );
+    return () => clearTimeout(timer);
+  }, [open, sheet.keyboardVisible]);
   if (!["truck", "bus"].includes(kind)) return null;
   return (
     <>
@@ -29,14 +40,14 @@ export function RideOptions({
         {`${kind === "truck" ? `${value.truckSize} · ${value.cargo}` : `${value.passengers} passenger${value.passengers === 1 ? "" : "s"}`} · ${value.departure ? "Scheduled" : "Now"}`}
       </Button>
       <BottomSheet open={open} onOpenChange={setOpen}>
-        <BottomSheet.Content
-          size="full"
-          style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}
-        >
+        <BottomSheet.Content size="full" style={sheet.style}>
           <BottomSheet.Header
             title={kind === "truck" ? "Truck requirements" : "Group transport"}
           />
           <BottomSheet.Body
+            ref={(node) => {
+              body.current = node;
+            }}
             keyboardShouldPersistTaps="handled"
             automaticallyAdjustKeyboardInsets
             contentContainerStyle={{ paddingVertical: 16, gap: 16 }}

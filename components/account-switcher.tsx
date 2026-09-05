@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, useWindowDimensions } from "react-native";
 import { BottomSheet } from "panelui-native";
 import { router } from "expo-router";
 import {
@@ -16,6 +16,7 @@ import { useCare } from "../lib/store";
 import { usePalette } from "../lib/theme";
 import { accounts, type AccountRole } from "../shared/workspace";
 import { Button } from "./button";
+import { useSheetLayout } from "../lib/sheet-layout";
 const icons = {
   customer: UserRound,
   caregiver: HeartHandshake,
@@ -27,6 +28,9 @@ export function AccountSwitcher() {
   const { state, act, pending, offline } = useCare(),
     p = usePalette(),
     [open, setOpen] = useState(false);
+  const { width, fontScale } = useWindowDimensions();
+  const sheet = useSheetLayout();
+  const compact = width < 390 || fontScale > 1.15;
   const account =
       accounts.find((a) => a.id === state?.workspace.role) ?? accounts[0],
     Icon = icons[account.id];
@@ -41,23 +45,24 @@ export function AccountSwitcher() {
     <>
       <Button
         variant="secondary"
-        size="sm"
+        size={compact ? "icon" : "sm"}
         accessibilityLabel="Switch account type"
         onPress={() => setOpen(true)}
-        startContent={<Icon size={16} />}
-        endContent={<ChevronsUpDown size={14} />}
+        startContent={compact ? undefined : <Icon size={16} />}
+        endContent={compact ? undefined : <ChevronsUpDown size={14} />}
       >
-        {account.id === "caregiver"
-          ? "Care pro"
-          : account.id === "provider"
-            ? "Provider"
-            : account.title}
+        {compact ? (
+          <Icon size={21} color={p.primary} />
+        ) : account.id === "caregiver" ? (
+          "Care pro"
+        ) : account.id === "provider" ? (
+          "Provider"
+        ) : (
+          account.title
+        )}
       </Button>
       <BottomSheet open={open} onOpenChange={setOpen}>
-        <BottomSheet.Content
-          size="full"
-          style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}
-        >
+        <BottomSheet.Content size="full" style={sheet.style}>
           <BottomSheet.Header
             title="Switch account"
             description={
