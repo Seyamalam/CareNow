@@ -165,31 +165,38 @@ export function quoteTrip(
     minutes: Math.max(4, Math.ceil((route.duration / 60) * 1.6)),
   };
 }
-// Distance-weighted interpolation prevents short geometry segments from changing vehicle speed.
+// Cache cumulative distances once per immutable route; frame updates use binary search.
+const routeLengths = new WeakMap<RoadRoute, number[]>();
 export function pointOnRoute(route: RoadRoute, progress: number): Coordinate {
   const points = route.coordinates;
-  const lengths = points
-    .slice(1)
-    .map((p, i) =>
-      Math.hypot(
-        (p[0] - points[i][0]) * Math.cos((p[1] * Math.PI) / 180),
-        p[1] - points[i][1],
-      ),
-    );
-  const target =
-    lengths.reduce((a, b) => a + b, 0) * Math.max(0, Math.min(1, progress));
-  let traversed = 0;
-  for (let i = 0; i < lengths.length; i++) {
-    if (traversed + lengths[i] >= target && lengths[i] > 0) {
-      const t = (target - traversed) / lengths[i];
-      return [
-        points[i][0] + (points[i + 1][0] - points[i][0]) * t,
-        points[i][1] + (points[i + 1][1] - points[i][1]) * t,
-      ];
-    }
-    traversed += lengths[i];
+  let lengths = routeLengths.get(route);
+  if (!lengths) {
+    lengths = [0];
+    for (let i = 1; i < points.length; i++)
+      lengths.push(
+        lengths[i - 1] +
+          Math.hypot(
+            (points[i][0] - points[i - 1][0]) *
+              Math.cos((points[i][1] * Math.PI) / 180),
+            points[i][1] - points[i - 1][1],
+          ),
+      );
+    routeLengths.set(route, lengths);
   }
-  return points[points.length - 1];
+  const target =
+    lengths[lengths.length - 1] * Math.max(0, Math.min(1, progress));
+  let lo = 0,
+    hi = points.length - 1;
+  while (lo < hi - 1) {
+    const mid = (lo + hi) >> 1;
+    if (lengths[mid] <= target) lo = mid;
+    else hi = mid;
+  }
+  const fraction = (target - lengths[lo]) / (lengths[hi] - lengths[lo] || 1);
+  return [
+    points[lo][0] + (points[hi][0] - points[lo][0]) * fraction,
+    points[lo][1] + (points[hi][1] - points[lo][1]) * fraction,
+  ];
 }
 export function routeBounds(
   route: RoadRoute,

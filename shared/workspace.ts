@@ -34,7 +34,7 @@ export const accounts: {
   {
     id: "doctor",
     title: "Doctor",
-    name: "Dr. Farhana Islam",
+    name: "CareNow clinical team",
     detail: "Appointments · Consultations",
   },
   {
@@ -49,6 +49,7 @@ export type JobKind = z.infer<typeof jobKindSchema>;
 export const workspaceSchema = z.object({
   role: z.enum(roles).default("customer"),
   available: z.boolean().default(true),
+  availability: z.record(z.string(), z.boolean()).default({}),
   accepted: z
     .array(
       z.object({

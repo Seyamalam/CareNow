@@ -25,11 +25,14 @@ test("bookings reject foreign family members", () =>
     /not found/,
   ));
 test("closed consultation cannot be completed twice", () => {
-  let s = applyAction(applyAction(initialState(), {type:"demo.configure",enabled:true}), {
-    type: "appointment.status",
-    id: "welcome-appointment",
-    status: "Completed",
-  });
+  let s = applyAction(
+    applyAction(initialState(), { type: "demo.configure", enabled: true }),
+    {
+      type: "appointment.status",
+      id: "welcome-appointment",
+      status: "Completed",
+    },
+  );
   assert.equal(s.records[0].type, "Consultation");
   assert.throws(
     () =>

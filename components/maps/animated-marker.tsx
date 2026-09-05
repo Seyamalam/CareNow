@@ -79,14 +79,14 @@ export function MovingMarker({
       );
     return () => cancelAnimation(progress);
   }, [motion, active, reduced, lngLat[0], lngLat[1]]);
-  function sample() {
+  function sample(value: number, longitude: number, latitude: number) {
     "worklet";
     if (!geometry)
       return {
-        coordinate: [lng.get(), lat.get()] as [number, number],
+        coordinate: [longitude, latitude] as [number, number],
         bearing: 0,
       };
-    const target = progress.get() * geometry.total;
+    const target = value * geometry.total;
     let lo = 0,
       hi = geometry.cumulative.length - 1;
     while (lo < hi - 1) {
@@ -114,11 +114,16 @@ export function MovingMarker({
         Math.PI,
     };
   }
+  // Read shared values in the mapper so Reanimated tracks their dependencies.
   const animatedProps = useAnimatedProps(() => ({
-    lngLat: sample().coordinate,
+    lngLat: sample(progress.get(), lng.get(), lat.get()).coordinate,
   }));
   const heading = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${sample().bearing - 45}deg` }],
+    transform: [
+      {
+        rotate: `${sample(progress.get(), lng.get(), lat.get()).bearing - 45}deg`,
+      },
+    ],
   }));
   return (
     <AnimatedMarker

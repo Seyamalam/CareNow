@@ -17,17 +17,21 @@ import {
 import { clockTime, newExhibition, type AccountRole } from "./workspace";
 import { initialState } from "./seed";
 export class ActionError extends Error {}
-export function applyAction(previous: State, action: Action): State {
-  const s = structuredClone(previous);
+export function applyAction(
+  previous: State,
+  action: Action,
+  createId: () => string = () => crypto.randomUUID(),
+): State {
+  const s: State = JSON.parse(JSON.stringify(previous));
   const now = new Date().toISOString();
-  const id = crypto.randomUUID();
+  const id = createId();
   function member(memberId: string) {
     if (!s.members.some((m) => m.id === memberId))
       throw new ActionError("Family member not found");
   }
   function notify(title: string, detail: string) {
     s.notifications.unshift({
-      id: crypto.randomUUID(),
+      id: createId(),
       title,
       detail,
       read: false,
@@ -46,6 +50,8 @@ export function applyAction(previous: State, action: Action): State {
   }
   switch (action.type) {
     case "account.switch":
+      s.workspace.availability[s.workspace.role] = s.workspace.available;
+      s.workspace.available = s.workspace.availability[action.role] ?? true;
       s.workspace.role = action.role;
       break;
     case "account.availability":
@@ -134,7 +140,7 @@ export function applyAction(previous: State, action: Action): State {
           : action.kind === "care"
             ? s.requests.find((x) => x.id === action.id)
             : s.appointments.find((x) => x.id === action.id);
-      if (!job || !["Requested", "Assigned", "Confirmed"].includes(job.status))
+      if (!job || ["Completed", "Cancelled"].includes(job.status))
         throw new ActionError("This job is no longer available");
       if (
         s.workspace.accepted.some(
@@ -170,18 +176,26 @@ export function applyAction(previous: State, action: Action): State {
           ];
         if (!next || next === "Assigned")
           throw new ActionError("No next trip stage");
-        return applyAction(s, {
-          type: "trip.status",
-          id: action.id,
-          status: next,
-        });
+        return applyAction(
+          s,
+          {
+            type: "trip.status",
+            id: action.id,
+            status: next,
+          },
+          createId,
+        );
       }
       if (action.kind === "appointment")
-        return applyAction(s, {
-          type: "appointment.status",
-          id: action.id,
-          status: "Completed",
-        });
+        return applyAction(
+          s,
+          {
+            type: "appointment.status",
+            id: action.id,
+            status: "Completed",
+          },
+          createId,
+        );
       const r = s.requests.find((r) => r.id === action.id);
       const stages = [
         "Requested",
@@ -194,11 +208,15 @@ export function applyAction(previous: State, action: Action): State {
         r && stages[stages.indexOf(r.status as (typeof stages)[number]) + 1];
       if (!next || next === "Requested")
         throw new ActionError("No next care stage");
-      return applyAction(s, {
-        type: "request.status",
-        id: action.id,
-        status: next,
-      });
+      return applyAction(
+        s,
+        {
+          type: "request.status",
+          id: action.id,
+          status: next,
+        },
+        createId,
+      );
     }
 
     case "trip.book": {
@@ -458,7 +476,7 @@ export function applyAction(previous: State, action: Action): State {
         createdAt: now,
       });
       s.messages.push({
-        id: crypto.randomUUID(),
+        id: createId(),
         appointmentId: a.id,
         sender: "Care team",
         text: action.attachmentId

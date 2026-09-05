@@ -1,3 +1,4 @@
+import { uuid } from "expo-modules-core";
 import { hc } from "hono/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { z } from "zod";
@@ -119,6 +120,7 @@ export async function sendAction(action: Action) {
       const next = applyAction(
         offlineState ?? initialState(),
         actionSchema.parse(action),
+        uuid.v4,
       );
       await AsyncStorage.setItem("carenow.rehearsal", JSON.stringify(next));
       offlineState = next;

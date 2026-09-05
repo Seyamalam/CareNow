@@ -97,6 +97,7 @@ export const stateSchema = z.object({
   workspace: workspaceSchema.default({
     role: "customer",
     available: true,
+    availability: {},
     accepted: [],
   }),
   exhibition: exhibitionSchema.default(newExhibition),

@@ -189,6 +189,23 @@ export function RouteMap({
             motionProgress(m.motion),
           );
           pin.marker.setLngLat(coordinate);
+          const next = pointOnRoute(
+            m.motion.route,
+            Math.min(1, motionProgress(m.motion) + 0.002),
+          );
+          const heading =
+            pin.element.querySelector<HTMLElement>("[data-heading]");
+          if (heading) {
+            const bearing =
+              (Math.atan2(
+                (next[0] - coordinate[0]) *
+                  Math.cos((coordinate[1] * Math.PI) / 180),
+                next[1] - coordinate[1],
+              ) *
+                180) /
+              Math.PI;
+            heading.style.transform = `rotate(${bearing}deg)`;
+          }
           if (follow && now - lastCamera > 1500) {
             map.current?.easeTo({
               center: coordinate,
@@ -199,7 +216,17 @@ export function RouteMap({
           }
         }
       }
-      if (!reduced && !document.hidden) frame = requestAnimationFrame(tick);
+      if (
+        !reduced &&
+        !document.hidden &&
+        moving.some(
+          (m) =>
+            m.motion &&
+            !m.motion.clock.paused &&
+            motionProgress(m.motion) < 0.95,
+        )
+      )
+        frame = requestAnimationFrame(tick);
     };
     const restart = () => {
       cancelAnimationFrame(frame);
@@ -224,15 +251,35 @@ export function RouteMap({
         const pin = markers.find((p) => p.id === h.id);
         return pin
           ? createPortal(
-              pin.kind === "person" ? (
-                <UserRound size={24} color={p.primary} />
-              ) : pin.kind ? (
-                <VehicleArt kind={pin.kind} size={48} selected={pin.active} />
-              ) : (
-                <Type size={12} weight="bold" style={{ color: p.onPrimary }}>
-                  {pin.label}
-                </Type>
-              ),
+              <>
+                {" "}
+                {pin.motion && (
+                  <span
+                    data-heading="true"
+                    aria-hidden="true"
+                    style={{
+                      position: "absolute",
+                      top: -15,
+                      left: "calc(50% - 6px)",
+                      color: p.primary,
+                      fontSize: 14,
+                      lineHeight: "14px",
+                      transformOrigin: "50% 30px",
+                    }}
+                  >
+                    ▲
+                  </span>
+                )}
+                {pin.kind === "person" ? (
+                  <UserRound size={24} color={p.primary} />
+                ) : pin.kind ? (
+                  <VehicleArt kind={pin.kind} size={48} selected={pin.active} />
+                ) : (
+                  <Type size={12} weight="bold" style={{ color: p.onPrimary }}>
+                    {pin.label}
+                  </Type>
+                )}
+              </>,
               h.element,
               h.id,
             )

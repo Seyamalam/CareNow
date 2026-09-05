@@ -2,7 +2,12 @@ import { type State, today } from "./contracts";
 import { newExhibition } from "./workspace";
 export function initialState(): State {
   return {
-    workspace: { role: "customer", available: true, accepted: [] },
+    workspace: {
+      role: "customer",
+      available: true,
+      availability: {},
+      accepted: [],
+    },
     exhibition: newExhibition(),
     members: [
       {
