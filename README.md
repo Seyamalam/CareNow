@@ -78,3 +78,21 @@ Verified: 22 domain tests, local/remote D1 integration, 21/21 Expo Doctor checks
 <tr><td align="center"><img src="docs/screenshots/27-attachment.png" width="230" alt="27 attachment" /><br/><sub>attachment</sub></td><td align="center"><img src="docs/screenshots/28-connection-retry.png" width="230" alt="28 connection retry" /><br/><sub>connection retry</sub></td></tr>
 </table>
 <!-- SCREENSHOTS:END -->
+
+## Exhibition report and presentation
+
+Prepared for judges, researchers, public leaders, investors and technical reviewers. The publications distinguish implemented demo behaviour, simulated services, dated market evidence and proposed pilot assumptions.
+
+- [42-page exhibition report](deliverables/CareNow-Exhibition-Report.docx): 25 chapters, 33 application screenshots, research, competition, architecture, costs, methodology, roadmap and references.
+- [32-slide presentation](deliverables/CareNow-Exhibition-Presentation-Edition-1.2.1.pptx): editable charts, tables, architecture and source notes.
+- [Publication source and generation instructions](docs/report-source/README.md).
+
+### Publication web captures
+
+Fictional demonstration sessions, captured on the production web application.
+
+<img src="docs/report-assets/web-account-switcher.png" width="250" alt="Five account roles in one application" /> <img src="docs/report-assets/web-role-Driver.png" width="250" alt="Driver workspace with a demo ambulance request" /> <img src="docs/report-assets/web-picker-360.png" width="250" alt="Corrected compact location picker" />
+
+Compact web transport keeps the map and all four vehicle choices in a scrollable page.
+
+<img src="docs/report-assets/web-transport-compact-top.png" width="250" alt="Compact production web transport map" /> <img src="docs/report-assets/web-transport-compact-choices.png" width="250" alt="Scrolled transport page with all four vehicle classes" />

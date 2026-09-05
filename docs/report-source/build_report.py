@@ -30,6 +30,7 @@ def table(rows):
  t=doc.add_table(rows=1,cols=len(rows[0]));t.alignment=WD_TABLE_ALIGNMENT.CENTER;t.autofit=False
  cols=len(rows[0]); widths=([4.65,2.14] if cols==2 else [1.6,2.5,2.69] if cols==3 else [1.85,1.35,1.8,1.79]);
  if cols==3 and rows[0][0] in ['Layer','Organisation','Risk','Stage','Capability','Measure','Audience']: widths=[1.38,2.57,2.84]
+ if rows[0][0]=='Illustrative monthly load':widths=[2.4,1.7,2.69]
  for i,w in enumerate(widths):t.columns[i].width=Inches(w)
  for ri,row in enumerate(rows):
   cells=t.rows[0].cells if ri==0 else t.add_row().cells
@@ -37,7 +38,7 @@ def table(rows):
    c=cells[ci];c.width=Inches(widths[ci]);c.vertical_alignment=WD_CELL_VERTICAL_ALIGNMENT.CENTER
    pp=c.paragraphs[0];pp.paragraph_format.space_after=Pt(0);pp.paragraph_format.line_spacing=1.05
    
-   if ri>0 and re.match(r'^(?:BDT |USD )?\d',str(s)) and ci>0:pp.alignment=WD_ALIGN_PARAGRAPH.RIGHT
+   if ri>0 and re.fullmatch(r'(?:BDT |USD )?[\d,. %]+',str(s)) and ci>0:pp.alignment=WD_ALIGN_PARAGRAPH.RIGHT
    rr=pp.add_run(str(s));rr.font.size=Pt(9);rr.bold=ri==0;rr.font.color.rgb=RGBColor.from_string('FFFFFF' if ri==0 else '000000')
    tcPr=c._tc.get_or_add_tcPr();shade=OxmlElement('w:shd');shade.set(qn('w:fill'),'333333' if ri==0 else ('F4F5F5' if ri%2 else 'FFFFFF'));tcPr.append(shade)
    mar=OxmlElement('w:tcMar')
@@ -96,7 +97,7 @@ for start,end in [(0,6),(6,12),(12,16)]:
   pp=p(url,'Caption');pp.paragraph_format.space_after=Pt(14)
  if start==12:
   doc.add_heading('Project and image provenance',level=2)
-  p('The private Project DBA source document is summarised in the repository visual brief review and is not reproduced here. Native screenshots 61 to 82 show the layout release. Web captures show the deployed demo. Original illustrations were generated using the built-in image tool and are stored with prompts in the project assets.')
+  p('The private Project DBA source document is summarised in the repository visual brief review and is not reproduced here. Native screenshots 61 to 82 show the layout release. Web captures show the deployed demo. Original illustrations were generated using the built-in image tool and are stored with generation briefs in the project assets.')
   p('Commercial assumptions, budget allocations and proposed pilot thresholds are project planning inputs. They are not externally sourced forecasts. No claim of clinical efficacy, government endorsement or existing commercial traction is made.')
 page();heading('Glossary')
 for term,definition in [
