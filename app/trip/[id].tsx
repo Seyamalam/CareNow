@@ -138,19 +138,21 @@ export default function TrackTrip() {
           follow={follow}
           offline={offline}
         />
-        <View style={{ position: "absolute", right: 16, bottom: 15 }}>
-          <Button
-            size="icon"
-            variant={follow ? "primary" : "outline"}
-            accessibilityLabel={follow ? "Show whole route" : "Follow driver"}
-            onPress={() => {
-              setFollow(!follow);
-              setRecenter((x) => x + 1);
-            }}
-          >
-            <LocateFixed size={20} color={p.primary} />
-          </Button>
-        </View>
+        {!offline && (
+          <View style={{ position: "absolute", right: 16, bottom: 15 }}>
+            <Button
+              size="icon"
+              variant={follow ? "primary" : "outline"}
+              accessibilityLabel={follow ? "Show whole route" : "Follow driver"}
+              onPress={() => {
+                setFollow(!follow);
+                setRecenter((x) => x + 1);
+              }}
+            >
+              <LocateFixed size={20} color={p.primary} />
+            </Button>
+          </View>
+        )}
       </View>
       <Card
         style={{
@@ -274,22 +276,24 @@ export default function TrackTrip() {
               <MotionArt kind="success" size={80} />
             </View>
           )}
-          {!closed && (state!.workspace.role!=="customer"||state!.exhibition.enabled) && (
-            <Button
-              variant="secondary"
-              onPress={() =>
-                router.push(
-                  state!.exhibition.enabled ? "/presenter" : "/workspace",
-                )
-              }
-            >
-              {state!.exhibition.enabled
-                ? "Presenter controls"
-                : state!.workspace.role === "driver"
-                  ? "Manage this trip"
-                  : "View account workspace"}
-            </Button>
-          )}
+          {!closed &&
+            (state!.workspace.role !== "customer" ||
+              state!.exhibition.enabled) && (
+              <Button
+                variant="secondary"
+                onPress={() =>
+                  router.push(
+                    state!.exhibition.enabled ? "/presenter" : "/workspace",
+                  )
+                }
+              >
+                {state!.exhibition.enabled
+                  ? "Presenter controls"
+                  : state!.workspace.role === "driver"
+                    ? "Manage this trip"
+                    : "View account workspace"}
+              </Button>
+            )}
           {closed ? (
             <Button fullWidth onPress={() => router.replace("/transport")}>
               Book another ride

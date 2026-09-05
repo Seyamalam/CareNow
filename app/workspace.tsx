@@ -84,7 +84,7 @@ function JobCard({ job, provider }: { job: Job; provider: boolean }) {
             </Button>
           )}
           <Button variant="secondary" onPress={open}>
-            View {job.kind === "appointment" ? "consultation" : "location"}
+            {job.kind === "appointment" ? "View consultation" : "View location"}
           </Button>
         </>
       ) : (

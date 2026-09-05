@@ -111,17 +111,42 @@ export function OfflineMap({ route, markers }: RouteMapProps) {
       style={{ flex: 1, backgroundColor: p.muted, justifyContent: "center" }}
     >
       <Svg width="100%" height="100%" viewBox="0 0 400 300">
-        <Path d={line} fill="none" stroke={p.card} strokeWidth={12} />
+        <Path
+          d={line}
+          fill="none"
+          stroke={p.card}
+          strokeWidth={12}
+          strokeLinejoin="round"
+        />
         <Path
           d={line}
           fill="none"
           stroke={p.primary}
           strokeWidth={5}
           strokeLinecap="round"
+          strokeLinejoin="round"
         />
         {markers.map((marker) => (
           <OfflinePin key={marker.id} marker={marker} bounds={[w, s, e, n]} />
         ))}
+        {markers
+          .filter((marker) => !marker.kind)
+          .map((marker) => {
+            const [x, y] = project(marker.coordinate);
+            return (
+              <SvgText
+                key={`label-${marker.id}`}
+                x={x}
+                y={y - 14}
+                textAnchor="middle"
+                fill={p.ink}
+                fontSize={12}
+                fontWeight="bold"
+              >
+                {marker.label}
+              </SvgText>
+            );
+          })}
       </Svg>
       <View style={{ position: "absolute", bottom: 12, left: 16, right: 16 }}>
         <Type size={11} weight="medium">

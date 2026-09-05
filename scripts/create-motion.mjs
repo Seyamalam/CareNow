@@ -11,5 +11,10 @@ const petal=(rotation,color)=>({ty:'gr',it:[{ty:'rc',p:fixed([0,-38]),s:fixed([3
 const logo=base([layer('CareNow mark',[petal(0,green),petal(90,mint),petal(180,green),petal(270,mint)],{r:anim(-45,0),s:anim([88,88,100],[100,100,100]),o:anim(0,100,18)})]);
 const check={ty:'sh',ks:fixed({i:[[0,0],[0,0],[0,0]],o:[[0,0],[0,0],[0,0]],v:[[-28,0],[-7,21],[33,-23]],c:false})};
 const success=base([layer('Check',[check,stroke,{ty:'tm',s:fixed(0),e:anim(0,100,40),o:fixed(0),m:1}]),{...layer('Disc',[{ty:'el',p:fixed([0,0]),s:fixed([134,134])},fill(mint)],{s:anim([90,90,100],[100,100,100]),o:anim(0,100,16)}),ind:2}]);
-const empty=base([layer('Calendar',[{ty:'rc',p:fixed([0,3]),s:fixed([110,100]),r:fixed(18)},fill(mint),{ty:'gr',it:[{ty:'sh',ks:fixed({i:[[0,0],[0,0]],o:[[0,0],[0,0]],v:[[-33,-12],[33,-12]],c:false})},stroke]},{ty:'el',p:fixed([-20,20]),s:fixed([10,10])},fill(green),{ty:'el',p:fixed([20,20]),s:fixed([10,10])},fill(green)],{r:anim(-8,0),o:anim(0,100,20)})]);
+const empty=base([
+  {...layer('Calendar date left',[{ty:'el',p:fixed([-20,20]),s:fixed([10,10])},fill(green)],{o:anim(0,100,32)}),ind:1},
+  {...layer('Calendar date right',[{ty:'el',p:fixed([20,20]),s:fixed([10,10])},fill(green)],{o:anim(0,100,38)}),ind:2},
+  {...layer('Calendar rule',[{ty:'sh',ks:fixed({i:[[0,0],[0,0]],o:[[0,0],[0,0]],v:[[-33,-12],[33,-12]],c:false})},stroke],{o:anim(0,100,25)}),ind:3},
+  {...layer('Calendar paper',[{ty:'rc',p:fixed([0,3]),s:fixed([110,100]),r:fixed(18)},fill(mint)],{s:anim([90,90,100],[100,100,100]),o:anim(0,100,20)}),ind:4}
+]);
 for(const [name,data]of Object.entries({logo,success,empty}))writeFileSync(`assets/motion/${name}.json`,JSON.stringify(data));
